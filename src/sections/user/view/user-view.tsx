@@ -1,5 +1,7 @@
-import { useState, useCallback } from 'react';
+import { UserAccount } from 'src/models/UserAccount';
+import { useState, useCallback, useEffect } from 'react';
 import Box from '@mui/material/Box';
+import {getUsers} from 'src/sections/services/UserService';
 import Card from '@mui/material/Card';
 import Table from '@mui/material/Table';
 import Button from '@mui/material/Button';
@@ -12,9 +14,6 @@ import DialogTitle from '@mui/material/DialogTitle';
 import DialogContent from '@mui/material/DialogContent';
 import TextField from '@mui/material/TextField';
 import DialogActions from '@mui/material/DialogActions';
-
-
-import { _users } from 'src/_mock';
 import { DashboardContent } from 'src/layouts/dashboard';
 import { Iconify } from 'src/components/iconify';
 import { Scrollbar } from 'src/components/scrollbar';
@@ -23,7 +22,6 @@ import { UserTableRow } from '../user-table-row';
 import { UserTableHead } from '../user-table-head';
 import { TableEmptyRows } from '../table-empty-rows';
 import { UserTableToolbar } from '../user-table-toolbar';
-
 import { emptyRows, applyFilter, getComparator } from '../utils';
 import type { UserProps } from '../user-table-row';
 
@@ -34,24 +32,34 @@ export function UserView() {
   const table = useTable();
   const [filterName, setFilterName] = useState('');
   const [open, setOpen] = useState(false);
-  
-  const handleOpen = () => setOpen(true);
+  const [dataFiltered, setDataFiltered] = useState<UserProps[]>();
+  const [_users, setUsers] = useState<UserAccount[]>([]);
+  const handleOpen = async () => {setOpen(true)};
   const handleClose = () =>(setOpen(false));
   const PriceSelectionTable=()=>{
     const prices = [10, 20, 30, 50, 75, 100, 150, 200]; // Pricing options
     const [selectedPrice, setSelectedPrice] = useState(null);
     const [customField, setCustomField] = useState("default");
-
+    
   }
 
-  const dataFiltered: UserProps[] = applyFilter({
-    inputData: _users,
-    comparator: getComparator(table.order, table.orderBy),
-    filterName,
-  });
+  
+  useEffect(() => {
+    (async function loadData(){
+      const users =  await getUsers(); 
+      setUsers(users);
+      console.log(users);
+      setDataFiltered(applyFilter({
+        inputData: users.map(user => user.toUserProps()),
+        comparator: getComparator(table.order, table.orderBy),
+        filterName,
+      }));
+    })();
+    
+  }, []);
 
-  const notFound = !dataFiltered.length && !!filterName;
-
+  const notFound = dataFiltered && dataFiltered!.length && !!filterName;
+  
   return (
     <DashboardContent>
       <Box display="flex" alignItems="center" mb={5}>
@@ -141,7 +149,7 @@ export function UserView() {
                 onSelectAllRows={(checked) =>
                   table.onSelectAllRows(
                     checked,
-                    _users.map((user) => user.id)
+                    _users?.map((user) => user.id)
                   )
                 }
                 headLabel={[
@@ -151,8 +159,7 @@ export function UserView() {
                 ]}
               />
               <TableBody>
-                {dataFiltered
-                  .slice(
+                {dataFiltered?.slice(
                     table.page * table.rowsPerPage,
                     table.page * table.rowsPerPage + table.rowsPerPage
                   )

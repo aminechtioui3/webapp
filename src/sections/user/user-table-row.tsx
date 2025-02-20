@@ -68,7 +68,8 @@ export function UserTableRow({ row, selected, onSelectRow }: UserTableRowProps) 
         </TableCell>
 
         <TableCell>
-          <Label color={(row.status === 'banned' && 'error') || 'success'}>{row.status}</Label>
+          {/* <Label color={(row.status === 'banned' && 'error') || 'success'}>{row.status}</Label> */}
+          
         </TableCell>
 
         <TableCell align="right">
