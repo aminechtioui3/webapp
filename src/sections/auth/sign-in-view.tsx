@@ -1,5 +1,6 @@
 import { useState, useCallback } from 'react';
-
+import { z } from 'zod';
+import { useRouter } from 'src/routes/hooks';
 import Box from '@mui/material/Box';
 import Link from '@mui/material/Link';
 import Divider from '@mui/material/Divider';
@@ -8,21 +9,67 @@ import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
 import LoadingButton from '@mui/lab/LoadingButton';
 import InputAdornment from '@mui/material/InputAdornment';
-
-import { useRouter } from 'src/routes/hooks';
-
 import { Iconify } from 'src/components/iconify';
 
-// ----------------------------------------------------------------------
+// Zod schema for form validation
+const loginSchema = z.object({
+  email: z.string().email({ message: 'Please enter a valid email address' }),
+  password: z.string().min(6, { message: 'Password must be at least 6 characters' })
+});
+
+type FormData = {
+  email: string;
+  password: string;
+};
 
 export function SignInView() {
   const router = useRouter();
-
   const [showPassword, setShowPassword] = useState(false);
+  const [formData, setFormData] = useState<FormData>({ email: '', password: '' });
+  const [errors, setErrors] = useState<{ email?: string; password?: string }>({});
+  const [loading, setLoading] = useState(false);
 
-  const handleSignIn = useCallback(() => {
-    router.push('/');
-  }, [router]);
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleSignIn = async () => {
+    setLoading(true);
+    try {
+      // Validate the form data with Zod
+      loginSchema.parse(formData);
+
+      // Proceed with authentication (mocked in this case)
+      const response = await fetch('https://your-api.com/auth/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(formData)
+      });
+
+      const data = await response.json();
+      if (response.ok && data.token) {
+        // Store the token (e.g., in localStorage or context)
+        localStorage.setItem('token', data.token);
+        router.push('/');
+      } else {
+        // Handle server-side validation errors (e.g., invalid credentials)
+        setErrors({ email: 'Invalid credentials', password: 'Invalid credentials' });
+      }
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        // Handle form validation errors
+        const newErrors: { email?: string; password?: string } = {};
+        error.errors.forEach((err) => {
+          if (err.path[0] === 'email') newErrors.email = err.message;
+          if (err.path[0] === 'password') newErrors.password = err.message;
+        });
+        setErrors(newErrors);
+      }
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const renderForm = (
     <Box display="flex" flexDirection="column" alignItems="flex-end">
@@ -30,11 +77,14 @@ export function SignInView() {
         fullWidth
         name="email"
         label="Email address"
-        defaultValue="Email Address"
+        value={formData.email}
+        onChange={handleInputChange}
+        error={!!errors.email}
+        helperText={errors.email}
         InputLabelProps={{ shrink: true }}
         sx={{ mb: 3 }}
       />
-
+      
       <Link variant="body2" color="inherit" sx={{ mb: 1.5 }}>
         Forgot password?
       </Link>
@@ -43,7 +93,10 @@ export function SignInView() {
         fullWidth
         name="password"
         label="Password"
-        defaultValue="mysecretpassword"
+        value={formData.password}
+        onChange={handleInputChange}
+        error={!!errors.password}
+        helperText={errors.password}
         InputLabelProps={{ shrink: true }}
         type={showPassword ? 'text' : 'password'}
         InputProps={{
@@ -61,10 +114,11 @@ export function SignInView() {
       <LoadingButton
         fullWidth
         size="large"
-        type="submit"
+        type="button"
         color="inherit"
         variant="contained"
         onClick={handleSignIn}
+        loading={loading}
       >
         Sign in
       </LoadingButton>
