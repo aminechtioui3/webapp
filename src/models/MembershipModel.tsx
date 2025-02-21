@@ -4,7 +4,7 @@ export class MembershipModel {
     subTitle: string;
     description: string;
     image?: string;
-    price: string;
+    price: number;
     available: boolean;
     createdAt: Date;
     updatedAt: Date;
@@ -13,21 +13,22 @@ export class MembershipModel {
         id: number,
         title: string,
         subTitle: string,
+        image:string,
         description: string,
-        price: string,
+        price: number,
         available: boolean,
-        options?: Partial<MembershipModel>
+        createdAt: Date,
+        updatedAt: Date
+       
     ) {
         this.id = id;
         this.title = title;
         this.subTitle = subTitle;
+        this.image=image;
         this.description = description;
         this.price = price;
         this.available = available;
-        this.createdAt = new Date();
-        this.updatedAt = new Date();
-
-        // Merge optional properties if provided
-        Object.assign(this, options);
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
     }
 }

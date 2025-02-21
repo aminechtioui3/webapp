@@ -1,7 +1,7 @@
 import { UserAccount } from 'src/models/UserAccount';
 import { useState, useCallback, useEffect } from 'react';
 import Box from '@mui/material/Box';
-import {getUsers} from 'src/sections/services/UserService';
+import {startMembership, getUsers} from 'src/sections/services/UserService';
 import Card from '@mui/material/Card';
 import Table from '@mui/material/Table';
 import Button from '@mui/material/Button';
@@ -27,6 +27,7 @@ import type { UserProps } from '../user-table-row';
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
+import { MembershipModel } from 'src/models/MembershipModel';
 
 // ----------------------------------------------------------------------
 
@@ -51,7 +52,7 @@ const schema = z.object({
   subTitle: z.string().min(1, "Subtitle is required"),
   description: z.string().min(1, "Description is required"),
   image: z.string().optional(),
-  price: z.string().min(1, "Price is required"),
+  price: z.number(),
   available: z.boolean(),
   
 });
@@ -63,9 +64,17 @@ const schema = z.object({
         resolver: zodResolver(schema),
       });
 
-      const onSubmit = (data :any) => {
+      const  onSubmit  = async (data :any) =>  {
         console.log("Form submitted: ", data);
-        handleClose();
+        let res=false;
+        res= await startMembership(data);
+        if (res){
+          alert("done");
+           handleClose();
+        }else{
+           alert("error");
+        }
+       
       };
   
   useEffect(() => {
@@ -139,8 +148,15 @@ const schema = z.object({
           <TextField label="Subtitle" fullWidth margin="dense" {...register("subTitle")} error={!!errors.subTitle} helperText={errors.subTitle?.message} />
           <TextField label="Description" fullWidth margin="dense" {...register("description")} error={!!errors.description} helperText={errors.description?.message} />
           <TextField label="Image URL" fullWidth margin="dense" {...register("image")} error={!!errors.image} helperText={errors.image?.message} />
-          <TextField label="Price" fullWidth margin="dense" {...register("price")} error={!!errors.price} helperText={errors.price?.message} />
-          <Box sx={{ width: 300, mt: 2 }}>
+          <TextField
+            {...register("price", { valueAsNumber: true })}
+            margin="dense"
+            label="Price"
+            type="number"
+            fullWidth
+            error={!!errors.price}
+            helperText={errors.price?.message}
+          /> <Box sx={{ width: 300, mt: 2 }}>
             <Typography variant="h6">Available</Typography>
             <input type="checkbox" {...register("available")} />
           </Box>
