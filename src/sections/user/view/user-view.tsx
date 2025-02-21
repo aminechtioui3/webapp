@@ -28,8 +28,6 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 
-
-
 // ----------------------------------------------------------------------
 
 export function UserView() {
@@ -46,30 +44,29 @@ export function UserView() {
     const [customField, setCustomField] = useState("default");
     
   }
-  const schema = z.object({
-    title: z.string().min(1, "Title is required"),
-    subTitle: z.string().min(1, "Subtitle is required"),
-    description: z.string().min(1, "Description is required"),
-    image: z.string().optional(),
-    price: z.string().min(1, "Price is required"),
-    available: z.boolean(),
-  });
-  
-  export default function AddNewItemDialog({ open: string , handleClose }) {
-    const {
-      register,
-      handleSubmit,
-      formState: { errors },
-    } = useForm({
-      resolver: zodResolver(schema),
-    });
-  
-    const onSubmit = (data) => {
-      console.log("Form submitted: ", data);
-      handleClose();
-    };
-  
 
+
+const schema = z.object({
+  title: z.string().min(1, "Title is required"),
+  subTitle: z.string().min(1, "Subtitle is required"),
+  description: z.string().min(1, "Description is required"),
+  image: z.string().optional(),
+  price: z.string().min(1, "Price is required"),
+  available: z.boolean(),
+  
+});
+      const {
+        register,
+        handleSubmit,
+        formState: { errors },
+      } = useForm({
+        resolver: zodResolver(schema),
+      });
+
+      const onSubmit = (data :any) => {
+        console.log("Form submitted: ", data);
+        handleClose();
+      };
   
   useEffect(() => {
     (async function loadData(){
@@ -134,7 +131,6 @@ export function UserView() {
       </Box>
       
       {/* User Form Modal */}
-      
       <Dialog open={open} onClose={handleClose}>
       <DialogTitle>Add New Item</DialogTitle>
       <DialogContent>
