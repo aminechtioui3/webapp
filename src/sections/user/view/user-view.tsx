@@ -1,23 +1,31 @@
-import { UserAccount } from 'src/models/UserAccount';
-import { useState, useCallback, useEffect } from 'react';
+import type { UserAccount } from 'src/models/UserAccount';
+
+import * as z from "zod";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useState, useEffect, useCallback } from 'react';
+
 import Box from '@mui/material/Box';
-import {startMembership, getUsers} from 'src/sections/services/UserService';
 import Card from '@mui/material/Card';
 import Table from '@mui/material/Table';
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import TableBody from '@mui/material/TableBody';
+import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
-import TableContainer from '@mui/material/TableContainer';
-import TablePagination from '@mui/material/TablePagination';
-import Dialog from '@mui/material/Dialog';
 import DialogTitle from '@mui/material/DialogTitle';
 import DialogContent from '@mui/material/DialogContent';
-import TextField from '@mui/material/TextField';
 import DialogActions from '@mui/material/DialogActions';
+import TableContainer from '@mui/material/TableContainer';
+import TablePagination from '@mui/material/TablePagination';
+
 import { DashboardContent } from 'src/layouts/dashboard';
+
 import { Iconify } from 'src/components/iconify';
 import { Scrollbar } from 'src/components/scrollbar';
+
+import {getUsers, startMembership} from 'src/sections/services/UserService';
+
 import { TableNoData } from '../table-no-data';
 import { UserTableRow } from '../user-table-row';
 import { UserTableHead } from '../user-table-head';
@@ -26,10 +34,6 @@ import { UserTableToolbar } from '../user-table-toolbar';
 import { emptyRows, applyFilter, getComparator } from '../utils';
 
 import type { UserProps } from '../user-table-row';
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import * as z from "zod";
-import { MembershipModel } from 'src/models/MembershipModel';
 
 // ----------------------------------------------------------------------
 
@@ -91,7 +95,7 @@ const schema = z.object({
       }));
     })();
     
-  }, []);
+  }, [filterName, table.order, table.orderBy]);
 
   const notFound = dataFiltered && dataFiltered!.length && !!filterName;
   

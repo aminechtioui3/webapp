@@ -1,11 +1,13 @@
-import axios, { Axios } from 'axios';
 import Cookies from 'js-cookie';
-import { MembershipModel } from 'src/models/MembershipModel';
-import { UserAccount } from 'src/models/UserAccount';
+
 import { Properties } from 'src/properties';
+import { UserAccount } from 'src/models/UserAccount';
+
+import api from "../../api/axiosConfig";
+
 
 const properties = Properties.getInstance();
-const client = axios.create({baseURL : properties.baseURL});
+const client = api;
 
 export async function getAccountDetails() : Promise<UserAccount[]>
 {
@@ -25,7 +27,6 @@ function fromJson(json: any) : UserAccount{
 
 
 
-
 export async function login(email :string,password :string): Promise<boolean> {
   
   
@@ -38,18 +39,26 @@ export async function login(email :string,password :string): Promise<boolean> {
   
     
     if( response.status === 200 || response.status === 201){
-        //save token
-        let token=response.data;
+        // save token
+        const token=response.data;
         Cookies.set("token", token, { expires: 7, secure: true }); // Expires in 7 days
         window.location.href = "/";
         return true;
 
-    }else{
-        return false;
     }
+        return false;
+    
   } catch (error) {
     console.error("Error activating membership:", error);
     return false;
   }
+}
+
+
+
+export async function logout(): Promise<boolean> {
+    Cookies.remove("token");
+    window.location.href = "/sign-in";
+    return true;
 }
 
