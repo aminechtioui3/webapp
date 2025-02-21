@@ -21,3 +21,4 @@ function fromJson(json: any) : UserAccount{
             json.firstName, json.lastName, json.phone, json.options);
 }
 
+

@@ -35,7 +35,7 @@ export class UserAccount {
     facebook?: string;
 
     twitter?: string;
-
+    
     linkedin?: string;
 
     instagram?: string;

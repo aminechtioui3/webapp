@@ -4,10 +4,13 @@ export class Properties{
     public baseURL;
 
     public GetUser;
+    
+    public ActivateMembership;
 
     private constructor(){
         this.baseURL = "http://localhost:8080";
         this.GetUser = "/api/v1/fake";
+        this.ActivateMembership="/protected/active-membership/start-active-membership";
     }
     
 

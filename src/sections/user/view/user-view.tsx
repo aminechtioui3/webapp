@@ -24,6 +24,10 @@ import { TableEmptyRows } from '../table-empty-rows';
 import { UserTableToolbar } from '../user-table-toolbar';
 import { emptyRows, applyFilter, getComparator } from '../utils';
 import type { UserProps } from '../user-table-row';
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import * as z from "zod";
+
 
 
 // ----------------------------------------------------------------------
@@ -42,6 +46,29 @@ export function UserView() {
     const [customField, setCustomField] = useState("default");
     
   }
+  const schema = z.object({
+    title: z.string().min(1, "Title is required"),
+    subTitle: z.string().min(1, "Subtitle is required"),
+    description: z.string().min(1, "Description is required"),
+    image: z.string().optional(),
+    price: z.string().min(1, "Price is required"),
+    available: z.boolean(),
+  });
+  
+  export default function AddNewItemDialog({ open: string , handleClose }) {
+    const {
+      register,
+      handleSubmit,
+      formState: { errors },
+    } = useForm({
+      resolver: zodResolver(schema),
+    });
+  
+    const onSubmit = (data) => {
+      console.log("Form submitted: ", data);
+      handleClose();
+    };
+  
 
   
   useEffect(() => {
@@ -109,23 +136,25 @@ export function UserView() {
       {/* User Form Modal */}
       
       <Dialog open={open} onClose={handleClose}>
-        <DialogTitle>Add New Member</DialogTitle>
-        <DialogContent>
-          <TextField autoFocus margin="dense" label="Full Name" fullWidth required />
-          <TextField margin="dense" label="Email" type="email" fullWidth />
-          <TextField margin="dense" label="subscription type" fullWidth/>
-          <Box sx={{ width: 300 }}>
-          <Typography variant="h4" flexGrow={1}>
-          Money amount
-        </Typography>
-
-    </Box>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleClose}>Cancel</Button>
-          <Button variant="contained" onClick={handleClose}>Save</Button>
-        </DialogActions>
-      </Dialog>
+      <DialogTitle>Add New Item</DialogTitle>
+      <DialogContent>
+        <form onSubmit={handleSubmit(onSubmit)}>
+          <TextField label="Title" fullWidth margin="dense" {...register("title")} error={!!errors.title} helperText={errors.title?.message} />
+          <TextField label="Subtitle" fullWidth margin="dense" {...register("subTitle")} error={!!errors.subTitle} helperText={errors.subTitle?.message} />
+          <TextField label="Description" fullWidth margin="dense" {...register("description")} error={!!errors.description} helperText={errors.description?.message} />
+          <TextField label="Image URL" fullWidth margin="dense" {...register("image")} error={!!errors.image} helperText={errors.image?.message} />
+          <TextField label="Price" fullWidth margin="dense" {...register("price")} error={!!errors.price} helperText={errors.price?.message} />
+          <Box sx={{ width: 300, mt: 2 }}>
+            <Typography variant="h6">Available</Typography>
+            <input type="checkbox" {...register("available")} />
+          </Box>
+          <DialogActions>
+            <Button onClick={handleClose}>Cancel</Button>
+            <Button type="submit" variant="contained">Save</Button>
+          </DialogActions>
+        </form>
+      </DialogContent>
+    </Dialog>
 
       <Card>
         <UserTableToolbar
