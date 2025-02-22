@@ -3,177 +3,143 @@ import { Helmet } from "react-helmet-async";
 import { CONFIG } from "src/config-global";
 import { useRouter } from "../routes/hooks";
 import { checkIfTokenExist } from "../sections/services/AccountService";
-import { sendNotification, getNotifications, Notification } from "src/sections/services/NotificationService";
-import type { UserAccount } from "src/models/UserAccount";
-import * as z from "zod";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
+import { sendNotification, getNotifications } from "src/sections/services/NotificationService";
+import CustomAlert from "../../src/components/Alert/CustomAlert"; // Import CustomAlert
+import {
+  Box,
+  Card,
+  Button,
+  TextField,
+  Typography,
+  Select,
+  MenuItem,
+  FormControl,
+  InputLabel,
+  Collapse,
+  IconButton,
+} from "@mui/material";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import ExpandLessIcon from "@mui/icons-material/ExpandLess";
 
-import Box from "@mui/material/Box";
-import Card from "@mui/material/Card";
-import Table from "@mui/material/Table";
-import Button from "@mui/material/Button";
-import Dialog from "@mui/material/Dialog";
-import TableBody from "@mui/material/TableBody";
-import TextField from "@mui/material/TextField";
-import Typography from "@mui/material/Typography";
-import DialogTitle from "@mui/material/DialogTitle";
-import DialogContent from "@mui/material/DialogContent";
-import DialogActions from "@mui/material/DialogActions";
-import TableContainer from "@mui/material/TableContainer";
-import TablePagination from "@mui/material/TablePagination";
-import Select from "@mui/material/Select";
-import MenuItem from "@mui/material/MenuItem";
-import FormControl from "@mui/material/FormControl";
-import InputLabel from "@mui/material/InputLabel";
-
-import { DashboardContent } from "src/layouts/dashboard";
-import { Iconify } from "src/components/iconify";
-import { Scrollbar } from "src/components/scrollbar";
-import { getUsers, startMembership } from "src/sections/services/UserService";
+// Define Notification type (optional)
+interface Notification {
+  message: string;
+  sentTo: string;
+  sentAt: string;
+  sender: string;
+}
 
 export default function NotificationsPage() {
-    const [isTokenValid, setIsTokenValid] = useState<boolean>(false);
-    const [message, setMessage] = useState<string>("");
-    const [group, setGroup] = useState<string>("all");
-    const [sentNotifications, setSentNotifications] = useState<Notification[]>([]);
-    const [receivedNotifications, setReceivedNotifications] = useState<Notification[]>([]);
-    const [loading, setLoading] = useState<boolean>(false);
-    const router = useRouter();
+  const [isTokenValid, setIsTokenValid] = useState<boolean>(false);
+  const [message, setMessage] = useState<string>("");
+  const [group, setGroup] = useState<string>("all");
+  const [sentNotifications, setSentNotifications] = useState<Notification[]>([]);
+  const [loading, setLoading] = useState<boolean>(false);
+  const [expanded, setExpanded] = useState<boolean>(false);
+  const [alert, setAlert] = useState<{ show: boolean; type: "success" | "error" | "warning" | "info"; message: string }>({
+    show: false,
+    type: "success",
+    message: "",
+  });
 
-    useEffect(() => {
-        const checkToken = async () => {
-            const isValid = await checkIfTokenExist();
-            if (!isValid) {
-                router.push("/sign-in");
-            }
-            setIsTokenValid(isValid);
-        };
+  const router = useRouter();
 
-        checkToken();
-    }, [router]);
-
-    useEffect(() => {
-        if (isTokenValid) {
-            fetchNotifications();
-        }
-    }, [isTokenValid]);
-
-    const fetchNotifications = async () => {
-        setLoading(true);
-        try {
-            const { sent, received } = await getNotifications();
-            setSentNotifications(sent);
-            setReceivedNotifications(received);
-        } catch (error) {
-            console.error("Error fetching notifications:", error);
-        }
-        setLoading(false);
+  useEffect(() => {
+    const checkToken = async () => {
+      const isValid = await checkIfTokenExist();
+      if (!isValid) router.push("/sign-in");
+      setIsTokenValid(isValid);
     };
+    checkToken();
+  }, [router]);
 
-    const handleSendNotification = async () => {
-        if (!message.trim()) return alert("Message cannot be empty.");
-        
-        setLoading(true);
-        try {
-            await sendNotification({ message, group });
-            setMessage("");
-            fetchNotifications();
-        } catch (error) {
-            console.error("Failed to send notification:", error);
-        }
-        setLoading(false);
-    };
+  useEffect(() => {
+    if (isTokenValid) fetchNotifications();
+  }, [isTokenValid]);
 
-    if (!isTokenValid) return null;
+  const fetchNotifications = async () => {
+    setLoading(true);
+    try {
+      const { sent } = await getNotifications();
+      setSentNotifications(sent);
+    } catch (error) {
+      console.error("Error fetching notifications:", error);
+      setAlert({ show: true, type: "error", message: "Failed to fetch notifications!" });
+    }
+    setLoading(false);
+  };
 
-    return (
-        <>
-            <Helmet>
-                <title>{`Notifications - ${CONFIG.appName}`}</title>
-            </Helmet>
+  const handleSendNotification = async () => {
+    if (!message.trim()) {
+      setAlert({ show: true, type: "warning", message: "Message cannot be empty!" });
+      return;
+    }
+    setLoading(true);
+    try {
+      await sendNotification({ message, group });
+      setMessage("");
+      fetchNotifications();
+      setAlert({ show: true, type: "success", message: "Notification sent successfully!" });
 
-            <div className="p-4 space-y-4">
-                <Card className="p-4">
-                    <Typography variant="h6" fontWeight="bold">
-                        Send Notification
-                    </Typography>
-                    
-                    <FormControl fullWidth className="mt-2">
-                        <InputLabel>Group</InputLabel>
-                        <Select
-                            value={group}
-                            onChange={(e) => setGroup(e.target.value)}
-                        >
-                            <MenuItem value="all">All Users</MenuItem>
-                            <MenuItem value="admins">Admins</MenuItem>
-                            <MenuItem value="members">Members</MenuItem>
-                        </Select>
-                    </FormControl>
+      setTimeout(() => {
+        setAlert({ show: false, type: "success", message: "" });
+      }, 3000);
+    } catch (error) {
+      console.error("Failed to send notification:", error);
+      setAlert({ show: true, type: "error", message: "Failed to send notification!" });
+    }
+    setLoading(false);
+  };
 
-                    <TextField
-                        fullWidth
-                        value={message}
-                        onChange={(e) => setMessage(e.target.value)}
-                        placeholder="Enter notification message..."
-                        className="mt-2"
-                        multiline
-                        rows={2}
-                    />
+  if (!isTokenValid) return null;
 
-                    <Button 
-                        variant="contained" 
-                        color="primary" 
-                        onClick={handleSendNotification}
-                        disabled={loading}
-                        className="mt-4"
-                    >
-                        {loading ? "Sending..." : "Send"}
-                    </Button>
-                </Card>
+  return (
+    <>
+      <Helmet>
+        <title>{`Notifications - ${CONFIG.appName}`}</title>
+      </Helmet>
 
-                <Card className="p-4">
-                    <Typography variant="h6" fontWeight="bold">
-                        Sent Notifications (Last 48 Hours)
-                    </Typography>
-                    {loading ? (
-                        <Typography>Loading...</Typography>
-                    ) : (
-                        <ul>
-                            {sentNotifications.length ? (
-                                sentNotifications.map((notif, index) => (
-                                    <li key={index} className="border-b py-2">
-                                        {notif.message} - {notif.timestamp}
-                                    </li>
-                                ))
-                            ) : (
-                                <Typography>No sent notifications.</Typography>
-                            )}
-                        </ul>
-                    )}
-                </Card>
+      {/* Global Alert Component */}
+      <CustomAlert type={alert.type} message={alert.message} show={alert.show} />
 
-                <Card className="p-4">
-                    <Typography variant="h6" fontWeight="bold">
-                        Received Notifications
-                    </Typography>
-                    {loading ? (
-                        <Typography>Loading...</Typography>
-                    ) : (
-                        <ul>
-                            {receivedNotifications.length ? (
-                                receivedNotifications.map((notif, index) => (
-                                    <li key={index} className="border-b py-2">
-                                        {notif.message} - {notif.timestamp}
-                                    </li>
-                                ))
-                            ) : (
-                                <Typography>No new notifications.</Typography>
-                            )}
-                        </ul>
-                    )}
-                </Card>
-            </div>
-        </>
-    );
+      <Box p={4}>
+        <Card sx={{ p: 3, mb: 3 }}>
+          <Typography variant="h6" fontWeight="bold" gutterBottom>
+            Send Notification
+          </Typography>
+          <FormControl fullWidth sx={{ mb: 2 }}>
+            <InputLabel>Group</InputLabel>
+            <Select value={group} onChange={(e) => setGroup(e.target.value)}>
+              <MenuItem value="all">All Users</MenuItem>
+              <MenuItem value="admins">Admins</MenuItem>
+              <MenuItem value="members">Members</MenuItem>
+              <MenuItem value="free_access">Free Access</MenuItem>
+              <MenuItem value="specific_course">Specific Course</MenuItem>
+            </Select>
+          </FormControl>
+
+          <TextField
+            fullWidth
+            value={message}
+            onChange={(e) => setMessage(e.target.value)}
+            placeholder="Enter notification message..."
+            multiline
+            rows={2}
+            sx={{ mb: 2 }}
+          />
+
+          <Box display="flex" justifyContent="center">
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={handleSendNotification}
+              disabled={loading}
+            >
+              {loading ? "Sending..." : "Send Notification"}
+            </Button>
+          </Box>
+        </Card>
+      </Box>
+    </>
+  );
 }

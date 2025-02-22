@@ -1,6 +1,10 @@
-export interface Notification {
+export type Notification= {
+    id: string;
     message: string;
     timestamp: string;
+    group?: string;   // Optional: Some notifications might not have a group
+    sender?: string;  // Optional: System-generated notifications might not have a sender
+    
 }
 
 export interface NotificationResponse {
@@ -8,6 +12,9 @@ export interface NotificationResponse {
     received: Notification[];
 }
 
+  
+
+// Function to send a notification
 export async function sendNotification(notification: { message: string; group: string }): Promise<{ success: boolean }> {
     try {
         const response = await fetch('/api/notifications', {
@@ -27,6 +34,7 @@ export async function sendNotification(notification: { message: string; group: s
     }
 }
 
+// Function to fetch notifications
 export async function getNotifications(): Promise<NotificationResponse> {
     try {
         const response = await fetch('/api/notifications');
@@ -35,7 +43,24 @@ export async function getNotifications(): Promise<NotificationResponse> {
             throw new Error('Failed to fetch notifications');
         }
 
-        return await response.json();
+        // Ensure response data has the correct structure
+        const data = await response.json();
+        
+        const sent = data.sent.map((notif: any) => ({
+            message: notif.message || "No message",
+            timestamp: notif.timestamp || new Date().toISOString(),
+            group: notif.group || "Unknown",
+            sender: notif.sender || "System",
+        }));
+
+        const received = data.received.map((notif: any) => ({
+            message: notif.message || "No message",
+            timestamp: notif.timestamp || new Date().toISOString(),
+            group: notif.group || "Unknown",
+            sender: notif.sender || "System",
+        }));
+
+        return { sent, received };
     } catch (error) {
         console.error('Error fetching notifications:', error);
         return { sent: [], received: [] };
