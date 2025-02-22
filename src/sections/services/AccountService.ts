@@ -15,15 +15,12 @@ export async function getAccountDetails() : Promise<UserAccount[]>
     await client.get(properties.GetUsers)
       .then(async response => {
         const data = await response.data;
-        res =  data.map(fromJson);
+        res =  data.map(UserAccount.fromJson(data));
     });
     return res;
 }
 
-function fromJson(json: any) : UserAccount{
-    return new UserAccount(json.id, json.email, json.password, json.role,
-            json.firstName, json.lastName, json.phone, json.options);
-}
+
 
 
 export async function checkIfTokenExist(): Promise<boolean>{

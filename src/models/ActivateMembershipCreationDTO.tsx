@@ -6,7 +6,7 @@ export class ActiveMembershipCreationDTO {
     email?: string;
     firstName?: string;
     lastName?: string;
-    birthday?: string;
+    birthday?: Date;
     weight?: number;
     height?: number;
     location?: string;

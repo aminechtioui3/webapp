@@ -5,47 +5,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="74813386-4e36-4a36-874f-73c4ba81e498" name="Changes" comment="f">
-      <change afterPath="$PROJECT_DIR$/src/models/ActivateMembershipCreationDTO.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/models/ExpenseModel.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/pages/Expense.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/pages/Membership.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/sections/Expense/expense-table-empty-rows.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/sections/Expense/expense-table-head.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/sections/Expense/expense-table-row.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/sections/Expense/expense-table-toolbar.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/sections/Expense/table-no-data.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/sections/Expense/utils.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/sections/Expense/view/expense-view.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/sections/Expense/view/index.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/sections/Membership/membership-table-empty-rows.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/sections/Membership/membership-table-head.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/sections/Membership/membership-table-row.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/sections/Membership/membership-table-toolbar.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/sections/Membership/table-no-data.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/sections/Membership/utils.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/sections/Membership/view/index.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/sections/Membership/view/membership-view.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/sections/services/MembershipService.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/app.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/config-global.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/config-global.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/layouts/config-nav-dashboard.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/layouts/config-nav-dashboard.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/layouts/dashboard/main.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/layouts/dashboard/main.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/layouts/simple/main.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/layouts/simple/main.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/models/ActiveMemberShip.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/models/ActiveMembership.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/models/MembershipModel.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/models/MembershipModel.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/models/ActivateMembershipCreationDTO.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/models/ActivateMembershipCreationDTO.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/models/UserAccount.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/models/UserAccount.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/blog.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/blog.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/home.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/home.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/products.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/products.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/user.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/user.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/properties.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/properties.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/routes/sections.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/routes/sections.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/sections/services/accountService.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/sections/services/AccountService.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/sections/user/view/user-view.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/sections/user/view/user-view.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/yarn.lock" beforeDir="false" afterPath="$PROJECT_DIR$/yarn.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/sections/services/AccountService.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/sections/services/AccountService.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -117,7 +80,7 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1740127790528</updated>
-      <workItem from="1740127792314" duration="22014000" />
+      <workItem from="1740127792314" duration="23756000" />
     </task>
     <task id="LOCAL-00001" summary="d">
       <option name="closed" value="true" />

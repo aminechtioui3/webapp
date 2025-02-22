@@ -10,7 +10,7 @@ export class UserAccount {
     firstName: string;
     lastName: string;
     image?: string;
-    birthday?: string;
+    birthday?: Date;
     weight?: number;
     height?: number;
     physicalActivity?: string;
@@ -48,7 +48,7 @@ export class UserAccount {
         updatedAt: Date,
         lastSeen?: Date,
         image?: string,
-        birthday?: string,
+        birthday?: Date,
         weight?: number,
         height?: number,
         physicalActivity?: string,
