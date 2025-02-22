@@ -4,86 +4,155 @@ export class Properties {
     public baseURL;
 
     public loginURL;
+
     public GetUsers;
+
     public ActivateMembership;
+
     public UpdateActiveMembership;
+
     public DeleteActiveMembership;
+
     public GetAllActiveMembershipsForUser;
+
     public GetAllActiveMembershipsByMembership;
+
     public GetActiveMembershipById;
 
     public CreateDeal;
+
     public UpdateDeal;
+
     public DeleteDeal;
+
     public GetDealById;
+
     public GetAllDeals;
 
     public GetAllExercises;
+
     public CreateExercise;
+
     public UpdateExercise;
+
     public DeleteExercise;
+
     public GetExerciseById;
+
     public GetAllExercisesBySessionId;
 
     public CreateMembership;
+
     public UpdateMembership;
+
     public DeleteMembership;
+
     public GetMembershipById;
+
     public GetAllMemberships;
 
     public CreateNews;
+
     public UpdateNews;
+
     public DeleteNews;
+
     public GetNewsById;
+
     public GetAllNews;
 
     public CreateNotification;
+
     public DeleteNotification;
+
     public GetNotificationById;
+
     public GetAllNotifications;
+
     public GetAllNotificationsForUser;
 
     public CreateProduct;
+
     public UpdateProduct;
+
     public DeleteProduct;
+
     public GetProductById;
+
     public GetAllProducts;
 
     public CreateProductCategory;
+
     public UpdateProductCategory;
+
     public DeleteProductCategory;
+
     public GetAllProductCategory;
+
     public GetProductCategoryById;
 
     public CreateProductOrder;
+
     public UpdateProductOrder;
+
     public DeleteProductOrder;
+
     public GetAllProductOrders;
+
     public GetAllProductOrderByUserId;
+
     public GetAllProductOrdersByProductId;
+
     public GetProductOrderById;
 
     public CreateReminder;
+
     public UpdateReminder;
+
     public DeleteReminder;
+
     public GetAllReminders;
+
     public GetReminderById;
 
     public CreateSession;
+
     public UpdateSession;
+
     public DeleteSession;
+
     public GetAllSessions;
+
     public GetSessionById;
 
     public GetAccountById;
+
     public GetAllAccounts;
+
     public CreateMobileAccount;
+
     public UpdateMobileAccount;
+
     public UpdateMobileAccountByAdmin;
+
     public DeleteAccount;
+
     public UpdatePassword;
+
     public UpdatePasswordByAdmin;
+
     public UpdateLastSeen;
+
+    public createExpense;
+
+    public updateExpense;
+
+    public deleteExpense;
+
+    public getExpenseById;
+
+    public getAllExpenses;
+
 
     private constructor() {
         this.baseURL = "https://c645-2c0f-f3a0-98-a7c1-c064-d2ec-228d-aeec.ngrok-free.app/api/v1";
@@ -125,6 +194,15 @@ export class Properties {
         this.DeleteNews = "/protected/news/delete-news/";
         this.GetNewsById = "/connected/news/get-news-by-id/";
         this.GetAllNews = "/connected/news/get-all-news";
+
+
+        // Expense
+        this.createExpense="/protected/Expense/create-expense";
+        this.updateExpense="/protected/Expense/update-expense";
+        this.deleteExpense="/protected/Expense/delete-expense/{id}";
+        this.getExpenseById="/protected/Expense/get-expense-by-id/{id}";
+        this.getAllExpenses="/protected/Expense/get-all-expenses";
+
 
         // Notifications
         this.CreateNotification = "/protected/notification/create-notification";

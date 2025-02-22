@@ -55,7 +55,7 @@ import { Iconify } from 'src/components/iconify';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'; // Use Routes instead of Switch
 import { AuthProvider } from './authConf';
 import { SignInPage } from './routes/sections';
-import { UserView } from './sections/user/view';
+import { ActiveMembershipView } from './sections/user/view';
 import { ProductsView } from './sections/product/view';
 import ProtectedRoute from './ProtectedRoutes';
 
@@ -95,7 +95,7 @@ export default function App() {
         <Route path="/login" element={<SignInPage />} /> 
         <Route
           path="/user"
-          element={<ProtectedRoute element={<UserView />} />} // Pass component as element prop
+          element={<ProtectedRoute element={<ActiveMembershipView />} />} // Pass component as element prop
         />
         <Route
           path="/products"

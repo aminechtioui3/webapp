@@ -1,5 +1,5 @@
 import type { UserAccount } from 'src/models/UserAccount';
-import Select from "react-select";
+
 import * as z from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -27,26 +27,23 @@ import { Scrollbar } from 'src/components/scrollbar';
 import {getUsers, startMembership} from 'src/sections/services/UserService';
 
 import { TableNoData } from '../table-no-data';
-import { UserTableRow } from '../user-table-row';
-import { UserTableHead } from '../user-table-head';
-import { TableEmptyRows } from '../table-empty-rows';
-import { UserTableToolbar } from '../user-table-toolbar';
+import { MembershipTableRow } from '../membership-table-row';
+import { MembershipTableHead } from '../membership-table-head';
+import { TableEmptyRows } from '../membership-table-empty-rows';
+import { MembershipTableToolbar } from '../membership-table-toolbar';
 import { emptyRows, applyFilter, getComparator } from '../utils';
 
-import type { UserProps } from '../user-table-row';
-import api from "../../../api/axiosConfig";
-import {getMemberships} from "../../services/MembershipService";
+import type { UserProps } from '../membership-table-row';
 
 // ----------------------------------------------------------------------
 
-export function UserView() {
+export function MembershipView() {
   const table = useTable();
   const [filterName, setFilterName] = useState('');
   const [open, setOpen] = useState(false);
   const [dataFiltered, setDataFiltered] = useState<UserProps[]>();
   const [_users, setUsers] = useState<UserAccount[]>([]);
-  const [memberships, setMemberships] = useState([]);
-  const [selectedMembership, setSelectedMembership] = useState(null);
+  const handleOpen = async () => {setOpen(true)};
   const handleClose = () =>(setOpen(false));
   const PriceSelectionTable=()=>{
     const prices = [10, 20, 30, 50, 75, 100, 150, 200]; // Pricing options
@@ -55,44 +52,17 @@ export function UserView() {
     
   }
 
-  const handleOpen = async () => {
-    async function fetchMemberships() {
-      try {
-        const response = await getMemberships();
-        const membershipOptions = response.map((membership) => ({
-          value: membership.id,
-          label: membership.title, // Display the name
-        }));
-        setMemberships(membershipOptions);
-      } catch (error) {
-        console.error("Error fetching memberships:", error);
-      }
-    }
-    fetchMemberships();
 
-    setOpen(true);
-
-  };
-  const schema = z.object({
-    id: z.number().optional(),
-    membershipId: z.number().optional(),
-    email: z.string().optional(),
-    firstName: z.string().optional(),
-    lastName: z.string().optional(),
-    birthday: z.string().optional(),
-    weight: z.number().optional(),
-    height: z.number().optional(),
-    location: z.string().optional(),
-    phone: z.string().optional(),
-    gender: z.string().optional(),
-    endDate: z.union([z.string(), z.date()]).optional(),
-    startDate: z.union([z.string(), z.date()]).optional(),
-    note: z.string().optional(),
-    status: z.string().optional(),
-  });
-
-
-  const {
+const schema = z.object({
+  title: z.string().min(1, "Title is required"),
+  subTitle: z.string().min(1, "Subtitle is required"),
+  description: z.string().min(1, "Description is required"),
+  image: z.string().optional(),
+  price: z.number(),
+  available: z.boolean(),
+  
+});
+      const {
         register,
         handleSubmit,
         formState: { errors },
@@ -128,136 +98,61 @@ export function UserView() {
   }, [filterName, table.order, table.orderBy]);
 
   const notFound = dataFiltered && dataFiltered!.length && !!filterName;
-
-  const handleMembershipChange = (selectedOption) => {
-    setSelectedMembership(selectedOption);
-  };
   
   return (
     <DashboardContent>
       <Box display="flex" alignItems="center" mb={5}>
         <Typography variant="h4" flexGrow={1}>
-          Members
+          Membership
         </Typography>
+
         <Button
           variant="contained"
           color="inherit"
           startIcon={<Iconify icon="mingcute:add-line" />}
           onClick={handleOpen}
         >
-          Add New Member
+         Add New Membership
         </Button>
+        { }
       </Box>
 
+      <p>
+        In this page you will find all the memberships you have in your gym
+      </p>
+      <br/>
+      
       {/* User Form Modal */}
       <Dialog open={open} onClose={handleClose}>
-        <DialogTitle>Add New Member</DialogTitle>
-        <DialogContent>
-          <form onSubmit={handleSubmit(onSubmit)}>
-            <div style={{ marginBottom: '10px' }}>
-              {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
-              <label>Membership</label>
-              <Select
-                options={memberships}
-                value={selectedMembership}
-                onChange={handleMembershipChange}
-                placeholder="Select Membership..."
-                isSearchable
-              />
-            </div>
-
-            {/* Hidden input to store membershipId */}
-            <input
-              type="hidden"
-              {...register('membershipId')}
-              value={selectedMembership?.value || ''}
-            />
-
-            <TextField
-              label="Email"
-              fullWidth
-              margin="dense"
-              {...register('email')}
-              error={!!errors.email}
-              helperText={errors.email?.message}
-            />
-            <TextField
-              label="First Name"
-              fullWidth
-              margin="dense"
-              {...register('firstName')}
-              error={!!errors.firstName}
-              helperText={errors.firstName?.message}
-            />
-            <TextField
-              label="Last Name"
-              fullWidth
-              margin="dense"
-              {...register('lastName')}
-              error={!!errors.lastName}
-              helperText={errors.lastName?.message}
-            />
-            <TextField
-              label="Birthday"
-              fullWidth
-              margin="dense"
-              type="date"
-              {...register('birthday')}
-              InputLabelProps={{ shrink: true }}
-            />
-
-            <TextField
-              label="Weight"
-              fullWidth
-              margin="dense"
-              type="number"
-              {...register('weight')}
-            />
-            <TextField
-              label="Height"
-              fullWidth
-              margin="dense"
-              type="number"
-              {...register('height')}
-            />
-
-            <TextField label="Location" fullWidth margin="dense" {...register('location')} />
-            <TextField label="Phone" fullWidth margin="dense" {...register('phone')} />
-            <TextField label="Gender" fullWidth margin="dense" {...register('gender')} />
-
-            {/* Fix startDate and endDate */}
-            <TextField
-              label="Start Date"
-              fullWidth
-              margin="dense"
-              type="date"
-              {...register('startDate')}
-              InputLabelProps={{ shrink: true }}
-            />
-            <TextField
-              label="End Date"
-              fullWidth
-              margin="dense"
-              type="date"
-              {...register('endDate')}
-              InputLabelProps={{ shrink: true }}
-            />
-
-            <TextField label="Note" fullWidth margin="dense" {...register('note')} />
-            <TextField label="Status" fullWidth margin="dense" {...register('status')} />
-
-            <DialogActions>
-              <Button onClick={handleClose}>Cancel</Button>
-              <Button type="submit" variant="contained">
-                Save
-              </Button>
-            </DialogActions>
-          </form>
-        </DialogContent>
-      </Dialog>
+      <DialogTitle>Add New Item</DialogTitle>
+      <DialogContent>
+        <form onSubmit={handleSubmit(onSubmit)}>
+          <TextField label="Title" fullWidth margin="dense" {...register("title")} error={!!errors.title} helperText={errors.title?.message} />
+          <TextField label="Subtitle" fullWidth margin="dense" {...register("subTitle")} error={!!errors.subTitle} helperText={errors.subTitle?.message} />
+          <TextField label="Description" fullWidth margin="dense" {...register("description")} error={!!errors.description} helperText={errors.description?.message} />
+          <TextField label="Image URL" fullWidth margin="dense" {...register("image")} error={!!errors.image} helperText={errors.image?.message} />
+          <TextField
+            {...register("price", { valueAsNumber: true })}
+            margin="dense"
+            label="Price"
+            type="number"
+            fullWidth
+            error={!!errors.price}
+            helperText={errors.price?.message}
+          /> <Box sx={{ width: 300, mt: 2 }}>
+            <Typography variant="h6">Available</Typography>
+            <input type="checkbox" {...register("available")} />
+          </Box>
+          <DialogActions>
+            <Button onClick={handleClose}>Cancel</Button>
+            <Button type="submit" variant="contained">Save</Button>
+          </DialogActions>
+        </form>
+      </DialogContent>
+    </Dialog>
 
       <Card>
-        <UserTableToolbar
+        <MembershipTableToolbar
           numSelected={table.selected.length}
           filterName={filterName}
           onFilterName={(event: React.ChangeEvent<HTMLInputElement>) => {
@@ -269,7 +164,7 @@ export function UserView() {
         <Scrollbar>
           <TableContainer sx={{ overflow: 'unset' }}>
             <Table sx={{ minWidth: 800 }}>
-              <UserTableHead
+              <MembershipTableHead
                 order={table.order}
                 orderBy={table.orderBy}
                 rowCount={_users.length}
@@ -282,19 +177,22 @@ export function UserView() {
                   )
                 }
                 headLabel={[
-                  { id: 'name', label: 'Name', width: '33%' },
-                  { id: 'role', label: 'Subscription type', width: '33%' },
-                  { id: 'status', label: 'Status', width: '33%' },
+                  { id: 'image', label: 'Image', width: '10%' },
+                  { id: 'name', label: 'Name', width: '20%' },
+                  { id: 'price', label: 'Price', width: '20%' },
+                  { id: 'description', label: 'description', width: '20%' },
+                  { id: 'status', label: 'Status', width: '10%' },
+
+
                 ]}
               />
               <TableBody>
-                {dataFiltered
-                  ?.slice(
+                {dataFiltered?.slice(
                     table.page * table.rowsPerPage,
                     table.page * table.rowsPerPage + table.rowsPerPage
                   )
                   .map((row) => (
-                    <UserTableRow
+                    <MembershipTableRow
                       key={row.id}
                       row={row}
                       selected={table.selected.includes(row.id)}

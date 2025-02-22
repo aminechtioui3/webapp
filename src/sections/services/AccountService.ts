@@ -26,25 +26,24 @@ function fromJson(json: any) : UserAccount{
 }
 
 
+export async function checkIfTokenExist(): Promise<boolean>{
+    const token = Cookies.get("token"); // Read token from cookies
+    // return !!token;
+    return true;
+}
+
+
+
 
 export async function login(email :string,password :string): Promise<boolean> {
-  
-  
-  try {const response = await client.post(properties.loginURL, {"email":email,"password":password}, {
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer YOUR_ACCESS_TOKEN`
-    }
-  });
-  
-    
+  try {const response = await client.post(properties.loginURL, {"email":email,"password":password});
+
     if( response.status === 200 || response.status === 201){
         // save token
         const token=response.data;
         Cookies.set("token", token, { expires: 7, secure: true }); // Expires in 7 days
         window.location.href = "/";
         return true;
-
     }
         return false;
     

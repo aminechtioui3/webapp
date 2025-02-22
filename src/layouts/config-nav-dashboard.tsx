@@ -14,20 +14,43 @@ export const navData = [
     icon: icon('ic-analytics'),
   },
   {
-    title: 'User',
+    title: 'Members',
     path: '/user',
     icon: icon('ic-user'),
   },
+  {
+    title: 'Membership ',
+    path: '/membership',
+    icon: icon('ic-cart'),
+    info: (
+        <Label color="error" variant="inverted">
+          new
+        </Label>
+    ),
+  },
+  {
+    title: 'Expense ',
+    path: '/expense',
+    icon: icon('ic-cart'),
+    info: (
+        <Label color="error" variant="inverted">
+          5
+        </Label>
+    ),
+  },
+
   {
     title: 'Product',
     path: '/products',
     icon: icon('ic-cart'),
     info: (
-      <Label color="error" variant="inverted">
-        +3
-      </Label>
+        <Label color="error" variant="inverted">
+          +3
+        </Label>
     ),
   },
+
+
   {
     title: 'Blog',
     path: '/blog',

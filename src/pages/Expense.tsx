@@ -1,9 +1,11 @@
-import { useEffect, useState } from 'react';
+import {useEffect, useState} from "react";
 import { Helmet } from 'react-helmet-async';
+
 import { CONFIG } from 'src/config-global';
-import { UserView } from 'src/sections/user/view';
-import { useRouter } from "../routes/hooks";
-import { checkIfTokenExist } from "../sections/services/AccountService";
+
+import {useRouter} from "../routes/hooks";
+import {ExpenseView} from "../sections/Expense/view";
+import {checkIfTokenExist} from "../sections/services/AccountService";
 
 // ----------------------------------------------------------------------
 
@@ -26,14 +28,13 @@ export default function Page() {
     if (!isTokenValid) {
         return null; // Optionally render a loading spinner here if needed while waiting for the token check
     }
-
     return (
         <>
             <Helmet>
-                <title>{`Users - ${CONFIG.appName}`}</title>
+                <title> {`Expenses - ${CONFIG.appName}`}</title>
             </Helmet>
 
-            <UserView /> {/* Only rendered if the token is valid */}
+            <ExpenseView />
         </>
     );
 }

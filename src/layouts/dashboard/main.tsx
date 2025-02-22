@@ -7,6 +7,7 @@ import { useTheme } from '@mui/material/styles';
 import Container from '@mui/material/Container';
 
 import { layoutClasses } from 'src/layouts/classes';
+import {checkIfTokenExist} from "../../sections/services/AccountService";
 
 // ----------------------------------------------------------------------
 
@@ -23,6 +24,7 @@ export function Main({ children, sx, ...other }: BoxProps) {
       }}
       {...other}
     >
+
       {children}
     </Box>
   );
@@ -71,7 +73,9 @@ export function DashboardContent({
       }}
       {...other}
     >
+
       {children}
+
     </Container>
   );
 }
