@@ -10,6 +10,7 @@ import Typography from '@mui/material/Typography';
 import LoadingButton from '@mui/lab/LoadingButton';
 import InputAdornment from '@mui/material/InputAdornment';
 import { Iconify } from 'src/components/iconify';
+import {login} from "../services/AccountService";
 
 // Zod schema for form validation
 const loginSchema = z.object({
@@ -40,22 +41,8 @@ export function SignInView() {
       // Validate the form data with Zod
       loginSchema.parse(formData);
 
-      // Proceed with authentication (mocked in this case)
-      const response = await fetch('https://your-api.com/auth/login', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(formData)
-      });
+      await login(formData.email, formData.password);
 
-      const data = await response.json();
-      if (response.ok && data.token) {
-        // Store the token (e.g., in localStorage or context)
-        localStorage.setItem('token', data.token);
-        router.push('/');
-      } else {
-        // Handle server-side validation errors (e.g., invalid credentials)
-        setErrors({ email: 'Invalid credentials', password: 'Invalid credentials' });
-      }
     } catch (error) {
       if (error instanceof z.ZodError) {
         // Handle form validation errors

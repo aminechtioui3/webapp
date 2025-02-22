@@ -5,7 +5,7 @@ export class Properties {
 
     public loginURL;
 
-    public GetUsers;
+    public GetActiveMembership;
 
     public ActivateMembership;
 
@@ -161,7 +161,7 @@ export class Properties {
         this.ActivateMembership = "/protected/active-membership/start-active-membership";
         this.UpdateActiveMembership = "/protected/active-membership/update-active-membership";
         this.DeleteActiveMembership = "/protected/active-membership/delete-active-membership/";
-        this.GetUsers = "/protected/active-membership/get-all-active-membership";
+        this.GetActiveMembership = "/protected/active-membership/get-all-active-membership";
         this.GetAllActiveMembershipsForUser = "/connected/active-membership/get-all-active-membership-for-user/";
         this.GetAllActiveMembershipsByMembership = "/protected/active-membership/get-all-active-membership-by-membership/";
         this.GetActiveMembershipById = "/protected/active-membership/get-active-membership/";
@@ -251,11 +251,11 @@ export class Properties {
         // Account
         this.GetAccountById = "/connected/account/get-account-by-id/";
         this.GetAllAccounts = "/protected/account/get-all-accounts";
-        this.CreateMobileAccount = "/connected/account/create-mobile-account";
+        this.CreateMobileAccount = "/public/account/create-mobile-account";
         this.UpdateMobileAccount = "/connected/account/update-mobile-account";
         this.UpdateMobileAccountByAdmin = "/protected/account/update-mobile-account-by-admin/";
         this.DeleteAccount = "/protected/account/delete-account/";
-        this.loginURL = "/connected/account/login-account";
+        this.loginURL = "/public/account/login-account";
         this.UpdatePassword = "/connected/account/update-password";
         this.UpdatePasswordByAdmin = "/protected/account/update-password-by-admin/";
         this.UpdateLastSeen = "/connected/account/update-last-seen/";

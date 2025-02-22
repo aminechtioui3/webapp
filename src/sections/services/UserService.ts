@@ -9,7 +9,7 @@ const client = axios.create({baseURL : properties.baseURL});
 export async function getUsers() : Promise<UserAccount[]>
 {
     let res : UserAccount[] = [];
-    await client.get(properties.GetUsers)
+    await client.get(properties.GetActiveMembership)
       .then(async response => {
         const data = await response.data;
         res =  data.map(fromJson);

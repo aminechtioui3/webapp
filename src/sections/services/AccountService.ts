@@ -12,7 +12,7 @@ const client = api;
 export async function getAccountDetails() : Promise<UserAccount[]>
 {
     let res : UserAccount[] = [];
-    await client.get(properties.GetUsers)
+    await client.get(properties.GetActiveMembership)
       .then(async response => {
         const data = await response.data;
         res =  data.map(UserAccount.fromJson(data));
