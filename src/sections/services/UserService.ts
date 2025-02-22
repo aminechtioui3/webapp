@@ -1,12 +1,12 @@
-import axios from 'axios';
+
 import { ResponseModel } from 'src/models/ResponseModel';
 import { ActiveMembership } from 'src/models/ActiveMembership';
 import { Properties } from 'src/properties';
 import { ActiveMembershipCreationDTO } from '../../models/ActivateMembershipCreationDTO';
+import api from "../../api/axiosConfig";
 
 const properties = Properties.getInstance();
-const client = axios.create({ baseURL: properties.baseURL });
-
+const client = api;
 export async function getUsers(): Promise<ResponseModel<ActiveMembership[]>> {
   let res: ActiveMembership[] = [];
   await client.get(properties.GetActiveMembership).then(async (response) => {
