@@ -36,6 +36,7 @@ import { emptyRows, applyFilter, getComparator } from '../utils';
 import type { UserProps } from '../user-table-row';
 import api from "../../../api/axiosConfig";
 import {getMemberships} from "../../services/MembershipService";
+import {ActiveMembership} from "../../../models/ActiveMembership";
 
 // ----------------------------------------------------------------------
 
@@ -44,7 +45,7 @@ export function UserView() {
   const [filterName, setFilterName] = useState('');
   const [open, setOpen] = useState(false);
   const [dataFiltered, setDataFiltered] = useState<UserProps[]>();
-  const [_users, setUsers] = useState<UserAccount[]>([]);
+  const [_users, setUsers] = useState<ActiveMembership[]>([]);
   const [memberships, setMemberships] = useState([]);
   const [selectedMembership, setSelectedMembership] = useState(null);
   const handleClose = () =>(setOpen(false));
@@ -59,11 +60,16 @@ export function UserView() {
     async function fetchMemberships() {
       try {
         const response = await getMemberships();
-        const membershipOptions = response.map((membership) => ({
-          value: membership.id,
-          label: membership.title, // Display the name
-        }));
-        setMemberships(membershipOptions);
+        if (response.status) {
+          const membershipOptions = response.data!.map((membership) => ({
+            value: membership.id,
+            label: membership.title, // Display the name
+          }));
+          setMemberships(membershipOptions);
+        }else{
+          alert(response.displayMsg)
+        }
+
       } catch (error) {
         console.error("Error fetching memberships:", error);
       }
@@ -102,9 +108,10 @@ export function UserView() {
 
       const  onSubmit  = async (data :any) =>  {
         console.log("Form submitted: ", data);
-        let res=false;
-        res= await startMembership(data);
-        if (res){
+
+        let res= await startMembership(data);
+
+        if (res.status){
           alert("done");
            handleClose();
         }else{
@@ -115,14 +122,20 @@ export function UserView() {
   
   useEffect(() => {
     (async function loadData(){
-      const users =  await getUsers(); 
-      setUsers(users);
-      console.log(users);
-      setDataFiltered(applyFilter({
-        inputData: users.map(user => user.toUserProps()),
-        comparator: getComparator(table.order, table.orderBy),
-        filterName,
-      }));
+      const users =  await getUsers();
+
+      if (users.status){
+        setUsers(users.data!);
+        console.log(users);
+        setDataFiltered(applyFilter({
+          inputData: users.data!.map(user => user.toUserProps()),
+          comparator: getComparator(table.order, table.orderBy),
+          filterName,
+        }));
+      }else{
+        // notify admin
+        setUsers([]);
+      }
     })();
     
   }, [filterName, table.order, table.orderBy]);

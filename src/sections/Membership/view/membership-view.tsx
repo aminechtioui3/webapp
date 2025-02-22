@@ -34,6 +34,8 @@ import { MembershipTableToolbar } from '../membership-table-toolbar';
 import { emptyRows, applyFilter, getComparator } from '../utils';
 
 import type { UserProps } from '../membership-table-row';
+import {getMemberships} from "../../services/MembershipService";
+import {MembershipModel} from "../../../models/MembershipModel";
 
 // ----------------------------------------------------------------------
 
@@ -42,7 +44,7 @@ export function MembershipView() {
   const [filterName, setFilterName] = useState('');
   const [open, setOpen] = useState(false);
   const [dataFiltered, setDataFiltered] = useState<UserProps[]>();
-  const [_users, setUsers] = useState<UserAccount[]>([]);
+  const [_users, setUsers] = useState<MembershipModel[]>([]);
   const handleOpen = async () => {setOpen(true)};
   const handleClose = () =>(setOpen(false));
   const PriceSelectionTable=()=>{
@@ -85,14 +87,18 @@ const schema = z.object({
   
   useEffect(() => {
     (async function loadData(){
-      const users =  await getUsers(); 
-      setUsers(users);
-      console.log(users);
-      setDataFiltered(applyFilter({
-        inputData: users.map(user => user.toUserProps()),
-        comparator: getComparator(table.order, table.orderBy),
-        filterName,
-      }));
+      const memberships =  await getMemberships();
+      if (memberships.status){
+        setUsers(memberships.data!);
+        console.log(memberships);
+        setDataFiltered(applyFilter({
+          inputData: memberships.data!.map(user => user.toUserProps()),
+          comparator: getComparator(table.order, table.orderBy),
+          filterName,
+        }));
+      }else{
+        setUsers([]);
+      }
     })();
     
   }, [filterName, table.order, table.orderBy]);

@@ -4,20 +4,25 @@ import { Properties } from 'src/properties';
 import { UserAccount } from 'src/models/UserAccount';
 
 import api from "../../api/axiosConfig";
+// eslint-disable-next-line import/no-named-as-default
+import ResponseModel from "../../models/ResponseModel";
 
 
 const properties = Properties.getInstance();
 const client = api;
 
-export async function getAccountDetails() : Promise<UserAccount[]>
+export async function getAccountDetails() : Promise<ResponseModel<UserAccount>>
 {
-    let res : UserAccount[] = [];
-    await client.get(properties.GetActiveMembership)
-      .then(async response => {
-        const data = await response.data;
-        res =  data.map(UserAccount.fromJson(data));
+
+    await client.post(properties.GetAccountById).then(async (response) => {
+        if (response.status === 200 || response.status === 200) {
+            const data = await response.data;
+            const res = UserAccount.fromJson(data);
+            return new ResponseModel<UserAccount>(true, res, undefined, 'Operation completed');
+        }
+        return new ResponseModel<UserAccount>(false, undefined, response.data, response.statusText);
+
     });
-    return res;
 }
 
 
@@ -32,7 +37,7 @@ export async function checkIfTokenExist(): Promise<boolean>{
 
 
 
-export async function login(email :string,password :string): Promise<boolean> {
+export async function login(email :string,password :string): Promise<ResponseModel<String>> {
   try {const response = await client.post(properties.loginURL, {"email":email,"password":password});
 
     if( response.status === 200 || response.status === 201){
@@ -40,13 +45,14 @@ export async function login(email :string,password :string): Promise<boolean> {
         const token=response.data;
         Cookies.set("token", token, { expires: 7, secure: true }); // Expires in 7 days
         window.location.href = "/";
-        return true;
+        return new ResponseModel<String>(true, token, "Welcome Home!", response.statusText);
+
     }
-        return false;
-    
+      return new ResponseModel<String>(false, "", response.data, response.statusText);
+
+
   } catch (error) {
-    console.error("Error activating membership:", error);
-    return false;
+      return new ResponseModel<String>(false, "", "error ! please try again", error.message);
   }
 }
 
