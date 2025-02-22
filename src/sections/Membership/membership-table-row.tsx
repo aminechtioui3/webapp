@@ -13,34 +13,64 @@ import MenuItem, { menuItemClasses } from '@mui/material/MenuItem';
 import { Label } from 'src/components/label';
 import { Iconify } from 'src/components/iconify';
 import { timeStamp } from 'console';
+import {deleteMembership} from "../services/MembershipService";
+import {applyFilter, getComparator} from "./utils";
 
 // ----------------------------------------------------------------------
 
-export type UserProps = {
-  id: string;
+export type MembershipProps = {
+  id: number;
   name: string;
-  role: string;
-  status: string;
-  avatarUrl: string;
-  isVerified: string;
+  price: number;
+  status: boolean;
+  image: string;
+  description: string;
 };
 
 type UserTableRowProps = {
-  row: UserProps;
+  row: MembershipProps;
   selected: boolean;
   onSelectRow: () => void;
+  updateData: any;
 };
 
-export function MembershipTableRow({ row, selected, onSelectRow }: UserTableRowProps) {
+
+export function MembershipTableRow({ row, selected, onSelectRow, updateData  }: UserTableRowProps) {
   const [openPopover, setOpenPopover] = useState<HTMLButtonElement | null>(null);
 
   const handleOpenPopover = useCallback((event: React.MouseEvent<HTMLButtonElement>) => {
     setOpenPopover(event.currentTarget);
   }, []);
 
-  const handleClosePopover = useCallback(() => {
-    setOpenPopover(null);
+
+
+
+
+  const handleClosePopover = useCallback( () => {
+
+      setOpenPopover(null);
+
   }, []);
+
+
+  const updateActiveMembership = useCallback(async () => {
+    updateData(row.id); // ✅ Now calling the function properly
+  }, [updateData, row.id]);
+
+  const deleteActiveMembership = useCallback( async () => {
+
+    const result = await deleteMembership(row.id.toString());
+    console.log(result);
+    if (result.status) {
+      setOpenPopover(null);
+    } else {
+      console.log(result.status);
+    }
+
+  }, []);
+
+
+
 
   return (
     <>
@@ -51,21 +81,23 @@ export function MembershipTableRow({ row, selected, onSelectRow }: UserTableRowP
 
         <TableCell component="th" scope="row">
           <Box gap={2} display="flex" alignItems="center">
-            <Avatar alt={row.name} src={row.avatarUrl} />
+            <Avatar alt={row.name} src={row.image} />
             {row.name}
           </Box>
         </TableCell>
 
-
-        <TableCell>{row.role}</TableCell>
-
-        <TableCell align="center">
-          {row.isVerified ? (
-            <Iconify width={22} icon="solar:check-circle-bold" sx={{ color: 'success.main' }} />
+        <TableCell >
+          {row.status ? (
+              <Iconify width={22} icon="solar:check-circle-bold" sx={{ color: 'success.main' }} />
           ) : (
-            '-'
+              '-'
           )}
         </TableCell>
+
+        <TableCell>{row.price}</TableCell>
+        <TableCell>{row.description}</TableCell>
+
+
 
         <TableCell>
           {/* <Label color={(row.status === 'banned' && 'error') || 'success'}>{row.status}</Label> */}
@@ -102,12 +134,12 @@ export function MembershipTableRow({ row, selected, onSelectRow }: UserTableRowP
             },
           }}
         >
-          <MenuItem onClick={handleClosePopover}>
+          <MenuItem onClick={updateActiveMembership}>
             <Iconify icon="solar:pen-bold" />
             Edit
           </MenuItem>
 
-          <MenuItem onClick={handleClosePopover} sx={{ color: 'error.main' }}>
+          <MenuItem onClick={deleteActiveMembership} sx={{ color: 'error.main' }}>
             <Iconify icon="solar:trash-bin-trash-bold" />
             Delete
           </MenuItem>

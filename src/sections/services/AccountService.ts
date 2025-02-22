@@ -3,10 +3,10 @@ import Cookies from 'js-cookie';
 import { Properties } from 'src/properties';
 import { UserAccount } from 'src/models/UserAccount';
 
-import api from "../../api/axiosConfig";
 // eslint-disable-next-line import/no-named-as-default
 import ResponseModel from "../../models/ResponseModel";
 
+import api from "../../api/axiosConfig";
 
 const properties = Properties.getInstance();
 const client = api;
@@ -30,8 +30,8 @@ export async function getAccountDetails() : Promise<ResponseModel<UserAccount>>
 
 export async function checkIfTokenExist(): Promise<boolean>{
     const token = Cookies.get("token"); // Read token from cookies
-    // return !!token;
-    return true;
+     return !!token;
+    // return true;
 }
 
 

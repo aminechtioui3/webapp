@@ -291,7 +291,7 @@ export function UserView() {
                 onSelectAllRows={(checked) =>
                   table.onSelectAllRows(
                     checked,
-                    _users?.map((user) => user.id)
+                    _users?.map((user) => user.id.toString()),
                   )
                 }
                 headLabel={[

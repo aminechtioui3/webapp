@@ -24,7 +24,7 @@ import { DashboardContent } from 'src/layouts/dashboard';
 import { Iconify } from 'src/components/iconify';
 import { Scrollbar } from 'src/components/scrollbar';
 
-import {getUsers, startMembership} from 'src/sections/services/UserService';
+
 
 import { TableNoData } from '../table-no-data';
 import { MembershipTableRow } from '../membership-table-row';
@@ -33,9 +33,11 @@ import { TableEmptyRows } from '../membership-table-empty-rows';
 import { MembershipTableToolbar } from '../membership-table-toolbar';
 import { emptyRows, applyFilter, getComparator } from '../utils';
 
-import type { UserProps } from '../membership-table-row';
-import {getMemberships} from "../../services/MembershipService";
+import type { MembershipProps } from '../membership-table-row';
+
+import {getMemberships, createMembership, updateMembership} from "../../services/MembershipService";
 import {MembershipModel} from "../../../models/MembershipModel";
+
 
 // ----------------------------------------------------------------------
 
@@ -43,7 +45,8 @@ export function MembershipView() {
   const table = useTable();
   const [filterName, setFilterName] = useState('');
   const [open, setOpen] = useState(false);
-  const [dataFiltered, setDataFiltered] = useState<UserProps[]>();
+  const [dataFiltered, setDataFiltered] = useState<MembershipProps[]>();
+  const [modifiedId, setModifiedId] = useState<number>(-1);
   const [_users, setUsers] = useState<MembershipModel[]>([]);
   const handleOpen = async () => {setOpen(true)};
   const handleClose = () =>(setOpen(false));
@@ -55,6 +58,7 @@ export function MembershipView() {
   }
 
 
+
 const schema = z.object({
   title: z.string().min(1, "Title is required"),
   subTitle: z.string().min(1, "Subtitle is required"),
@@ -64,45 +68,86 @@ const schema = z.object({
   available: z.boolean(),
   
 });
-      const {
-        register,
-        handleSubmit,
-        formState: { errors },
-      } = useForm({
-        resolver: zodResolver(schema),
-      });
+  const {
+    register,
+    handleSubmit,
+    reset, // <-- Add reset here
+    formState: { errors },
+  } = useForm({
+    resolver: zodResolver(schema),
+  });
 
-      const  onSubmit  = async (data :any) =>  {
-        console.log("Form submitted: ", data);
-        let res=false;
-        res= await startMembership(data);
-        if (res){
-          alert("done");
-           handleClose();
-        }else{
-           alert("error");
-        }
-       
-      };
-  
-  useEffect(() => {
-    (async function loadData(){
-      const memberships =  await getMemberships();
-      if (memberships.status){
-        setUsers(memberships.data!);
-        console.log(memberships);
-        setDataFiltered(applyFilter({
-          inputData: memberships.data!.map(user => user.toUserProps()),
-          comparator: getComparator(table.order, table.orderBy),
-          filterName,
-        }));
-      }else{
-        setUsers([]);
+  const updateData = async (id: string) => {
+    const userToEdit = _users.find(user => user.id.toString() === id.toString()); // Find user by ID
+
+    setModifiedId(Number.parseInt(id, 10));
+    if (userToEdit) {
+      reset(userToEdit); // Populate form fields with user data
+      handleOpen(); // Open the form modal
+    }
+  };
+
+
+  const loadData = async () => {
+    const memberships = await getMemberships();
+    console.log(memberships);
+
+    if (memberships.status) {
+      setUsers(memberships.data!);
+      console.log(memberships);
+      setDataFiltered(applyFilter({
+        inputData: memberships.data!.map(m => m.toMembershipProps()),
+        comparator: getComparator(table.order, table.orderBy),
+        filterName,
+      }));
+    } else {
+      setUsers([]);
+    }
+  };
+
+  const onSubmit = async (data: any) => {
+    console.log("Form submitted: ", data);
+
+    if (modifiedId === -1) {
+      // Create new membership
+      const result = await createMembership(MembershipModel.fromJson(data));
+      console.log(result);
+
+      if (result.status) {
+        handleClose();
+        await loadData(); // ✅ Reload data after successful creation
+      } else {
+        console.log(result);
       }
-    })();
-    
-  }, [filterName, table.order, table.orderBy]);
+    } else {
+      // Update existing membership
+      const m = new MembershipModel(
+          modifiedId,  // ID stays the same
+          data.title,  // Populate fields from form
+          data.subTitle,
+          data.description,
+          data.image,
+          data.price,
+          data.available,
+          new Date(),
+          new Date(),
+      );
 
+      const result = await updateMembership(m);
+      console.log(result);
+
+      if (result.status) {
+        handleClose();
+        await loadData(); // ✅ Reload data after successful update
+      } else {
+        console.log(result);
+      }
+    }
+  };
+
+  useEffect(() => {
+    loadData();
+  }, [filterName, loadData, table.order, table.orderBy]); // ✅ Will run when dependencies change
   const notFound = dataFiltered && dataFiltered!.length && !!filterName;
   
   return (
@@ -179,15 +224,16 @@ const schema = z.object({
                 onSelectAllRows={(checked) =>
                   table.onSelectAllRows(
                     checked,
-                    _users?.map((user) => user.id)
+                    _users?.map((user) => user.id.toString())
                   )
                 }
                 headLabel={[
-                  { id: 'image', label: 'Image', width: '10%' },
-                  { id: 'name', label: 'Name', width: '20%' },
-                  { id: 'price', label: 'Price', width: '20%' },
-                  { id: 'description', label: 'description', width: '20%' },
+                  { id: 'image', label: 'Image', width: '20%' },
+
                   { id: 'status', label: 'Status', width: '10%' },
+                  { id: 'price', label: 'Price', width: '10%' },
+                  { id: 'description', label: 'description', width: '60%' },
+
 
 
                 ]}
@@ -201,8 +247,9 @@ const schema = z.object({
                     <MembershipTableRow
                       key={row.id}
                       row={row}
-                      selected={table.selected.includes(row.id)}
-                      onSelectRow={() => table.onSelectRow(row.id)}
+                      selected={table.selected.includes(row.id.toString())}
+                      onSelectRow={() => table.onSelectRow(row.id.toString())}
+                      updateData={updateData}
                     />
                   ))}
 
@@ -262,6 +309,8 @@ export function useTable() {
     []
   );
 
+
+
   const onResetPage = useCallback(() => setPage(0), []);
   const onChangePage = useCallback((event: unknown, newPage: number) => setPage(newPage), []);
   const onChangeRowsPerPage = useCallback(
@@ -272,6 +321,7 @@ export function useTable() {
     [onResetPage]
   );
   
+
 
   return { page, order, onSort, orderBy, selected, rowsPerPage, onSelectRow, onResetPage, onChangePage, onSelectAllRows, onChangeRowsPerPage };
 }
