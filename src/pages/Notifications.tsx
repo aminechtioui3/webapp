@@ -4,7 +4,7 @@ import { CONFIG } from "src/config-global";
 import { useRouter } from "../routes/hooks";
 import { checkIfTokenExist } from "../sections/services/AccountService";
 import { sendNotification, getNotifications } from "src/sections/services/NotificationService";
-import CustomAlert from "../../src/components/Alert/CustomAlert"; // Import CustomAlert
+import CustomAlert from "../../src/components/Alert/CustomAlert";
 import {
   Box,
   Card,
@@ -15,13 +15,9 @@ import {
   MenuItem,
   FormControl,
   InputLabel,
-  Collapse,
-  IconButton,
+  Grid,
 } from "@mui/material";
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import ExpandLessIcon from "@mui/icons-material/ExpandLess";
 
-// Define Notification type (optional)
 interface Notification {
   message: string;
   sentTo: string;
@@ -33,14 +29,12 @@ export default function NotificationsPage() {
   const [isTokenValid, setIsTokenValid] = useState<boolean>(false);
   const [message, setMessage] = useState<string>("");
   const [group, setGroup] = useState<string>("all");
+  const [subGroup, setSubGroup] = useState<string>("all members");
   const [sentNotifications, setSentNotifications] = useState<Notification[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
-  const [expanded, setExpanded] = useState<boolean>(false);
-  const [alert, setAlert] = useState<{ show: boolean; type: "success" | "error" | "warning" | "info"; message: string }>({
-    show: false,
-    type: "success",
-    message: "",
-  });
+  const [alert, setAlert] = useState<{ show: boolean; type: "success" | "error" | "warning" | "info"; message: string }>(
+    { show: false, type: "success", message: "" }
+  );
 
   const router = useRouter();
 
@@ -63,7 +57,6 @@ export default function NotificationsPage() {
       const { sent } = await getNotifications();
       setSentNotifications(sent);
     } catch (error) {
-      console.error("Error fetching notifications:", error);
       setAlert({ show: true, type: "error", message: "Failed to fetch notifications!" });
     }
     setLoading(false);
@@ -76,7 +69,7 @@ export default function NotificationsPage() {
     }
     setLoading(true);
     try {
-      await sendNotification({ message, group });
+      await sendNotification({ message, group: `${group} - ${subGroup}` });
       setMessage("");
       fetchNotifications();
       setAlert({ show: true, type: "success", message: "Notification sent successfully!" });
@@ -85,7 +78,6 @@ export default function NotificationsPage() {
         setAlert({ show: false, type: "success", message: "" });
       }, 3000);
     } catch (error) {
-      console.error("Failed to send notification:", error);
       setAlert({ show: true, type: "error", message: "Failed to send notification!" });
     }
     setLoading(false);
@@ -99,7 +91,6 @@ export default function NotificationsPage() {
         <title>{`Notifications - ${CONFIG.appName}`}</title>
       </Helmet>
 
-      {/* Global Alert Component */}
       <CustomAlert type={alert.type} message={alert.message} show={alert.show} />
 
       <Box p={4}>
@@ -107,16 +98,32 @@ export default function NotificationsPage() {
           <Typography variant="h6" fontWeight="bold" gutterBottom>
             Send Notification
           </Typography>
-          <FormControl fullWidth sx={{ mb: 2 }}>
-            <InputLabel>Group</InputLabel>
-            <Select value={group} onChange={(e) => setGroup(e.target.value)}>
-              <MenuItem value="all">All Users</MenuItem>
-              <MenuItem value="admins">Admins</MenuItem>
-              <MenuItem value="members">Members</MenuItem>
-              <MenuItem value="free_access">Free Access</MenuItem>
-              <MenuItem value="specific_course">Specific Course</MenuItem>
-            </Select>
-          </FormControl>
+          
+          <Grid container spacing={2} sx={{ mb: 2 }}>
+            <Grid item xs={6}>
+              <FormControl fullWidth>
+                <InputLabel>Group</InputLabel>
+                <Select value={group} onChange={(e) => setGroup(e.target.value)}>
+                  <MenuItem value="all">All Users</MenuItem>
+                  <MenuItem value="specific_course">Specific Course</MenuItem>
+                </Select>
+              </FormControl>
+            </Grid>
+            <Grid item xs={6}>
+              <FormControl fullWidth>
+                <InputLabel>{group === "all" ? "Sub Group" : "Course"}</InputLabel>
+                <Select value={subGroup} onChange={(e) => setSubGroup(e.target.value)}>
+                  {group === "all" ? (
+                    <MenuItem value="all members">All Members</MenuItem>
+                  ) : (
+                    ["Boxing", "Accès Libre", "Football Team", "Yoga"].map((course) => (
+                      <MenuItem key={course} value={course}>{course}</MenuItem>
+                    ))
+                  )}
+                </Select>
+              </FormControl>
+            </Grid>
+          </Grid>
 
           <TextField
             fullWidth
@@ -138,6 +145,23 @@ export default function NotificationsPage() {
               {loading ? "Sending..." : "Send Notification"}
             </Button>
           </Box>
+        </Card>
+
+        <Card sx={{ p: 3, mt: 3 }}>
+          <Typography variant="h6" fontWeight="bold" gutterBottom>
+            Sent Notifications
+          </Typography>
+          {sentNotifications.length === 0 ? (
+            <Typography>No notifications sent yet.</Typography>
+          ) : (
+            sentNotifications.map((notif, index) => (
+              <Card key={index} sx={{ p: 2, mb: 2 }}>
+                <Typography><strong>To:</strong> {notif.sentTo}</Typography>
+                <Typography><strong>Message:</strong> {notif.message}</Typography>
+                <Typography variant="caption"><strong>Sent At:</strong> {notif.sentAt}</Typography>
+              </Card>
+            ))
+          )}
         </Card>
       </Box>
     </>
