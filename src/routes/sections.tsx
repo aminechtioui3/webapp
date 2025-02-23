@@ -20,6 +20,9 @@ export const SignInPage = lazy(() => import('src/pages/sign-in'));
 export const ProductsPage = lazy(() => import('src/pages/products'));
 export const Page404 = lazy(() => import('src/pages/page-not-found'));
 export const NotificationPage = lazy(() =>import('src/pages/Notifications'));
+export const Profile =lazy(()=>import('src/pages/Profile'));
+export const AuthReset =lazy(()=>import('src/pages/AuthReset'));
+export const Settings= lazy(()=>import('src/pages/settings'));
 
 // ----------------------------------------------------------------------
 
@@ -54,6 +57,9 @@ export function Router() {
         { path: 'products', element: <ProductsPage /> },
         { path: 'blog', element: <BlogPage /> },
         { path: 'notifications', element: <NotificationPage /> },
+        {path: 'profile',element :<Profile/>},
+        {path:'AuthReset', element:<AuthReset/>},
+        {path :'Settings',element:<Settings/>},
 
 
       ],
