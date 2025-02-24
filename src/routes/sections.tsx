@@ -67,7 +67,7 @@ export function Router() {
         { path: 'notifications', element: <NotificationPage /> },
         { path: 'article', element: <ArticlePage /> },
         { path: 'deals', element: <DealsPage /> },
-        { path: 'exercise', element: <ExercisePage /> },
+        { path: 'exercises', element: <ExercisePage /> },
         { path: 'session', element: <SessionPage /> },
         { path: 'shop', element: <ShopPage /> },
         { path: 'product-category', element: <ProductCategoryPage /> },

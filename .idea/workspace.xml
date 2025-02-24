@@ -5,12 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="74813386-4e36-4a36-874f-73c4ba81e498" name="Changes" comment="f">
-      <change afterPath="$PROJECT_DIR$/src/pages/AuthReset.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/pages/Profile.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/pages/settings.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/sections/services/ProfileService.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/sections/services/authService.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/routes/sections.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/routes/sections.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -48,7 +43,7 @@
   "keyToString": {
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.git.unshallow": "true",
-    "git-widget-placeholder": "Merging main",
+    "git-widget-placeholder": "main",
     "last_opened_file_path": "C:/Users/mohaa/Desktop/Work Chtioui/webapp/src/sections/Exercises",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
@@ -87,7 +82,7 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1740127790528</updated>
-      <workItem from="1740127792314" duration="84717000" />
+      <workItem from="1740127792314" duration="84923000" />
     </task>
     <task id="LOCAL-00001" summary="d">
       <option name="closed" value="true" />
