@@ -24,19 +24,18 @@ import { Iconify } from 'src/components/iconify';
 import { Scrollbar } from 'src/components/scrollbar';
 
 import { TableNoData } from '../table-no-data';
-import { ActiveMembershipProps, ExerciseTableRow } from '../exercise-table-row';
+import { ExerciseProps, ExerciseTableRow } from '../exercise-table-row';
 import { ExerciseTableHead } from '../exercise-table-head';
 import { ExerciseTableToolbar } from '../exercise-table-toolbar';
 import { applyFilter, emptyRows, getComparator } from '../utils';
 
-import { ActiveMembership } from '../../../models/ActiveMembership';
-import { ActiveMembershipCreationDTO } from '../../../models/ActivateMembershipCreationDTO';
 import { createActiveMembership, getMembers, updateActiveMembership } from '../../services/UserService';
-import { getMemberships } from '../../services/MembershipService';
+
 import { TableEmptyRows } from '../exercise-table-empty-rows';
-import { Role } from '../../../models/Role';
-import {MembershipModel} from "../../../models/MembershipModel";
-import {Snackbar} from "@mui/material";
+import {ExerciseModel} from "../../../models/ExerciseModel";
+import {SessionModel} from "../../../models/SessionModel";
+import {getExercise, updateExercise} from "../../services/ExerciseService";
+import {getAllSessions} from "../../services/SessionService";
 
 // ----------------------------------------------------------------------
 
@@ -46,28 +45,26 @@ export function ExerciseView() {
   const [open, setOpen] = useState(false);
   const [notFoundTrigger, setNotFoundTrigger] = useState(false);
   const [modifiedId, setModifiedId] = useState<number | null>(null);
-  const [updatedUserProfile, setUpdatedUserProfile] = useState<UserAccount | null>(null);
-  const [dataFiltered, setDataFiltered] = useState<ActiveMembershipProps[]>();
-  const [_users, setUsers] = useState<ActiveMembership[]>([]);
-  const [memberships, setMemberships] = useState<MembershipModel[]>([]);
-  const [selectedMembership, setSelectedMembership] = useState<MembershipModel | null>(null);
+  const [dataFiltered, setDataFiltered] = useState<ExerciseProps[]>();
+  const [_exercises, setExercises] = useState<ExerciseModel[]>([]);
+  const [sessions, setSessions] = useState<SessionModel[]>([]);
+  const [selectedSession, setSelectedSession] = useState<SessionModel | null>(null);
 
   const schema = z.object({
+
+
     id: z.number().optional(),
-    membershipId: z.number(),
-    email: z.string(),
-    firstName: z.string(),
-    lastName: z.string(),
-    birthday: z.union([z.string(), z.date()]),
-    weight: z.number(),
-    height: z.number(),
-    location: z.string(),
-    phone: z.string(),
-    gender: z.string(),
-    startDate: z.union([z.string(), z.date()]),
-    endDate: z.union([z.string(), z.date()]),
-    note: z.string().optional(),
-    status: z.string().optional(),
+    sessionId: z.number(),
+    name: z.string(),
+    description: z.string(),
+    image: z.string().optional(),
+    video: z.string().optional(),
+    durationInMinutes: z.number(),
+    calorie: z.number(),
+    level: z.string(),
+    muscles: z.string(),
+    tags: z.string(),
+    repeatNumber: z.string().optional(),
     available: z.boolean(),
   });
 
@@ -81,21 +78,23 @@ export function ExerciseView() {
     resolver: zodResolver(schema),
     defaultValues:{
       available:true,
-      gender: "Male"
+      repeatNumber: "0",
+      calorie:0,
+      durationInMinutes:0,
     }
   });
 
   // Sync selected membership with form state
   useEffect(() => {
-    if (selectedMembership) {
-      setValue('membershipId', selectedMembership.id);
+    if (selectedSession) {
+      setValue('sessionId', selectedSession.id);
     }
-  }, [selectedMembership, setValue]);
+  }, [selectedSession, setValue]);
 
   const handleClose = () => {
     setOpen(false);
     setModifiedId(null);
-    setSelectedMembership(null);
+    setSelectedSession(null);
     reset();
   };
 
@@ -105,16 +104,16 @@ export function ExerciseView() {
     reset();
 
     try {
-      const response = await getMemberships();
+      const response = await getAllSessions();
       if (response.status) {
-        setMemberships(response.data);
-        setSelectedMembership(null);
+        setSessions(response.data);
+        setSelectedSession(null);
       } else {
         handleClose();
         alert(response.displayMsg);
       }
     } catch (error) {
-      console.error('Error fetching memberships:', error);
+      console.error('Error fetching sessions:', error);
     }
 
     setOpen(true);
@@ -124,41 +123,29 @@ export function ExerciseView() {
   useEffect(() => {
     const loadUserDataAndOpenDialog = async () => {
       if (modifiedId && modifiedId !== -1) {
-        const userToEdit = _users.find((user) => user.id === modifiedId);
+        const userToEdit = _exercises.find((user) => user.id === modifiedId);
         if (userToEdit) {
           const formattedUser = {
             ...userToEdit,
-            startDate: userToEdit.startDate?.toISOString().split('T')[0] || '',
-            endDate: userToEdit.endDate?.toISOString().split('T')[0] || '',
-            email: userToEdit.user.email,
-            firstName: userToEdit.user.firstName,
-            lastName: userToEdit.user.lastName,
-            birthday: userToEdit.user.birthday?.toISOString().split('T')[0] || '',
-            weight: userToEdit.user.weight,
-            height: userToEdit.user.height,
-            location: '',
-            phone: userToEdit.user.phone,
-            gender: userToEdit.user.gender,
-            note: userToEdit.note,
-            status: userToEdit.status,
-            available: userToEdit.available,
-            membershipId: userToEdit.membership.id,
+
+            sessionId: userToEdit.session.id,
+
           };
 
           reset(formattedUser);
 
           try {
-            const response = await getMemberships();
+            const response = await getAllSessions();
             if (response.status) {
-              setMemberships(response.data);
-              const userMembership = response.data.find((m) => m.id === userToEdit.membership.id);
+              setSessions(response.data);
+              const userMembership = response.data.find((m) => m.id === userToEdit.session.id);
               if (userMembership) {
-                setSelectedMembership(userMembership);
-                setValue('membershipId', userMembership.id);
+                setSelectedSession(userMembership);
+                setValue('sessionId', userMembership.id);
               }
             }
           } catch (error) {
-            console.error('Error fetching memberships:', error);
+            console.error('Error fetching sessions:', error);
           }
 
           setOpen(true);
@@ -167,45 +154,52 @@ export function ExerciseView() {
     };
 
     loadUserDataAndOpenDialog();
-  }, [modifiedId, _users, reset, setValue,updatedUserProfile]);
+  }, [modifiedId, _exercises, reset, setValue,updatedUserProfile]);
 
   const handleSubmitForm = async (data: any) => {
     try {
-      if (!selectedMembership) {
-        alert('Please select a valid membership');
+      if (!selectedSession) {
+        alert('Please select a valid sessions');
         return;
       }
 
-      if (!selectedMembership) {
-        alert('Please select a valid membership');
+      if (!selectedSession) {
+        alert('Please select a valid session');
         return;
       }
 
       if (modifiedId === -1) {
         // Create new membership
-        const activeMembershipCreationDto = new ActiveMembershipCreationDTO(
-            undefined,
-            selectedMembership.id,
-            data.email,
-            data.firstName,
-            data.lastName,
-            new Date(data.birthday),
-            data.weight,
-            data.height,
-            data.location,
-            data.phone,
-            data.gender,
-            new Date(data.startDate),
-            new Date(data.endDate),
-            data.note,
-            data.status,
+        const exerciseModel = new ExerciseModel(
+            -1,
+            data.name ,
+            data.description ,
+
+            data.durationInMinutes ,
+
+            data.calorie ,
+
+            selectedSession,
+
+            data.available ,
+
+            data.image ,
+            data.video ,
+            data.level ,
+            data.muscles ,
+            data.tags ,
+
+            data.repeatNumber ,
+            new Date() ,
+            new Date() ,
+
         );
 
 
 
-        console.log(activeMembershipCreationDto);
+        console.log(exerciseModel);
 
-        const result = await createActiveMembership(activeMembershipCreationDto);
+        const result = await createActiveMembership(exerciseModel);
         console.log(result);
         if (result.status) {
           console.log(result.status);
@@ -216,26 +210,38 @@ export function ExerciseView() {
         // Update existing membership
 
         console.log("selected Membership");
-        console.log(selectedMembership);
+        console.log(selectedSession);
         console.log("selectedMembershipId");
         console.log(data.membershipId);
-        const newMembership = memberships.find((m) => m.id === selectedMembership.id);
-        const updatedMembership = new ActiveMembership(
-            modifiedId,
-            selectedMembership,
-            updatedUserProfile || data.user,
-            new Date(data.startDate),
-            new Date(data.endDate),
-            data.available,
-            new Date(),
-            new Date(),
-            data.note,
-            data.status
-        );
-        console.log("update membership");
-        console.log(updatedMembership);
+        const newMembership = sessions.find((m) => m.id === selectedSession.id);
+        const updatedExercise = new ExerciseModel(
 
-        const result = await updateActiveMembership(updatedMembership);
+            modifiedId,
+            data.name ,
+            data.description ,
+
+            data.durationInMinutes ,
+
+            data.calorie ,
+
+            selectedSession,
+
+            data.available ,
+
+            data.image ,
+            data.video ,
+            data.level ,
+            data.muscles ,
+            data.tags ,
+            data.repeatNumber ,
+            new Date() ,
+            new Date() ,
+
+        );
+        console.log("update exercise", updatedExercise);
+
+
+        const result = await updateExercise(updatedExercise);
         if (result.status) {
           handleClose();
           await loadData();
@@ -247,19 +253,19 @@ export function ExerciseView() {
   };
 
   const loadData = useCallback(async () => {
-    const res = await getMembers();
+    const res = await getExercise();
     if (res.status) {
       setNotFoundTrigger(false)
-      setUsers(res.data);
+      setExercises(res.data);
       setDataFiltered(
           applyFilter({
-            inputData: res.data.map((m) => m.toActiveMembershipProps()),
+            inputData: res.data.map((m) => m.toExerciseProps()),
             comparator: getComparator(table.order, table.orderBy),
             filterName,
           })
       );
     }else{
-      setUsers([]);
+      setExercises([]);
       setNotFoundTrigger(true)
     }
   }, [filterName, table.order, table.orderBy]);
@@ -270,11 +276,9 @@ export function ExerciseView() {
 
   const updateData = (id: string) => {
     setModifiedId(Number(id));
-    const selectedMem = _users.find((user) => user.id.toString() === id);
+    const selectedMem = _exercises.find((user) => user.id.toString() === id);
     if (selectedMem) {
-      let account= _users.find((user) => user.id.toString() === id);
-      console.log("the selected account is",account)
-      setUpdatedUserProfile(account?.user);
+
     }
   };
 
@@ -292,7 +296,7 @@ export function ExerciseView() {
           startIcon={<Iconify icon="mingcute:add-line" />}
           onClick={handleOpenAdd}
         >
-          Add New Member
+          Add New Exercise
         </Button>
       </Box>
 
@@ -305,9 +309,9 @@ export function ExerciseView() {
             <div style={{ marginBottom: '10px' }}>
               <label>Membership</label>
               <Select
-                options={memberships}
-                value={selectedMembership}
-                onChange={setSelectedMembership}
+                options={sessions}
+                value={selectedSession}
+                onChange={setSelectedSession}
                 getOptionLabel={(option) => option.title}
                 getOptionValue={(option) => option.id.toString()}
                 placeholder="Select Membership..."
@@ -317,73 +321,61 @@ export function ExerciseView() {
 
             <input
               type="hidden"
-              {...register('membershipId')}
-              value={selectedMembership?.value || ''}
+              {...register('sessionId')}
+              value={selectedSession?.value || ''}
             />
 
-            {/* Show these fields only when adding new member */}
-            {modifiedId === -1 && (
+
               <>
-                <TextField label="First Name" fullWidth margin="dense" {...register('firstName')} />
-                <TextField label="Last Name" fullWidth margin="dense" {...register('lastName')} />
-                <TextField label="Email" fullWidth type="email" margin="dense" {...register('email')} />
-                <TextField
-                  label="Birthday"
-                  fullWidth
-                  margin="dense"
-                  type="date"
-                  {...register('birthday')}
-                  InputLabelProps={{ shrink: true }}
-                />
-                <TextField
-                  label="Weight"
-                  fullWidth
-                  margin="dense"
-                  type="number"
-                  {...register('weight', { valueAsNumber: true })}
-                />
-                <TextField
-                  label="Height"
-                  fullWidth
-                  margin="dense"
-                  type="number"
-                  {...register('height', { valueAsNumber: true })}
-                />
-                <TextField label="Location" fullWidth margin="dense" {...register('location')} />
-                <TextField label="Phone" fullWidth margin="dense" {...register('phone')} />
-                <div style={{ marginBottom: '10px' }}>
-                  <label>Gender</label>
-                  <Select
-                    options={[
-                      { value: 'MALE', label: 'Male' },
-                      { value: 'FEMALE', label: 'Female' },
-                    ]}
-                    onChange={(selectedOption) => setValue('gender', selectedOption?.value)}
-                    placeholder="Select Gender..."
-                  />
-                </div>
-              </>
-            )}
 
-            {/* Always show these fields */}
-            <TextField
-              label="Start Date"
-              fullWidth
-              margin="dense"
-              type="date"
-              {...register('startDate')}
-              InputLabelProps={{ shrink: true }}
-            />
-            <TextField
-              label="End Date"
-              fullWidth
-              margin="dense"
-              type="date"
-              {...register('endDate')}
-              InputLabelProps={{ shrink: true }}
-            />
-            <TextField label="Note" fullWidth margin="dense" {...register('note')} />
-            <TextField label="Status" fullWidth margin="dense" {...register('status')} />
+                id: number,
+                name: string,
+                description: string,
+                durationInMinutes: number,
+                calorie: number,
+                session: SessionModel,
+                available: boolean,
+                image?: string,
+                video?: string,
+                level?: string,
+                muscles?: string,
+                tags?: string,
+                repeatNumber?: string,
+                createdAt: Date = new Date(),
+                updatedAt: Date = new Date()
+
+                <TextField label="Name" fullWidth margin="dense" {...register("name")} error={!!errors.name} helperText={errors.name?.message} />
+                <TextField label="Description" fullWidth margin="dense" {...register("description")} error={!!errors.description} helperText={errors.description?.message} />
+                <TextField label="Image URL" fullWidth margin="dense" {...register("image")} error={!!errors.image} helperText={errors.image?.message} />
+                <TextField label="Video URL" fullWidth margin="dense" {...register("video")} error={!!errors.video} helperText={errors.video?.message} />
+                <TextField label="Level" fullWidth margin="dense" {...register("level")} error={!!errors.level} helperText={errors.level?.message} />
+                <TextField label="Muscles" fullWidth margin="dense" {...register("muscles")} error={!!errors.muscles} helperText={errors.muscles?.message} />
+                <TextField label="Tags" fullWidth margin="dense" {...register("tags")} error={!!errors.tags} helperText={errors.tags?.message} />
+                <TextField label="Repeat" fullWidth margin="dense" {...register("repeatNumber")} error={!!errors.repeatNumber} helperText={errors.repeatNumber?.message} />
+
+                <TextField
+                    {...register("durationInMinutes", { valueAsNumber: true })}
+                    margin="dense"
+                    label="Duration (minutes)"
+                    type="number"
+                    fullWidth
+                    error={!!errors.durationInMinutes}
+                    helperText={errors.durationInMinutes?.message}
+                />
+                <TextField
+                    {...register("calorie", { valueAsNumber: true })}
+                    margin="dense"
+                    label="Calories"
+                    type="number"
+                    fullWidth
+                    error={!!errors.durationInMinutes}
+                    helperText={errors.durationInMinutes?.message}
+                />
+
+              </>
+
+
+
             <TextField
               type="checkbox"
               label="Available"
@@ -423,13 +415,13 @@ export function ExerciseView() {
               <ExerciseTableHead
                 order={table.order}
                 orderBy={table.orderBy}
-                rowCount={_users.length}
+                rowCount={_exercises.length}
                 numSelected={table.selected.length}
                 onSort={table.onSort}
                 onSelectAllRows={(checked) =>
                   table.onSelectAllRows(
                     checked,
-                    _users?.map((user) => user.id.toString())
+                    _exercises?.map((user) => user.id.toString())
                   )
                 }
                 headLabel={[
@@ -460,7 +452,7 @@ export function ExerciseView() {
 
                 <TableEmptyRows
                   height={68}
-                  emptyRows={emptyRows(table.page, table.rowsPerPage, _users.length)}
+                  emptyRows={emptyRows(table.page, table.rowsPerPage, _exercises.length)}
                 />
 
                 {notFoundTrigger && <TableNoData searchQuery={filterName} />}
@@ -472,7 +464,7 @@ export function ExerciseView() {
         <TablePagination
           component="div"
           page={table.page}
-          count={_users.length}
+          count={_exercises.length}
           rowsPerPage={table.rowsPerPage}
           onPageChange={table.onChangePage}
           rowsPerPageOptions={[5, 10, 25]}

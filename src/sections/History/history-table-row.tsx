@@ -178,7 +178,7 @@ export function HistoryTableRow({ row, selected, onSelectRow, updateData, onDele
         </DialogTitle>
         <DialogContent>
           <DialogContentText id="alert-dialog-description">
-            Are you sure you want to delete the {row.name} membership!
+            Are you sure you want to delete the {row.title} membership!
           </DialogContentText>
         </DialogContent>
         <DialogActions>

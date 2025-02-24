@@ -1,4 +1,5 @@
 import {SessionModel} from "./SessionModel";
+import {ExerciseProps} from "../sections/Exercises/exercise-table-row";
 
 export class ExerciseModel {
   id: number;
@@ -88,6 +89,26 @@ export class ExerciseModel {
       available: this.available,
       createdAt: this.createdAt.toISOString(),
       updatedAt: this.updatedAt.toISOString(),
+    };
+  }
+
+
+  toExerciseProps(): ExerciseProps {
+    return {
+
+
+      id: this.id,
+      name: this.name,
+      durationInMinutes: this.durationInMinutes,
+      level: this.level,
+      muscles: this.muscles,
+      tags: this.tags,
+      session: this.session,
+      repeatNumber: this.repeatNumber,
+      image:( this.image)?this.image:'https://example.com/avatar.jpg',
+      description: this.description,
+      available: this.available,
+      calorie: this.calorie
     };
   }
 }

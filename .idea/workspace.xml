@@ -6,6 +6,12 @@
   <component name="ChangeListManager">
     <list default="true" id="74813386-4e36-4a36-874f-73c4ba81e498" name="Changes" comment="f">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/models/ExerciseModel.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/models/ExerciseModel.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/properties.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/properties.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/routes/sections.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/routes/sections.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/sections/Exercises/exercise-table-row.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/sections/Exercises/exercise-table-row.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/sections/Exercises/view/exercise-view.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/sections/Exercises/view/exercise-view.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/sections/History/history-table-row.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/sections/History/history-table-row.tsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -82,7 +88,7 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1740127790528</updated>
-      <workItem from="1740127792314" duration="84923000" />
+      <workItem from="1740127792314" duration="90148000" />
     </task>
     <task id="LOCAL-00001" summary="d">
       <option name="closed" value="true" />

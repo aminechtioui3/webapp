@@ -73,7 +73,7 @@ export function Router() {
         { path: 'product-category', element: <ProductCategoryPage /> },
         { path: 'product-orders', element: <ProductOrdersPage /> },
         { path: 'history', element: <HistoryPage /> },
-
+          
         {path: 'profile',element :<Profile/>},
         {path:'AuthReset', element:<AuthReset/>},
         {path :'Settings',element:<Settings/>},

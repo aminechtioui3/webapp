@@ -10,12 +10,8 @@ import TableCell from '@mui/material/TableCell';
 import IconButton from '@mui/material/IconButton';
 import MenuItem, { menuItemClasses } from '@mui/material/MenuItem';
 
-import { Label } from 'src/components/label';
 import { Iconify } from 'src/components/iconify';
-import { timeStamp } from 'console';
 
-import {applyFilter, getComparator} from "./utils";
-import {MembershipModel} from "../../models/MembershipModel";
 import {deleteActiveMembership} from "../services/UserService";
 import Dialog from "@mui/material/Dialog";
 import DialogTitle from "@mui/material/DialogTitle";
@@ -23,22 +19,29 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogActions from "@mui/material/DialogActions";
 import Button from "@mui/material/Button";
 import {DialogContentText} from "@mui/material";
-import {UserAccount} from "../../models/UserAccount";
+
+import {SessionModel} from "../../models/SessionModel";
+import {deleteExercise} from "../services/ExerciseService";
 
 // ----------------------------------------------------------------------
 
-export type ActiveMembershipProps = {
+export type ExerciseProps = {
   id: number;
-  user: UserAccount;
-  membership: MembershipModel;
-  endDate: Date;
-  startDate: Date;
-  note?: string;
-  status?: string;
+  name: string;
+  description: string;
+  image?: string;
+  durationInMinutes: number;
+  calorie: number;
+  level?: string;
+  muscles?: string;
+  tags?: string;
+  session: SessionModel
+  repeatNumber?: string;
+  available: boolean;
 };
 
 type UserTableRowProps = {
-  row: ActiveMembershipProps;
+  row: ExerciseProps;
   selected: boolean;
   onSelectRow: () => void;
   updateData: void;
@@ -86,7 +89,7 @@ export function ExerciseTableRow({ row, selected, onSelectRow, updateData, onDel
   }, []);
 
   const deleteActiveMem = useCallback(async () => {
-    const result = await deleteActiveMembership(row.id.toString());
+    const result = await deleteExercise(row.id.toString());
     if (result.status) {
       onDeleteSuccess();
       handleCloseDeleteDialog();
@@ -107,21 +110,19 @@ export function ExerciseTableRow({ row, selected, onSelectRow, updateData, onDel
 
         <TableCell component="th" scope="row">
           <Box gap={2} display="flex" alignItems="center">
-            <Avatar alt={row.user.firstName} src={row.user.image} />
-            {row.user.firstName}  {row.user.lastName}
-            {"\n"}
-                {row.user.phone}
+            <Avatar alt={row.image} src={row.image} />
+            {row.name}
           </Box>
         </TableCell>
 
-        <TableCell>{row.membership.title}</TableCell>
+        <TableCell>{row.session.title}</TableCell>
 
 
 
-        <TableCell>{row.startDate.toISOString()}</TableCell>
-        <TableCell>{row.endDate.toISOString()}</TableCell>
+        <TableCell>{row.calorie}</TableCell>
+        <TableCell>{row.level}</TableCell>
         <TableCell >
-          {row.status ? (
+          {row.available ? (
               <Iconify width={22} icon="solar:check-circle-bold" sx={{ color: 'success.main' }} />
           ) : (
               '-'
@@ -189,7 +190,7 @@ export function ExerciseTableRow({ row, selected, onSelectRow, updateData, onDel
         </DialogTitle>
         <DialogContent>
           <DialogContentText id="alert-dialog-description">
-            Are you sure you want to delete this membership for {row.user.firstName} {row.user.lastName}?
+            Are you sure you want to delete this exercise  {row.name} of session {row.session.title}?
           </DialogContentText>
         </DialogContent>
         <DialogActions>

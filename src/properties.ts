@@ -155,7 +155,7 @@ export class Properties {
 
 
     private constructor() {
-        this.baseURL = "https://c645-2c0f-f3a0-98-a7c1-c064-d2ec-228d-aeec.ngrok-free.app/api/v1";
+        this.baseURL = "https://gymapp-production-e339.up.railway.app/api/v1";
 
         // Active Membership
         this.ActivateMembership = "/protected/active-membership/start-active-membership";
