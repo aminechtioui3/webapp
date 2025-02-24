@@ -20,6 +20,14 @@ export const SignInPage = lazy(() => import('src/pages/sign-in'));
 export const ProductsPage = lazy(() => import('src/pages/products'));
 export const Page404 = lazy(() => import('src/pages/page-not-found'));
 export const NotificationPage = lazy(() =>import('src/pages/Notifications'));
+export const ArticlePage = lazy(() =>import('src/pages/Article'));
+export const ShopPage = lazy(() =>import('src/pages/Shop'));
+export const ProductCategoryPage = lazy(() =>import('src/pages/ProductType'));
+export const ExercisePage = lazy(() =>import('src/pages/Exercise'));
+export const DealsPage = lazy(() =>import('src/pages/Deals'));
+export const HistoryPage = lazy(() =>import('src/pages/History'));
+export const SessionPage = lazy(() =>import('src/pages/Sessions'));
+export const ProductOrdersPage = lazy(() =>import('src/pages/ProductOrders'));
 
 // ----------------------------------------------------------------------
 
@@ -48,12 +56,21 @@ export function Router() {
       ),
       children: [
         { element: <HomePage />, index: true },
-          { path: 'user', element: <UserPage /> },
-          { path: 'membership', element: <Membership /> },
-          { path: 'expense', element: <Expense /> },
+        { path: 'user', element: <UserPage /> },
+        { path: 'membership', element: <Membership /> },
+        { path: 'expense', element: <Expense /> },
         { path: 'products', element: <ProductsPage /> },
         { path: 'blog', element: <BlogPage /> },
         { path: 'notifications', element: <NotificationPage /> },
+        { path: 'article', element: <ArticlePage /> },
+        { path: 'deals', element: <DealsPage /> },
+        { path: 'exercise', element: <ExercisePage /> },
+        { path: 'session', element: <SessionPage /> },
+        { path: 'shop', element: <ShopPage /> },
+        { path: 'product-category', element: <ProductCategoryPage /> },
+        { path: 'product-orders', element: <ProductOrdersPage /> },
+        { path: 'history', element: <HistoryPage /> },
+
 
 
       ],

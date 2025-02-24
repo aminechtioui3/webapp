@@ -9,38 +9,89 @@ import MenuList from '@mui/material/MenuList';
 import TableCell from '@mui/material/TableCell';
 import IconButton from '@mui/material/IconButton';
 import MenuItem, { menuItemClasses } from '@mui/material/MenuItem';
-
-import { Label } from 'src/components/label';
 import { Iconify } from 'src/components/iconify';
-import { timeStamp } from 'console';
+
+import Dialog from "@mui/material/Dialog";
+import DialogTitle from "@mui/material/DialogTitle";
+import DialogContent from "@mui/material/DialogContent";
+import {DialogContentText} from "@mui/material";
+import DialogActions from "@mui/material/DialogActions";
+import Button from "@mui/material/Button";
+import {deleteExpense} from "../services/ExpenseService";
+
 
 // ----------------------------------------------------------------------
 
-export type UserProps = {
-  id: string;
-  name: string;
-  role: string;
-  status: string;
-  avatarUrl: string;
-  isVerified: string;
+export type ExpenseProps = {
+  id: number;
+  date: Date;
+  note: string;
+  amount: number;
+  type: string;
 };
 
-type UserTableRowProps = {
-  row: UserProps;
+type ExpenseTableRowProps = {
+  row: ExpenseProps;
   selected: boolean;
   onSelectRow: () => void;
+  updateData: any;
+  onDeleteSuccess: () => void;
 };
 
-export function ExpenseTableRow({ row, selected, onSelectRow }: UserTableRowProps) {
+
+export function ExpenseTableRow({ row, selected, onSelectRow, updateData, onDeleteSuccess  }: ExpenseTableRowProps) {
   const [openPopover, setOpenPopover] = useState<HTMLButtonElement | null>(null);
 
   const handleOpenPopover = useCallback((event: React.MouseEvent<HTMLButtonElement>) => {
     setOpenPopover(event.currentTarget);
   }, []);
 
-  const handleClosePopover = useCallback(() => {
-    setOpenPopover(null);
+
+  const [openDeleteDialog, setOpenDeleteDialog] = useState(false); // Add this state
+
+
+
+
+
+
+  const handleClosePopover = useCallback( () => {
+
+      setOpenPopover(null);
+
   }, []);
+
+
+  const updateActiveMembership = useCallback(async () => {
+    updateData(row.id); // ✅ Now calling the function properly
+  }, [updateData, row.id]);
+
+
+
+
+
+
+  const handleOpenDeleteDialog = useCallback(() => {
+    setOpenDeleteDialog(true);
+    setOpenPopover(null);
+
+    onDeleteSuccess();
+    handleClosePopover(); // Close the popover when opening dialog
+  }, []);
+
+  const handleCloseDeleteDialog = useCallback(() => {
+    setOpenDeleteDialog(false);
+  }, []);
+
+  const deleteP = useCallback(async () => {
+    const result = await deleteExpense(row.id.toString());
+    if (result.status) {
+      onDeleteSuccess();
+      handleCloseDeleteDialog();
+    }
+  }, [row.id, onDeleteSuccess, handleCloseDeleteDialog]);
+
+
+
 
   return (
     <>
@@ -49,23 +100,15 @@ export function ExpenseTableRow({ row, selected, onSelectRow }: UserTableRowProp
           <Checkbox disableRipple checked={selected} onChange={onSelectRow} />
         </TableCell>
 
-        <TableCell component="th" scope="row">
-          <Box gap={2} display="flex" alignItems="center">
-            <Avatar alt={row.name} src={row.avatarUrl} />
-            {row.name}
-          </Box>
-        </TableCell>
 
 
-        <TableCell>{row.role}</TableCell>
+        <TableCell>{row.date.toISOString().split('T')[0]}</TableCell>
+        <TableCell>{row.amount}</TableCell>
+        <TableCell>{row.type}</TableCell>
+        <TableCell>{row.note}</TableCell>
 
-        <TableCell align="center">
-          {row.isVerified ? (
-            <Iconify width={22} icon="solar:check-circle-bold" sx={{ color: 'success.main' }} />
-          ) : (
-            '-'
-          )}
-        </TableCell>
+
+
 
         <TableCell>
           {/* <Label color={(row.status === 'banned' && 'error') || 'success'}>{row.status}</Label> */}
@@ -102,17 +145,42 @@ export function ExpenseTableRow({ row, selected, onSelectRow }: UserTableRowProp
             },
           }}
         >
-          <MenuItem onClick={handleClosePopover}>
+          <MenuItem onClick={updateActiveMembership}>
             <Iconify icon="solar:pen-bold" />
             Edit
           </MenuItem>
 
-          <MenuItem onClick={handleClosePopover} sx={{ color: 'error.main' }}>
+          <MenuItem onClick={handleOpenDeleteDialog} sx={{ color: 'error.main' }}>
             <Iconify icon="solar:trash-bin-trash-bold" />
             Delete
           </MenuItem>
         </MenuList>
       </Popover>
+      <Dialog
+          open={openDeleteDialog}
+          onClose={handleCloseDeleteDialog}
+          aria-labelledby="alert-dialog-title"
+          aria-describedby="alert-dialog-description"
+      >
+        <DialogTitle id="alert-dialog-title">
+          Delete Membership
+        </DialogTitle>
+        <DialogContent>
+          <DialogContentText id="alert-dialog-description">
+            Are you sure you want to delete the expense!
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleCloseDeleteDialog}>Cancel</Button>
+          <Button
+              onClick={deleteP}
+              color="error"
+              autoFocus
+          >
+            Confirm Delete
+          </Button>
+        </DialogActions>
+      </Dialog>
     </>
   );
 }

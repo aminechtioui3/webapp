@@ -5,18 +5,121 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="74813386-4e36-4a36-874f-73c4ba81e498" name="Changes" comment="f">
+      <change afterPath="$PROJECT_DIR$/src/models/Article.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/models/DealModel.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/models/ExerciseModel.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/models/HistoryModel.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/models/NotificationModel.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/models/ProductCategoryModel.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/models/ProductModel.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/models/ProductOrder.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/models/ProductOrderStatus.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/models/SessionModel.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/pages/Article.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/pages/Deals.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/pages/Exercise.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/pages/History.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/pages/ProductOrders.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/pages/ProductType.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/pages/Sessions.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/pages/Shop.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/sections/Articles/article-table-head.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/sections/Articles/article-table-row.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/sections/Articles/article-table-toolbar.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/sections/Articles/table-no-data.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/sections/Articles/utils.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/sections/Articles/view/article-view.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/sections/Articles/view/index.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/sections/Deals/deal-table-empty-rows.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/sections/Deals/deal-table-head.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/sections/Deals/deal-table-row.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/sections/Deals/deal-table-toolbar.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/sections/Deals/table-no-data.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/sections/Deals/utils.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/sections/Deals/view/deal-view.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/sections/Deals/view/index.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/sections/Exercises/exercise-table-empty-rows.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/sections/Exercises/exercise-table-head.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/sections/Exercises/exercise-table-row.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/sections/Exercises/exercise-table-toolbar.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/sections/Exercises/table-no-data.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/sections/Exercises/utils.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/sections/Exercises/view/exercise-view.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/sections/Exercises/view/index.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/sections/History/history-table-empty-rows.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/sections/History/history-table-head.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/sections/History/history-table-row.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/sections/History/history-table-toolbar.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/sections/History/table-no-data.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/sections/History/utils.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/sections/History/view/history-view.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/sections/History/view/index.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/sections/Notification/view/notification-view.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/sections/Product Category/product-category-empty-rows.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/sections/Product Category/product-category-table-head.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/sections/Product Category/product-category-table-row.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/sections/Product Category/product-category-table-toolbar.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/sections/Product Category/table-no-data.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/sections/Product Category/utils.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/sections/Product Category/view/index.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/sections/Product Category/view/product-category-view.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/sections/Product Order/product-order-table-empty-rows.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/sections/Product Order/product-order-table-head.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/sections/Product Order/product-order-table-row.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/sections/Product Order/product-order-table-toolbar.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/sections/Product Order/table-no-data.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/sections/Product Order/utils.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/sections/Product Order/view/index.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/sections/Product Order/view/product-order-view.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/sections/Sessions/session-table-empty-rows.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/sections/Sessions/session-table-head.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/sections/Sessions/session-table-row.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/sections/Sessions/session-table-toolbar.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/sections/Sessions/table-no-data.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/sections/Sessions/utils.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/sections/Sessions/view/index.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/sections/Sessions/view/session-view.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/sections/Shop/shop-table-empty-rows.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/sections/Shop/shop-table-head.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/sections/Shop/shop-table-row.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/sections/Shop/shop-table-toolbar.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/sections/Shop/table-no-data.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/sections/Shop/utils.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/sections/Shop/view/index.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/sections/Shop/view/shop-view.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/sections/services/ArticleService.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/sections/services/DealService.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/sections/services/ExerciseService.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/sections/services/ExpenseService.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/sections/services/SessionService.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/sections/services/shopService.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/sections/user/user-table-empty-rows.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/api/axiosConfig.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/api/axiosConfig.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/models/MembershipModel.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/models/MembershipModel.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/layouts/config-nav-dashboard.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/layouts/config-nav-dashboard.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/models/ActivateMembershipCreationDTO.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/models/ActivateMembershipCreationDTO.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/models/ActiveMembership.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/models/ActiveMembership.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/models/ExpenseModel.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/models/ExpenseModel.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/models/ResponseModel.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/models/ResponseModel.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/models/Role.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/models/Role.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/models/UserAccount.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/models/UserAccount.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/Notifications.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/Notifications.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/properties.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/properties.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/routes/sections.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/routes/sections.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/sections/Expense/expense-table-row.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/sections/Expense/expense-table-row.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/sections/Expense/utils.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/sections/Expense/utils.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/sections/Expense/view/expense-view.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/sections/Expense/view/expense-view.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/sections/Membership/membership-table-row.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/sections/Membership/membership-table-row.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/sections/Membership/utils.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/sections/Membership/utils.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/sections/Membership/view/membership-view.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/sections/Membership/view/membership-view.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/sections/services/AccountService.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/sections/services/AccountService.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/sections/services/MembershipService.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/sections/services/MembershipService.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/sections/services/NotificationService.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/sections/services/NotificationService.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/sections/services/UserService.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/sections/services/UserService.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/sections/user/table-empty-rows.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/sections/Articles/article-table-empty-rows.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/sections/user/user-table-row.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/sections/user/user-table-row.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/sections/user/user-table-toolbar.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/sections/user/user-table-toolbar.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/sections/user/utils.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/sections/user/utils.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/sections/user/view/user-view.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/sections/user/view/user-view.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/yarn.lock" beforeDir="false" afterPath="$PROJECT_DIR$/yarn.lock" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -55,7 +158,7 @@
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.git.unshallow": "true",
     "git-widget-placeholder": "main",
-    "last_opened_file_path": "C:/Users/mohaa/Desktop/Work Chtioui/webapp/src/sections/Expense",
+    "last_opened_file_path": "C:/Users/mohaa/Desktop/Work Chtioui/webapp/src/sections/Exercises",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
@@ -68,9 +171,14 @@
 }]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
-      <recent name="C:\Users\mohaa\Desktop\Work Chtioui\webapp\src\sections\Expense" />
-      <recent name="C:\Users\mohaa\Desktop\Work Chtioui\webapp\src\sections\ActiveMembership" />
-      <recent name="C:\Users\mohaa\Desktop\Work Chtioui\webapp\src\sections\Membership" />
+      <recent name="C:\Users\mohaa\Desktop\Work Chtioui\webapp\src\sections\Exercises" />
+      <recent name="C:\Users\mohaa\Desktop\Work Chtioui\webapp\src\sections\Shop" />
+      <recent name="C:\Users\mohaa\Desktop\Work Chtioui\webapp\src\sections\Articles" />
+      <recent name="C:\Users\mohaa\Desktop\Work Chtioui\webapp\src\sections\Deals" />
+      <recent name="C:\Users\mohaa\Desktop\Work Chtioui\webapp\src\sections\History" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\mohaa\Desktop\Work Chtioui\webapp\src\sections\Expense\view" />
     </key>
   </component>
   <component name="SharedIndexes">
@@ -88,7 +196,7 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1740127790528</updated>
-      <workItem from="1740127792314" duration="39435000" />
+      <workItem from="1740127792314" duration="84509000" />
     </task>
     <task id="LOCAL-00001" summary="d">
       <option name="closed" value="true" />

@@ -1,7 +1,7 @@
 import type { UserAccount } from 'src/models/UserAccount';
 
 import * as z from "zod";
-import {Controller, useForm} from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useState, useEffect, useCallback } from 'react';
 
@@ -24,17 +24,19 @@ import { DashboardContent } from 'src/layouts/dashboard';
 import { Iconify } from 'src/components/iconify';
 import { Scrollbar } from 'src/components/scrollbar';
 
-import {getUsers, startMembership} from 'src/sections/services/UserService';
 
-import Select from "react-select";
+
 import { TableNoData } from '../table-no-data';
-import { ExpenseTableRow } from '../expense-table-row';
-import { ExpenseTableHead } from '../expense-table-head';
-import { TableEmptyRows } from '../expense-table-empty-rows';
-import { ExpenseTableToolbar } from '../expense-table-toolbar';
-import { emptyRows, applyFilter, getComparator } from '../utils';
 
-import type { UserProps } from '../expense-table-row';
+import { emptyRows, applyFilter, getComparator } from '../utils';
+import {ExpenseProps, ExpenseTableRow} from "../expense-table-row";
+import {ExpenseModel} from "../../../models/ExpenseModel";
+import {createExpense, getExpenses, updateExpense} from "../../services/ExpenseService";
+import {ExpenseTableToolbar} from "../expense-table-toolbar";
+import {ExpenseTableHead} from "../expense-table-head";
+import {TableEmptyRows} from "../expense-table-empty-rows";
+
+
 
 // ----------------------------------------------------------------------
 
@@ -42,11 +44,12 @@ export function ExpenseView() {
   const table = useTable();
   const [filterName, setFilterName] = useState('');
   const [open, setOpen] = useState(false);
-  const [dataFiltered, setDataFiltered] = useState<UserProps[]>();
-  const [_users, setUsers] = useState<UserAccount[]>([]);
+  const [notFoundTrigger, setNotFoundTrigger] = useState(false);
+  const [dataFiltered, setDataFiltered] = useState<ExpenseProps[]>();
+  const [modifiedId, setModifiedId] = useState<number>(-1);
+  const [_users, setUsers] = useState<ExpenseModel[]>([]);
   const handleOpen = async () => {setOpen(true)};
   const handleClose = () =>(setOpen(false));
-  const [selectedType, setSelectedType] = useState("OTHERS");
   const PriceSelectionTable=()=>{
     const prices = [10, 20, 30, 50, 75, 100, 150, 200]; // Pricing options
     const [selectedPrice, setSelectedPrice] = useState(null);
@@ -55,63 +58,100 @@ export function ExpenseView() {
   }
 
 
-const schema = z.object({
-  note: z.string().optional(),
-  type: z.string(),
-  date: z.string().date(),
-  amount: z.number(),
-});
-      const {
-        control,
-        register,
-        handleSubmit,
-        formState: { errors },
-      } = useForm({
-        resolver: zodResolver(schema),
-      });
 
-      const  onSubmit  = async (data :any) =>  {
-        console.log("Form submitted: ", data);
-        let res=false;
-        res= await startMembership(data);
-        if (res){
-          alert("done");
-           handleClose();
-        }else{
-           alert("error");
-        }
-       
-      };
+const schema = z.object({
+  note: z.string().min(1, "note is required"),
+  amount: z.number(),
+  type: z.string().min(1, "type is required"),
+  date: z.union([z.string(), z.date()]),
+
   
-  useEffect(() => {
-    (async function loadData(){
-      const users =  await getUsers(); 
-      setUsers(users);
-      console.log(users);
+});
+  const {
+    register,
+    handleSubmit,
+    reset, // <-- Add reset here
+    formState: { errors },
+  } = useForm({
+    resolver: zodResolver(schema),
+  });
+
+  const updateData = async (id: string) => {
+    const userToEdit = _users.find(user => user.id.toString() === id.toString()); // Find user by ID
+
+    setModifiedId(Number.parseInt(id, 10));
+    if (userToEdit) {
+      reset(userToEdit); // Populate form fields with user data
+      handleOpen(); // Open the form modal
+    }
+  };
+
+
+
+
+  const onSubmit = async (data: any) => {
+    console.log("Form submitted: ", data);
+
+    if (modifiedId === -1) {
+
+      const result = await createExpense(ExpenseModel.fromJson(data));
+      console.log(result);
+
+      if (result.status) {
+        handleClose();
+        await loadData(); // ✅ Reload data after successful creation
+      } else {
+        console.log(result);
+      }
+    } else {
+
+      const m = new ExpenseModel(
+          data.id,
+      data.date,
+      data.note,
+      data.amount,
+      data.type,
+      );
+
+      const result = await updateExpense(m);
+      console.log(result);
+
+      if (result.status) {
+        handleClose();
+        await loadData(); // ✅ Reload data after successful update
+      } else {
+        console.log(result);
+      }
+    }
+  };
+
+  const loadData = useCallback(async () => {
+    const responseModel = await getExpenses();
+    console.log(responseModel);
+
+    if (responseModel.status) {
+      setUsers(responseModel.data!);
       setDataFiltered(applyFilter({
-        inputData: users.map(user => user.toUserProps()),
+        inputData: responseModel.data!.map(m => m.toExpenseProps()),
         comparator: getComparator(table.order, table.orderBy),
         filterName,
       }));
-    })();
-    
-  }, [filterName, table.order, table.orderBy]);
+    } else {
+      setNotFoundTrigger(true);
+      setUsers([]);
+    }
+  }, [filterName, table.order, table.orderBy]); // ✅ Dependencies are properly managed
 
+  useEffect(() => {
+    loadData();
+  }, [filterName, table.order, table.orderBy]); // ✅ No more infinite re-renders
   const notFound = dataFiltered && dataFiltered!.length && !!filterName;
-
-  const options = [
-    { value: 'EQUIPMENTS', label: 'EQUIPMENTS' },
-    { value: 'BILLS', label: 'BILLS' },
-    { value: 'SALARY', label: 'SALARY' },
-    { value: 'FIX', label: 'FIX' },
-    { value: 'OTHERS', label: 'OTHERS' }
-  ];
-
+  
   return (
     <DashboardContent>
       <Box display="flex" alignItems="center" mb={5}>
         <Typography variant="h4" flexGrow={1}>
-          Expenses
+          Expense
         </Typography>
 
         <Button
@@ -120,77 +160,40 @@ const schema = z.object({
           startIcon={<Iconify icon="mingcute:add-line" />}
           onClick={handleOpen}
         >
-          Add New Expense
+         Add New Expense
         </Button>
-        {}
+        { }
       </Box>
 
-      <p>In this page you will find all the Expenses you declare</p>
-      <br />
-
+      <br/>
+      
       {/* User Form Modal */}
       <Dialog open={open} onClose={handleClose}>
-        <DialogTitle>Add New Item</DialogTitle>
-        <DialogContent>
-          <form onSubmit={handleSubmit(onSubmit)}>
-            <TextField
-              label="Date"
-              fullWidth
-              margin="dense"
-              type="date"
-              {...register('date')}
-              InputLabelProps={{ shrink: true }}
-            />
-            <TextField
-              {...register('amount', { valueAsNumber: true })}
-              margin="dense"
-              label="Amount"
-              type="number"
-              fullWidth
-              error={!!errors.amount}
-              helperText={errors.amount?.message}
-            />
+      <DialogTitle>Add New Item</DialogTitle>
+      <DialogContent>
 
-            <div>
-              <label>Type</label>
-              <Controller
-                name="type" // Bind to the "type" field in the form
-                control={control} // Use the control from react-hook-form
-                defaultValue={selectedType} // Set default value
-                render={({ field }) => (
-                  <Select
-                    {...field} // Spread the field props (including onChange, value)
-                    options={options}
-                    onChange={(selectedOption) => {
-                      field.onChange(selectedOption?.value); // Update field value
-                      setSelectedType(selectedOption?.value); // Update the selectedType state
-                    }}
-                    placeholder={selectedType != null ? selectedType : "Select Type."}
-                    isSearchable
-                  />
-                )}
-              />
-              {errors.type && <p style={{ color: 'red' }}>{errors.type.message}</p>}
-            </div>
-
-            <TextField
-              label="note"
-              fullWidth
-              margin="dense"
-              {...register('note')}
-              error={!!errors.note}
-              helperText={errors.note?.message}
-            />
-
-            <DialogActions>
-              <Button onClick={handleClose}>Cancel</Button>
-              <Button type="submit" variant="contained">
-                Save
-              </Button>
-            </DialogActions>
-          </form>
-        </DialogContent>
-      </Dialog>
+        <form onSubmit={handleSubmit(onSubmit)}>
+          <label>Date</label>
+          <TextField type="date" fullWidth margin="dense" {...register("date")} error={!!errors.date} helperText={errors.date?.message} />
+          <TextField label="Note" fullWidth margin="dense" {...register("note")} error={!!errors.note} helperText={errors.note?.message} />
+          <TextField label="Type" fullWidth margin="dense" {...register("type")} error={!!errors.type} helperText={errors.type?.message} />
+          <TextField
+            {...register("amount", { valueAsNumber: true })}
+            margin="dense"
+            label="Amount"
+            type="number"
+            fullWidth
+            error={!!errors.amount}
+            helperText={errors.amount?.message}
+          /> <Box sx={{ width: 300, mt: 2 }}>
+          </Box>
+          <DialogActions>
+            <Button onClick={handleClose}>Cancel</Button>
+            <Button type="submit" variant="contained">Save</Button>
+          </DialogActions>
+        </form>
+      </DialogContent>
+    </Dialog>
 
       <Card>
         <ExpenseTableToolbar
@@ -214,20 +217,22 @@ const schema = z.object({
                 onSelectAllRows={(checked) =>
                   table.onSelectAllRows(
                     checked,
-                    _users?.map((user) => user.id)
+                    _users?.map((user) => user.id.toString())
                   )
                 }
                 headLabel={[
-                  { id: 'image', label: 'Image', width: '10%' },
-                  { id: 'name', label: 'Name', width: '20%' },
-                  { id: 'price', label: 'Price', width: '20%' },
-                  { id: 'description', label: 'description', width: '20%' },
+                  { id: 'image', label: 'Image', width: '20%' },
+
                   { id: 'status', label: 'Status', width: '10%' },
+                  { id: 'price', label: 'Price', width: '10%' },
+                  { id: 'description', label: 'description', width: '60%' },
+
+
+
                 ]}
               />
               <TableBody>
-                {dataFiltered
-                  ?.slice(
+                {dataFiltered?.slice(
                     table.page * table.rowsPerPage,
                     table.page * table.rowsPerPage + table.rowsPerPage
                   )
@@ -235,8 +240,10 @@ const schema = z.object({
                     <ExpenseTableRow
                       key={row.id}
                       row={row}
-                      selected={table.selected.includes(row.id)}
-                      onSelectRow={() => table.onSelectRow(row.id)}
+                      selected={table.selected.includes(row.id.toString())}
+                      onSelectRow={() => table.onSelectRow(row.id.toString())}
+                      updateData={updateData}
+                      onDeleteSuccess={loadData}
                     />
                   ))}
 
@@ -245,7 +252,7 @@ const schema = z.object({
                   emptyRows={emptyRows(table.page, table.rowsPerPage, _users.length)}
                 />
 
-                {notFound && <TableNoData searchQuery={filterName} />}
+                {notFoundTrigger && <TableNoData searchQuery={filterName} />}
               </TableBody>
             </Table>
           </TableContainer>
@@ -296,6 +303,8 @@ export function useTable() {
     []
   );
 
+
+
   const onResetPage = useCallback(() => setPage(0), []);
   const onChangePage = useCallback((event: unknown, newPage: number) => setPage(newPage), []);
   const onChangeRowsPerPage = useCallback(
@@ -306,6 +315,7 @@ export function useTable() {
     [onResetPage]
   );
   
+
 
   return { page, order, onSort, orderBy, selected, rowsPerPage, onSelectRow, onResetPage, onChangePage, onSelectAllRows, onChangeRowsPerPage };
 }

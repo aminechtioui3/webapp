@@ -1,68 +1,78 @@
-export type Notification= {
-    id: string;
-    message: string;
-    timestamp: string;
-    group?: string;   // Optional: Some notifications might not have a group
-    sender?: string;  // Optional: System-generated notifications might not have a sender
-    
-}
+import { Properties } from 'src/properties';
+import ResponseModel from "../../models/ResponseModel";
 
-export interface NotificationResponse {
-    sent: Notification[];
-    received: Notification[];
-}
+import api from "../../api/axiosConfig";
+import {NotificationModel} from "../../models/NotificationModel";
 
-  
+const properties = Properties.getInstance();
+const client = api;
 
-// Function to send a notification
-export async function sendNotification(notification: { message: string; group: string }): Promise<{ success: boolean }> {
+export async function getAllNotifications(): Promise<ResponseModel<NotificationModel[]>> {
     try {
-        const response = await fetch('/api/notifications', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(notification),
-        });
+        const response = await client.post(properties.GetAllNotifications);
 
-        if (!response.ok) {
-            throw new Error('Failed to send notification');
+        if (response.status === 200) {
+            const data = response.data;
+
+            console.log(data);
+
+            const memberships = data.map(NotificationModel.fromJson);
+
+            const result = new ResponseModel<NotificationModel[]>(true, memberships, undefined, 'Operation completed');
+
+            console.log(result);
+            return result;
         }
 
-        return { success: true };
+        return new ResponseModel<NotificationModel[]>(false, [], response.statusText, response.data);
     } catch (error) {
-        console.error('Error sending notification:', error);
-        return { success: false };
+        console.error("Error fetching Notifications:", error);
+        return new ResponseModel<NotificationModel[]>(false, [], "An error occurred", undefined);
     }
 }
 
-// Function to fetch notifications
-export async function getNotifications(): Promise<NotificationResponse> {
+
+
+
+
+
+
+export async function createNotification(data: any): Promise<ResponseModel<String>> {
+    const model = NotificationModel.fromJson(data);
+
     try {
-        const response = await fetch('/api/notifications');
+        const response = await client.post(properties.CreateNotification, model);
 
-        if (!response.ok) {
-            throw new Error('Failed to fetch notifications');
+        if (response.status === 200 || response.status === 200) {
+            return new ResponseModel<String>(true, "", undefined, 'Operation completed');
         }
+        return new ResponseModel<String>(false, "", response.data, response.statusText);
 
-        // Ensure response data has the correct structure
-        const data = await response.json();
-        
-        const sent = data.sent.map((notif: any) => ({
-            message: notif.message || "No message",
-            timestamp: notif.timestamp || new Date().toISOString(),
-            group: notif.group || "Unknown",
-            sender: notif.sender || "System",
-        }));
-
-        const received = data.received.map((notif: any) => ({
-            message: notif.message || "No message",
-            timestamp: notif.timestamp || new Date().toISOString(),
-            group: notif.group || "Unknown",
-            sender: notif.sender || "System",
-        }));
-
-        return { sent, received };
     } catch (error) {
-        console.error('Error fetching notifications:', error);
-        return { sent: [], received: [] };
+        console.error('Error Creating membership:', error);
+        return new ResponseModel<String>(false, "", "Error Creating Membership", error.message);
+
     }
 }
+
+
+
+
+export async function deleteNotification(id: string): Promise<ResponseModel<String>> {
+
+
+    try {
+        const response = await client.post(`${properties.DeleteNotification}/${id}`);
+
+        if (response.status === 200 || response.status === 201) {
+            return new ResponseModel<String>(true, "", undefined, 'Operation completed');
+        }
+        return new ResponseModel<String>(false, "", response.data, response.statusText);
+
+    } catch (error) {
+        console.error('Error Deleting membership:', error);
+        return new ResponseModel<String>(false, "", "Error Creating Membership", error.message);
+
+    }
+}
+

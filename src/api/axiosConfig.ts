@@ -27,10 +27,10 @@ api.interceptors.request.use(
 api.interceptors.response.use(
     (response) => response,
     (error) => {
-        if (error.response && (error.response.status === 401 || error.response.status === 403)) {
+        if (error.response && (error.response.status === 401 )) {
             // Redirect to login if unauthorized
-            Cookies.remove("token");
-            window.location.href = "/sign-in";
+              Cookies.remove("token");
+             window.location.href = "/sign-in";
         }
         return Promise.reject(error);
     }

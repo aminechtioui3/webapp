@@ -1,5 +1,6 @@
 import {UserAccount} from "./UserAccount";
 import {MembershipModel} from "./MembershipModel";
+import {ActiveMembershipProps} from "../sections/user/user-table-row";
 
 export class ActiveMembership {
     id: number;
@@ -71,6 +72,19 @@ export class ActiveMembership {
             available: this.available,
             createdAt: this.createdAt.toISOString(),
             updatedAt: this.updatedAt.toISOString(),
+            note: this.note,
+            status: this.status,
+        };
+    }
+
+
+    toActiveMembershipProps(): ActiveMembershipProps {
+        return {
+            id: this.id,
+            membership: this.membership.toJson(),
+            user: this.user.toJson(),
+            startDate: this.startDate,
+            endDate: this.endDate,
             note: this.note,
             status: this.status,
         };

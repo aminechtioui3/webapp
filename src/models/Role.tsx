@@ -1,2 +1,6 @@
-export enum Role{
-    ADMIN,COACH,USER,GUEST};
+export enum Role {
+    ADMIN = "ADMIN",
+    COACH = "COACH",
+    USER = "USER",
+    GUEST = "GUEST"
+}

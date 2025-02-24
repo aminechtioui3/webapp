@@ -45,6 +45,28 @@ export const navData = [
   },
 
   {
+    title: 'Shop',
+    path: '/shop',
+    icon: icon('ic-cart'),
+    info: (
+        <Label color="error" variant="inverted">
+          new
+        </Label>
+    ),
+  },
+  {
+    title: 'Product Category',
+    path: '/product-category',
+    icon: icon('ic-cart'),
+
+  },
+  {
+    title: 'Product Orders',
+    path: '/product-orders',
+    icon: icon('ic-cart'),
+
+  },
+  {
     title: 'Product',
     path: '/products',
     icon: icon('ic-cart'),
@@ -61,6 +83,38 @@ export const navData = [
     path: '/blog',
     icon: icon('ic-blog'),
   },
+  {
+    title: 'Article',
+    path: '/article',
+    icon: icon('ic-cart'),
+  },
+  {
+    title: 'Deals',
+    path: '/deals',
+    icon: icon('ic-cart'),
+
+  },
+  {
+    title: 'History',
+    path: '/history',
+    icon: icon('ic-cart'),
+    info: (
+        <Label color="error" variant="inverted">
+          +11
+        </Label>
+    ),
+  },
+  {
+    title: 'Sessions',
+    path: '/session',
+    icon: icon('ic-cart'),
+  },
+  {
+    title: 'Exercises',
+    path: '/exercises',
+    icon: icon('ic-cart'),
+  },
+
   {
     title: 'Sign in',
     path: '/sign-in',

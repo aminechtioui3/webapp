@@ -45,6 +45,7 @@ export function MembershipView() {
   const table = useTable();
   const [filterName, setFilterName] = useState('');
   const [open, setOpen] = useState(false);
+  const [notFoundTrigger, setNotFoundTrigger] = useState(false);
   const [dataFiltered, setDataFiltered] = useState<MembershipProps[]>();
   const [modifiedId, setModifiedId] = useState<number>(-1);
   const [_users, setUsers] = useState<MembershipModel[]>([]);
@@ -88,22 +89,7 @@ const schema = z.object({
   };
 
 
-  const loadData = async () => {
-    const memberships = await getMemberships();
-    console.log(memberships);
 
-    if (memberships.status) {
-      setUsers(memberships.data!);
-      console.log(memberships);
-      setDataFiltered(applyFilter({
-        inputData: memberships.data!.map(m => m.toMembershipProps()),
-        comparator: getComparator(table.order, table.orderBy),
-        filterName,
-      }));
-    } else {
-      setUsers([]);
-    }
-  };
 
   const onSubmit = async (data: any) => {
     console.log("Form submitted: ", data);
@@ -145,9 +131,26 @@ const schema = z.object({
     }
   };
 
+  const loadData = useCallback(async () => {
+    const memberships = await getMemberships();
+    console.log(memberships);
+
+    if (memberships.status) {
+      setUsers(memberships.data!);
+      setDataFiltered(applyFilter({
+        inputData: memberships.data!.map(m => m.toMembershipProps()),
+        comparator: getComparator(table.order, table.orderBy),
+        filterName,
+      }));
+    } else {
+      setNotFoundTrigger(true)
+      setUsers([]);
+    }
+  }, [filterName, table.order, table.orderBy]); // ✅ Dependencies are properly managed
+
   useEffect(() => {
     loadData();
-  }, [filterName, loadData, table.order, table.orderBy]); // ✅ Will run when dependencies change
+  }, [filterName, table.order, table.orderBy]); // ✅ No more infinite re-renders
   const notFound = dataFiltered && dataFiltered!.length && !!filterName;
   
   return (
@@ -250,6 +253,7 @@ const schema = z.object({
                       selected={table.selected.includes(row.id.toString())}
                       onSelectRow={() => table.onSelectRow(row.id.toString())}
                       updateData={updateData}
+                      onDeleteSuccess={loadData}
                     />
                   ))}
 
@@ -258,7 +262,7 @@ const schema = z.object({
                   emptyRows={emptyRows(table.page, table.rowsPerPage, _users.length)}
                 />
 
-                {notFound && <TableNoData searchQuery={filterName} />}
+                {notFoundTrigger && <TableNoData searchQuery={filterName} />}
               </TableBody>
             </Table>
           </TableContainer>

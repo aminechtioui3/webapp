@@ -5,7 +5,7 @@ export class Properties {
 
     public loginURL;
 
-    public GetActiveMembership;
+    public GetAllActiveMembership;
 
     public ActivateMembership;
 
@@ -161,7 +161,7 @@ export class Properties {
         this.ActivateMembership = "/protected/active-membership/start-active-membership";
         this.UpdateActiveMembership = "/protected/active-membership/update-active-membership";
         this.DeleteActiveMembership = "/protected/active-membership/delete-active-membership";
-        this.GetActiveMembership = "/protected/active-membership/get-all-active-membership";
+        this.GetAllActiveMembership = "/protected/active-membership/get-all-active-membership";
         this.GetAllActiveMembershipsForUser = "/connected/active-membership/get-all-active-membership-for-user";
         this.GetAllActiveMembershipsByMembership = "/protected/active-membership/get-all-active-membership-by-membership";
         this.GetActiveMembershipById = "/protected/active-membership/get-active-membership";

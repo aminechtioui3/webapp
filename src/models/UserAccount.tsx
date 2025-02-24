@@ -1,8 +1,8 @@
-import { UserProps } from 'src/sections/user/user-table-row';
+
 import { Role } from './Role';
 
 export class UserAccount {
-  id: string;
+  id: number;
   email: string;
   password: string;
   lastSeen?: Date;
@@ -37,7 +37,7 @@ export class UserAccount {
   updatedAt: Date;
 
   constructor(
-    id: string,
+    id: number,
     email: string,
     password: string,
     role: Role,

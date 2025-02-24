@@ -1,0 +1,7 @@
+export enum ProductOrderStatus {
+    PROCESS="PROCESS",
+    CONFIRMED="CONFIRMED",
+    REFUSED="REFUSED",
+    OUT_OF_STOCK="OUT_OF_STOCK",
+    DELIVERED="DELIVERED",
+}

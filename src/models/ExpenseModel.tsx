@@ -1,4 +1,7 @@
-class ExpenseModel {
+import {MembershipProps} from "../sections/Membership/membership-table-row";
+import {ExpenseProps} from "../sections/Expense/expense-table-row";
+
+export class ExpenseModel {
     id: number;
     date: Date;
     note: string;
@@ -26,29 +29,41 @@ class ExpenseModel {
     }
 
     // Method to convert class instance to JSON
-    toJson(): object {
+    toJson(): any {
         return {
             id: this.id,
             date: this.date.toISOString(),
             note: this.note,
             amount: this.amount,
             type: this.type,
-            createdAt: this.createdAt.toISOString(),
-            updatedAt: this.updatedAt.toISOString()
+            createdAt: new Date(),
+            updatedAt: new Date(),
         };
     }
 
-    // Static method to create class instance from JSON
-    static fromJson(json: string): ExpenseModel {
-        const obj = JSON.parse(json);
+
+    static fromJson(json: any): ExpenseModel {
         return new ExpenseModel(
-            obj.id,
-            new Date(obj.date),
-            obj.note,
-            obj.amount,
-            obj.type,
-            new Date(obj.createdAt),
-            new Date(obj.updatedAt)
+            json.id,
+            new Date(json.date),
+            json.note,
+            json.amount,
+            json.type,
+            new Date(json.createdAt),
+            new Date(json.updatedAt)
         );
     }
+
+
+
+    toExpenseProps(): ExpenseProps {
+        return {
+            id: this.id,
+            date: this.date,
+            note: this.note,
+            amount: this.amount,
+            type: this.type,
+        };
+    }
 }
+

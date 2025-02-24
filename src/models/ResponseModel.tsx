@@ -2,9 +2,9 @@ export class ResponseModel<T> {
     status: boolean;
     errorMsg?: string;
     displayMsg?: string;
-    data?: T;
+    data: T;
 
-    constructor(status: boolean, data?: T, errorMsg?: string, displayMsg?: string) {
+    constructor(status: boolean, data: T, errorMsg?: string, displayMsg?: string) {
         this.status = status;
         this.data = data;
         this.errorMsg = errorMsg;
