@@ -154,7 +154,7 @@ export function ExerciseView() {
     };
 
     loadUserDataAndOpenDialog();
-  }, [modifiedId, _exercises, reset, setValue,updatedUserProfile]);
+  }, [modifiedId, _exercises, reset, setValue]);
 
   const handleSubmitForm = async (data: any) => {
     try {

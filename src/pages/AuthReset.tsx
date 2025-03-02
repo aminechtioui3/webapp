@@ -42,7 +42,7 @@ const ResetPassword = () => {
             variant="outlined"
             margin="normal"
             value={password}
-            onChange={(e) => setPassword(e.target.value)}
+            onChange={}
             required
           />
           <TextField

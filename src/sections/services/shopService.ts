@@ -105,12 +105,13 @@ export async function getAllProductCategories(): Promise<ResponseModel<ProductCa
     try {
         const response = await client.post(properties.GetAllProductCategory);
 
+        console.log(response);
         if (response.status === 200) {
             const data = response.data;
 
             console.log(data);
 
-            const memberships = data.map(ProductModel.fromJson);
+            const memberships = data.map(ProductCategory.fromJson);
 
             const result = new ResponseModel<ProductCategory[]>(true, memberships, undefined, 'Operation completed');
 
@@ -199,7 +200,7 @@ export async function getAllProductOrders(): Promise<ResponseModel<ProductOrderM
 
             console.log(data);
 
-            const memberships = data.map(ProductModel.fromJson);
+            const memberships = data.map(ProductOrderModel.fromJson);
 
             const result = new ResponseModel<ProductOrderModel[]>(true, memberships, undefined, 'Operation completed');
 

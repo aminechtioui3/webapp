@@ -116,7 +116,7 @@ export function HistoryTableRow({ row, selected, onSelectRow, updateData, onDele
 
 
 
-        <TableCell>{row.date}</TableCell>
+        <TableCell>{row.date.toISOString()}</TableCell>
         <TableCell>{row.content}</TableCell>
 
 

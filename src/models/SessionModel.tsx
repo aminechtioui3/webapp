@@ -1,4 +1,5 @@
 import {MembershipProps} from "../sections/Membership/membership-table-row";
+import {SessionProps} from "../sections/Sessions/session-table-row";
 
 export class SessionModel {
   id: number;
@@ -59,10 +60,11 @@ export class SessionModel {
     return {
       id: this.id,
       title: this.title,
-      subtitle: this.subTitle,
+      subTitle: this.subTitle,
+      description: this.description,
       available: this.available,
       image:( this.image)?this.image:'https://example.com/avatar.jpg',
-      description: this.description, // Consider making this a boolean instead of a string
+
     };
   }
 

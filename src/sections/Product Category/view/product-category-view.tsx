@@ -218,10 +218,10 @@ const schema = z.object({
                 }
                 headLabel={[
                   { id: 'image', label: 'Image', width: '20%' },
-
+                  { id: 'description', label: 'description', width: '80%' },
                   { id: 'status', label: 'Status', width: '10%' },
-                  { id: 'price', label: 'Price', width: '10%' },
-                  { id: 'description', label: 'description', width: '60%' },
+
+
 
 
 

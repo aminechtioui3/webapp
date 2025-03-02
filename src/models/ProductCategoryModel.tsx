@@ -1,5 +1,5 @@
-import {MembershipProps} from "../sections/Membership/membership-table-row";
 import {ProductCategoryProps} from "../sections/Product Category/product-category-table-row";
+
 
 export class ProductCategory {
     id: number;

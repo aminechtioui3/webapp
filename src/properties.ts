@@ -153,6 +153,15 @@ export class Properties {
 
     public getAllExpenses;
 
+    public deleteHistory;
+
+    public markHistoryAsSeen;
+
+    public getAllHistory;
+
+    public getLastHistoryNotifications;
+
+
 
     private constructor() {
         this.baseURL = "https://gymapp-production-e339.up.railway.app/api/v1";
@@ -202,6 +211,13 @@ export class Properties {
         this.deleteExpense="/protected/Expense/delete-expense";
         this.getExpenseById="/protected/Expense/get-expense-by-id";
         this.getAllExpenses="/protected/Expense/get-all-expenses";
+
+
+        //HISTORY
+        this.deleteHistory="/protected/history/delete-history/{id}";
+        this.markHistoryAsSeen="/protected/history/mark-history-as-seen/{id}";
+        this.getAllHistory="/protected/history/get-all-history";
+        this.getLastHistoryNotifications="/protected/history/get-all-history-notifications";
 
 
         // Notifications

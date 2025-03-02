@@ -122,7 +122,7 @@ export function DealTableRow({ row, selected, onSelectRow, updateData, onDeleteS
         </TableCell>
 
 
-        <TableCell>{row.dealEndDate}</TableCell>
+        <TableCell>{row.dealEndDate.toISOString()}</TableCell>
         <TableCell>{row.description}</TableCell>
 
 

@@ -3,6 +3,7 @@ import { Properties } from 'src/properties';
 import ResponseModel from "../../models/ResponseModel";
 
 import api from "../../api/axiosConfig";
+import {ArticleModel} from "../../models/Article";
 
 const properties = Properties.getInstance();
 const client = api;

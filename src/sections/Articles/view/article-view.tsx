@@ -174,9 +174,6 @@ const schema = z.object({
         { }
       </Box>
 
-      <p>
-        In this page you will find all the memberships you have in your gym
-      </p>
       <br/>
       
       {/* User Form Modal */}

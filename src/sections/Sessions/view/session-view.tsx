@@ -33,10 +33,12 @@ import { TableEmptyRows } from '../session-table-empty-rows';
 import { SessionTableToolbar } from '../session-table-toolbar';
 import { emptyRows, applyFilter, getComparator } from '../utils';
 
-import type { MembershipProps } from '../session-table-row';
+import type { SessionProps } from '../session-table-row';
 
 import {getMemberships, createMembership, updateMembership} from "../../services/MembershipService";
 import {MembershipModel} from "../../../models/MembershipModel";
+import {SessionModel} from "../../../models/SessionModel";
+import {getAllSessions, updateSession} from "../../services/SessionService";
 
 
 // ----------------------------------------------------------------------
@@ -46,9 +48,9 @@ export function SessionView() {
   const [filterName, setFilterName] = useState('');
   const [open, setOpen] = useState(false);
   const [notFoundTrigger, setNotFoundTrigger] = useState(false);
-  const [dataFiltered, setDataFiltered] = useState<MembershipProps[]>();
+  const [dataFiltered, setDataFiltered] = useState<SessionProps[]>();
   const [modifiedId, setModifiedId] = useState<number>(-1);
-  const [_users, setUsers] = useState<MembershipModel[]>([]);
+  const [_sessions, setSessions] = useState<SessionModel[]>([]);
   const handleOpen = async () => {setOpen(true)};
   const handleClose = () =>(setOpen(false));
   const PriceSelectionTable=()=>{
@@ -61,11 +63,12 @@ export function SessionView() {
 
 
 const schema = z.object({
+
+  id: z.number().optional(),
   title: z.string().min(1, "Title is required"),
   subTitle: z.string().min(1, "Subtitle is required"),
   description: z.string().min(1, "Description is required"),
   image: z.string().optional(),
-  price: z.number(),
   available: z.boolean(),
   
 });
@@ -79,7 +82,7 @@ const schema = z.object({
   });
 
   const updateData = async (id: string) => {
-    const userToEdit = _users.find(user => user.id.toString() === id.toString()); // Find user by ID
+    const userToEdit = _sessions.find(user => user.id.toString() === id.toString()); // Find user by ID
 
     setModifiedId(Number.parseInt(id, 10));
     if (userToEdit) {
@@ -107,19 +110,20 @@ const schema = z.object({
       }
     } else {
       // Update existing membership
-      const m = new MembershipModel(
-          modifiedId,  // ID stays the same
-          data.title,  // Populate fields from form
-          data.subTitle,
-          data.description,
-          data.image,
-          data.price,
-          data.available,
+      const m = new SessionModel(
+
+          modifiedId,
+          data.title ,
+          data.subTitle ,
+          data.description ,
+          data.image ,
+
+          data.available ,
           new Date(),
           new Date(),
       );
 
-      const result = await updateMembership(m);
+      const result = await updateSession(m);
       console.log(result);
 
       if (result.status) {
@@ -132,19 +136,19 @@ const schema = z.object({
   };
 
   const loadData = useCallback(async () => {
-    const memberships = await getMemberships();
+    const memberships = await getAllSessions();
     console.log(memberships);
 
     if (memberships.status) {
-      setUsers(memberships.data!);
+      setSessions(memberships.data!);
       setDataFiltered(applyFilter({
-        inputData: memberships.data!.map(m => m.toMembershipProps()),
+        inputData: memberships.data!.map(m => m.toSessionProps()),
         comparator: getComparator(table.order, table.orderBy),
         filterName,
       }));
     } else {
       setNotFoundTrigger(true)
-      setUsers([]);
+      setSessions([]);
     }
   }, [filterName, table.order, table.orderBy]); // ✅ Dependencies are properly managed
 
@@ -157,7 +161,7 @@ const schema = z.object({
     <DashboardContent>
       <Box display="flex" alignItems="center" mb={5}>
         <Typography variant="h4" flexGrow={1}>
-          Membership
+          Session
         </Typography>
 
         <Button
@@ -166,14 +170,10 @@ const schema = z.object({
           startIcon={<Iconify icon="mingcute:add-line" />}
           onClick={handleOpen}
         >
-         Add New Membership
+         Add New Session
         </Button>
         { }
       </Box>
-
-      <p>
-        In this page you will find all the memberships you have in your gym
-      </p>
       <br/>
       
       {/* User Form Modal */}
@@ -181,19 +181,12 @@ const schema = z.object({
       <DialogTitle>Add New Item</DialogTitle>
       <DialogContent>
         <form onSubmit={handleSubmit(onSubmit)}>
+
           <TextField label="Title" fullWidth margin="dense" {...register("title")} error={!!errors.title} helperText={errors.title?.message} />
           <TextField label="Subtitle" fullWidth margin="dense" {...register("subTitle")} error={!!errors.subTitle} helperText={errors.subTitle?.message} />
           <TextField label="Description" fullWidth margin="dense" {...register("description")} error={!!errors.description} helperText={errors.description?.message} />
           <TextField label="Image URL" fullWidth margin="dense" {...register("image")} error={!!errors.image} helperText={errors.image?.message} />
-          <TextField
-            {...register("price", { valueAsNumber: true })}
-            margin="dense"
-            label="Price"
-            type="number"
-            fullWidth
-            error={!!errors.price}
-            helperText={errors.price?.message}
-          /> <Box sx={{ width: 300, mt: 2 }}>
+         <Box sx={{ width: 300, mt: 2 }}>
             <Typography variant="h6">Available</Typography>
             <input type="checkbox" {...register("available")} />
           </Box>
@@ -221,13 +214,13 @@ const schema = z.object({
               <SessionTableHead
                 order={table.order}
                 orderBy={table.orderBy}
-                rowCount={_users.length}
+                rowCount={_sessions.length}
                 numSelected={table.selected.length}
                 onSort={table.onSort}
                 onSelectAllRows={(checked) =>
                   table.onSelectAllRows(
                     checked,
-                    _users?.map((user) => user.id.toString())
+                    _sessions?.map((user) => user.id.toString())
                   )
                 }
                 headLabel={[
@@ -259,7 +252,7 @@ const schema = z.object({
 
                 <TableEmptyRows
                   height={68}
-                  emptyRows={emptyRows(table.page, table.rowsPerPage, _users.length)}
+                  emptyRows={emptyRows(table.page, table.rowsPerPage, _sessions.length)}
                 />
 
                 {notFoundTrigger && <TableNoData searchQuery={filterName} />}
@@ -271,7 +264,7 @@ const schema = z.object({
         <TablePagination
           component="div"
           page={table.page}
-          count={_users.length}
+          count={_sessions.length}
           rowsPerPage={table.rowsPerPage}
           onPageChange={table.onChangePage}
           rowsPerPageOptions={[5, 10, 25]}

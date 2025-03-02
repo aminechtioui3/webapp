@@ -110,7 +110,7 @@ export function ArticleTableRow({ row, selected, onSelectRow, updateData, onDele
           </Box>
         </TableCell>
         <TableCell>{row.header}</TableCell>
-        <TableCell>{row.date}</TableCell>
+        <TableCell>{row.date.toISOString()}</TableCell>
 
         <TableCell >
           {row.status ? (

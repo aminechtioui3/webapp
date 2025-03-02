@@ -14,7 +14,7 @@ import { Label } from 'src/components/label';
 import { Iconify } from 'src/components/iconify';
 import { timeStamp } from 'console';
 import {deleteMembership} from "../services/MembershipService";
-import {applyFilter, getComparator} from "./utils";
+
 import Dialog from "@mui/material/Dialog";
 import DialogTitle from "@mui/material/DialogTitle";
 import DialogContent from "@mui/material/DialogContent";
@@ -25,17 +25,18 @@ import Button from "@mui/material/Button";
 
 // ----------------------------------------------------------------------
 
-export type MembershipProps = {
+export type SessionProps = {
   id: number;
-  name: string;
-  price: number;
-  status: boolean;
-  image: string;
+  title: string;
+  subTitle: string;
   description: string;
+  image?: string;
+  available: boolean;
+
 };
 
 type MembershipTableRowProps = {
-  row: MembershipProps;
+  row: SessionProps;
   selected: boolean;
   onSelectRow: () => void;
   updateData: any;
@@ -106,20 +107,20 @@ export function SessionTableRow({ row, selected, onSelectRow, updateData, onDele
 
         <TableCell component="th" scope="row">
           <Box gap={2} display="flex" alignItems="center">
-            <Avatar alt={row.name} src={row.image} />
-            {row.name}
+            <Avatar alt={row.title} src={row.image} />
+            {row.title}
           </Box>
         </TableCell>
-
+        <TableCell>{row.subTitle}</TableCell>
         <TableCell >
-          {row.status ? (
+          {row.available ? (
               <Iconify width={22} icon="solar:check-circle-bold" sx={{ color: 'success.main' }} />
           ) : (
               '-'
           )}
         </TableCell>
 
-        <TableCell>{row.price}</TableCell>
+
         <TableCell>{row.description}</TableCell>
 
 
@@ -177,11 +178,11 @@ export function SessionTableRow({ row, selected, onSelectRow, updateData, onDele
           aria-describedby="alert-dialog-description"
       >
         <DialogTitle id="alert-dialog-title">
-          Delete Membership
+          Delete Session
         </DialogTitle>
         <DialogContent>
           <DialogContentText id="alert-dialog-description">
-            Are you sure you want to delete the {row.name} membership!
+            Are you sure you want to delete the {row.title} session!
           </DialogContentText>
         </DialogContent>
         <DialogActions>

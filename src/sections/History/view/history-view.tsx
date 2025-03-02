@@ -37,6 +37,8 @@ import type { HistoryProps } from '../history-table-row';
 
 
 import {HistoryModel} from "../../../models/HistoryModel";
+import {getExercise} from "../../services/ExerciseService";
+import {getHistory} from "../../services/HistoryService";
 
 
 // ----------------------------------------------------------------------
@@ -47,8 +49,7 @@ export function HistoryView() {
   const [open, setOpen] = useState(false);
   const [notFoundTrigger, setNotFoundTrigger] = useState(false);
   const [dataFiltered, setDataFiltered] = useState<HistoryProps[]>();
-  const [modifiedId, setModifiedId] = useState<number>(-1);
-  const [_users, setUsers] = useState<HistoryModel[]>([]);
+  const [_history, setHistory] = useState<HistoryModel[]>([]);
   const handleOpen = async () => {setOpen(true)};
   const handleClose = () =>(setOpen(false));
   const PriceSelectionTable=()=>{
@@ -73,27 +74,37 @@ const schema = z.object({
   });
 
   const updateData = async (id: string) => {
-    const userToEdit = _users.find(user => user.id.toString() === id.toString()); // Find user by ID
-
-    setModifiedId(Number.parseInt(id, 10));
-    if (userToEdit) {
-      reset(userToEdit); // Populate form fields with user data
-      handleOpen(); // Open the form modal
-    }
-  };
-
-
-
-
-  const onSubmit = async (data: any) => {
-    console.log("Form submitted: ", data);
+    const userToEdit = _history.find(user => user.id.toString() === id.toString()); // Find user by ID
 
   };
+
+
 
   const loadData = useCallback(async () => {
-    setUsers([]);
+    const res = await getHistory();
+    if (res.status) {
+      setNotFoundTrigger(false)
+      setHistory(res.data);
+      setDataFiltered(
+          applyFilter({
+            inputData: res.data.map((m) => m.toHistoryProps()),
+            comparator: getComparator(table.order, table.orderBy),
+            filterName,
+          })
+      );
+    }else{
+      setHistory([]);
+      setNotFoundTrigger(true)
+    }
+  }, [filterName, table.order, table.orderBy]);
 
-  }, [filterName, table.order, table.orderBy]); // ✅ Dependencies are properly managed
+  useEffect(() => {
+    loadData();
+  }, [loadData]);
+
+
+
+
 
   useEffect(() => {
     loadData();
@@ -104,16 +115,13 @@ const schema = z.object({
     <DashboardContent>
       <Box display="flex" alignItems="center" mb={5}>
         <Typography variant="h4" flexGrow={1}>
-          Membership
+          History
         </Typography>
 
 
         { }
       </Box>
 
-      <p>
-        In this page you will find all the memberships you have in your gym
-      </p>
       <br/>
 
 
@@ -133,21 +141,21 @@ const schema = z.object({
               <HistoryTableHead
                 order={table.order}
                 orderBy={table.orderBy}
-                rowCount={_users.length}
+                rowCount={_history.length}
                 numSelected={table.selected.length}
                 onSort={table.onSort}
                 onSelectAllRows={(checked) =>
                   table.onSelectAllRows(
                     checked,
-                    _users?.map((user) => user.id.toString())
+                    _history?.map((user) => user.id.toString())
                   )
                 }
                 headLabel={[
 
-                  { id: 'image', label: 'Image', width: '20%' },
-                  { id: 'title', label: 'Title', width: '20%' },
+                  { id: 'image', label: 'Image', width: '30%' },
+
                   { id: 'date', label: 'Date', width: '20%' },
-                  { id: 'content', label: 'Content', width: '40%' },
+                  { id: 'content', label: 'Content', width: '50%' },
 
 
 
@@ -172,7 +180,7 @@ const schema = z.object({
 
                 <TableEmptyRows
                   height={68}
-                  emptyRows={emptyRows(table.page, table.rowsPerPage, _users.length)}
+                  emptyRows={emptyRows(table.page, table.rowsPerPage, _history.length)}
                 />
 
                 {notFoundTrigger && <TableNoData searchQuery={filterName} />}
@@ -184,7 +192,7 @@ const schema = z.object({
         <TablePagination
           component="div"
           page={table.page}
-          count={_users.length}
+          count={_history.length}
           rowsPerPage={table.rowsPerPage}
           onPageChange={table.onChangePage}
           rowsPerPageOptions={[5, 10, 25]}

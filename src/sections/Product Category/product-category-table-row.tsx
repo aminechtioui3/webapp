@@ -111,6 +111,10 @@ export function ProductCategoryTableRow({ row, selected, onSelectRow, updateData
           </Box>
         </TableCell>
 
+
+
+
+        <TableCell>{row.description}</TableCell>
         <TableCell >
           {row.available ? (
               <Iconify width={22} icon="solar:check-circle-bold" sx={{ color: 'success.main' }} />
@@ -118,10 +122,6 @@ export function ProductCategoryTableRow({ row, selected, onSelectRow, updateData
               '-'
           )}
         </TableCell>
-
-
-        <TableCell>{row.description}</TableCell>
-
 
 
         <TableCell>

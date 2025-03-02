@@ -1,4 +1,4 @@
-import type { MembershipProps } from './session-table-row';
+import type { SessionProps } from './session-table-row';
 
 // ----------------------------------------------------------------------
 
@@ -53,7 +53,7 @@ export function getComparator<Key extends keyof any>(
 // ----------------------------------------------------------------------
 
 type ApplyFilterProps = {
-  inputData: MembershipProps[];
+  inputData: SessionProps[];
   filterName: string;
   comparator: (a: any, b: any) => number;
 };
