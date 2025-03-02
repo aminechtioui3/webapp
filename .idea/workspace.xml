@@ -4,28 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="74813386-4e36-4a36-874f-73c4ba81e498" name="Changes" comment="f">
-      <change afterPath="$PROJECT_DIR$/src/sections/services/HistoryService.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/models/ProductCategoryModel.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/models/ProductCategoryModel.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/models/SessionModel.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/models/SessionModel.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/AuthReset.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/AuthReset.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/properties.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/properties.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/routes/sections.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/routes/sections.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/sections/Articles/article-table-row.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/sections/Articles/article-table-row.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/sections/Articles/view/article-view.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/sections/Articles/view/article-view.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/sections/Deals/deal-table-row.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/sections/Deals/deal-table-row.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/sections/Exercises/view/exercise-view.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/sections/Exercises/view/exercise-view.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/sections/History/history-table-row.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/sections/History/history-table-row.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/sections/History/view/history-view.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/sections/History/view/history-view.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/sections/Product Category/product-category-table-row.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/sections/Product Category/product-category-table-row.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/sections/Product Category/view/product-category-view.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/sections/Product Category/view/product-category-view.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/sections/Sessions/session-table-row.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/sections/Sessions/session-table-row.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/sections/Sessions/utils.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/sections/Sessions/utils.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/sections/Sessions/view/session-view.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/sections/Sessions/view/session-view.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/sections/services/ArticleService.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/sections/services/ArticleService.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/sections/services/shopService.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/sections/services/shopService.ts" afterDir="false" />
-    </list>
+    <list default="true" id="74813386-4e36-4a36-874f-73c4ba81e498" name="Changes" comment="f" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -103,6 +82,7 @@
       <updated>1740127790528</updated>
       <workItem from="1740127792314" duration="95104000" />
       <workItem from="1740508616667" duration="1145000" />
+      <workItem from="1740953701867" duration="241000" />
     </task>
     <task id="LOCAL-00001" summary="d">
       <option name="closed" value="true" />
