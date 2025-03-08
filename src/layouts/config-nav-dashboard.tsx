@@ -1,128 +1,101 @@
 import { Label } from 'src/components/label';
-import { SvgColor } from 'src/components/svg-color';
-
-// ----------------------------------------------------------------------
-
-const icon = (name: string) => (
-  <SvgColor width="100%" height="100%" src={`/assets/icons/navbar/${name}.svg`} />
-);
+import {
+  Dashboard,
+  Notifications,
+  People,
+  ShoppingCart,
+  Category,
+  ListAlt,
+  ShoppingBag,
+  Article,
+  History,
+  FitnessCenter,
+  Lock,
+  ErrorOutline,
+} from '@mui/icons-material';
+import SettingsIcon from '@mui/icons-material/Settings';
 
 export const navData = [
   {
     title: 'Dashboard',
     path: '/',
-    icon: icon('ic-analytics'),
+    icon: <Dashboard />,
   },
   {
     title: 'Notifications',
-    path:'/Notifications',
-    icon: icon('ic-notification'),
+    path: '/notifications',
+    icon: <Notifications />,
+    info: <Label color="error" variant="inverted">new</Label>,
   },
   {
     title: 'Members',
     path: '/user',
-    icon: icon('ic-user'),
+    icon: <People />,
   },
   {
-    title: 'Membership ',
+    title: 'Membership',
     path: '/membership',
-    icon: icon('ic-cart'),
-    info: (
-        <Label color="error" variant="inverted">
-          new
-        </Label>
-    ),
+    icon: <ShoppingCart />,
+    info: <Label color="error" variant="inverted">new</Label>,
   },
   {
-    title: 'Expense ',
+    title: 'Expense',
     path: '/expense',
-    icon: icon('ic-cart'),
-    info: (
-        <Label color="error" variant="inverted">
-          5
-        </Label>
-    ),
+    icon: <ShoppingCart />,
+    info: <Label color="error" variant="inverted">5</Label>,
   },
-
   {
     title: 'Shop',
     path: '/shop',
-    icon: icon('ic-cart'),
-    info: (
-        <Label color="error" variant="inverted">
-          new
-        </Label>
-    ),
+    icon: <ShoppingBag />,
+    info: <Label color="error" variant="inverted">new</Label>,
   },
   {
     title: 'Product Category',
     path: '/product-category',
-    icon: icon('ic-cart'),
-
+    icon: <Category />,
   },
   {
     title: 'Product Orders',
     path: '/product-orders',
-    icon: icon('ic-cart'),
-
+    icon: <ListAlt />,
   },
   {
     title: 'Product',
     path: '/products',
-    icon: icon('ic-cart'),
-    info: (
-        <Label color="error" variant="inverted">
-          +3
-        </Label>
-    ),
+    icon: <ShoppingBag />,
+    info: <Label color="error" variant="inverted">+3</Label>,
   },
-
-
   {
     title: 'Blog',
     path: '/blog',
-    icon: icon('ic-blog'),
+    icon: <Article />,
   },
   {
     title: 'Article',
     path: '/article',
-    icon: icon('ic-cart'),
+    icon: <Article />,
   },
   {
     title: 'Deals',
     path: '/deals',
-    icon: icon('ic-cart'),
-
+    icon: <ShoppingCart />,
   },
   {
     title: 'History',
     path: '/history',
-    icon: icon('ic-cart'),
-    info: (
-        <Label color="error" variant="inverted">
-          +11
-        </Label>
-    ),
+    icon: <History />,
+    info: <Label color="error" variant="inverted">+11</Label>,
   },
   {
     title: 'Sessions',
     path: '/session',
-    icon: icon('ic-cart'),
+    icon: <ListAlt />,
   },
   {
     title: 'Exercises',
     path: '/exercises',
-    icon: icon('ic-cart'),
+    icon: <FitnessCenter />,
   },
-
-  {
-    title: 'Sign in',
-    path: '/sign-in',
-    icon: icon('ic-lock'),
-  },
-  {
-    title: 'Not found',
-    path: '/404',
-    icon: icon('ic-disabled'),
-  },
+  
 ];

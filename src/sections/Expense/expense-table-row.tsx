@@ -163,7 +163,7 @@ export function ExpenseTableRow({ row, selected, onSelectRow, updateData, onDele
           aria-describedby="alert-dialog-description"
       >
         <DialogTitle id="alert-dialog-title">
-          Delete Membership
+          Delete Expense
         </DialogTitle>
         <DialogContent>
           <DialogContentText id="alert-dialog-description">

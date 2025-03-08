@@ -55,38 +55,7 @@ export function WorkspacesPopover({ data = [], sx, ...other }: WorkspacesPopover
 
   return (
     <>
-      <ButtonBase
-        disableRipple
-        onClick={handleOpenPopover}
-        sx={{
-          pl: 2,
-          py: 3,
-          gap: 1.5,
-          pr: 1.5,
-          width: 1,
-          borderRadius: 1.5,
-          textAlign: 'left',
-          justifyContent: 'flex-start',
-          bgcolor: (theme) => varAlpha(theme.vars.palette.grey['500Channel'], 0.08),
-          ...sx,
-        }}
-        {...other}
-      >
-        {renderAvatar(workspace?.name, workspace?.logo)}
-
-        <Box
-          gap={1}
-          flexGrow={1}
-          display="flex"
-          alignItems="center"
-          sx={{ typography: 'body2', fontWeight: 'fontWeightSemiBold' }}
-        >
-          {workspace?.name}
-          {renderLabel(workspace?.plan)}
-        </Box>
-
-        <Iconify width={16} icon="carbon:chevron-sort" sx={{ color: 'text.disabled' }} />
-      </ButtonBase>
+      
 
       <Popover open={!!openPopover} anchorEl={openPopover} onClose={handleClosePopover}>
         <MenuList

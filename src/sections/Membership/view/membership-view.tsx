@@ -235,7 +235,7 @@ const schema = z.object({
 
                   { id: 'status', label: 'Status', width: '10%' },
                   { id: 'price', label: 'Price', width: '10%' },
-                  { id: 'description', label: 'description', width: '60%' },
+                  { id: 'description', label: 'description', width: '40%' },
 
 
 
