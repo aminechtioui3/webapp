@@ -4,6 +4,7 @@ import { Properties } from 'src/properties';
 
 const properties = Properties.getInstance();
 
+
 const api = axios.create({
     baseURL: properties.baseURL,
     headers: {
