@@ -2,25 +2,23 @@ import { useState, useCallback } from 'react';
 
 import Box from '@mui/material/Box';
 import Avatar from '@mui/material/Avatar';
+import Dialog from "@mui/material/Dialog";
+import Button from "@mui/material/Button";
 import Popover from '@mui/material/Popover';
 import TableRow from '@mui/material/TableRow';
 import Checkbox from '@mui/material/Checkbox';
 import MenuList from '@mui/material/MenuList';
 import TableCell from '@mui/material/TableCell';
+import {DialogContentText} from "@mui/material";
 import IconButton from '@mui/material/IconButton';
-import MenuItem, { menuItemClasses } from '@mui/material/MenuItem';
-
-import { Label } from 'src/components/label';
-import { Iconify } from 'src/components/iconify';
-import { timeStamp } from 'console';
-import {deleteMembership} from "../services/MembershipService";
-import {applyFilter, getComparator} from "./utils";
-import Dialog from "@mui/material/Dialog";
 import DialogTitle from "@mui/material/DialogTitle";
 import DialogContent from "@mui/material/DialogContent";
-import {DialogContentText} from "@mui/material";
 import DialogActions from "@mui/material/DialogActions";
-import Button from "@mui/material/Button";
+import MenuItem, { menuItemClasses } from '@mui/material/MenuItem';
+
+import { Iconify } from 'src/components/iconify';
+
+// eslint-disable-next-line import/no-cycle
 import {deleteDeal} from "../services/DealService";
 
 
@@ -32,7 +30,7 @@ export type DealProps = {
   header: string;
   status: boolean;
   image: string;
-  dealEndDate: Date;
+  dealEndDate?: Date;
   description: string;
 };
 
@@ -82,7 +80,7 @@ export function DealTableRow({ row, selected, onSelectRow, updateData, onDeleteS
 
     onDeleteSuccess();
     handleClosePopover(); // Close the popover when opening dialog
-  }, []);
+  }, [handleClosePopover, onDeleteSuccess]);
 
   const handleCloseDeleteDialog = useCallback(() => {
     setOpenDeleteDialog(false);
@@ -122,7 +120,7 @@ export function DealTableRow({ row, selected, onSelectRow, updateData, onDeleteS
         </TableCell>
 
 
-        <TableCell>{row.dealEndDate.toISOString()}</TableCell>
+        <TableCell>{row.dealEndDate!==undefined?row.dealEndDate.toISOString():"undefined"}</TableCell>
         <TableCell>{row.description}</TableCell>
 
 

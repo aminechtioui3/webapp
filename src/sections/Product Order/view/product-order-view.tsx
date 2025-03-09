@@ -78,6 +78,7 @@ const schema = z.object({
 
     setModifiedId(Number.parseInt(id, 10));
     if (userToEdit) {
+      // @ts-ignore
       reset(userToEdit); // Populate form fields with user data
       handleOpen(); // Open the form modal
     }
@@ -112,7 +113,7 @@ const schema = z.object({
 
   useEffect(() => {
     loadData();
-  }, [filterName, table.order, table.orderBy]); // ✅ No more infinite re-renders
+  }, [filterName, loadData, table.order, table.orderBy]); // ✅ No more infinite re-renders
   const notFound = dataFiltered && dataFiltered!.length && !!filterName;
   
   return (

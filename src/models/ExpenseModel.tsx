@@ -1,13 +1,18 @@
-import {MembershipProps} from "../sections/Membership/membership-table-row";
-import {ExpenseProps} from "../sections/Expense/expense-table-row";
+import type {ExpenseProps} from "../sections/Expense/expense-table-row";
 
 export class ExpenseModel {
     id: number;
+
     date: Date;
+
     note: string;
+
     amount: number;
+
     type: string;
+
     createdAt: Date;
+
     updatedAt: Date;
 
     constructor(

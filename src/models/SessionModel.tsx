@@ -1,14 +1,20 @@
-import {MembershipProps} from "../sections/Membership/membership-table-row";
-import {SessionProps} from "../sections/Sessions/session-table-row";
+import type {SessionProps} from "../sections/Sessions/session-table-row";
 
 export class SessionModel {
   id: number;
+
   title: string;
+
   subTitle: string;
+
   description: string;
+
   image?: string;
+
   available: boolean;
+
   createdAt: Date;
+
   updatedAt: Date;
 
   constructor(
@@ -56,6 +62,7 @@ export class SessionModel {
       updatedAt: this.updatedAt.toISOString(),
     };
   }
+  
   toSessionProps(): SessionProps {
     return {
       id: this.id,

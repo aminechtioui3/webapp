@@ -1,5 +1,6 @@
 import {UserAccount} from "./UserAccount";
 import {MembershipModel} from "./MembershipModel";
+// eslint-disable-next-line import/no-cycle
 import {ActiveMembershipProps} from "../sections/user/user-table-row";
 
 export class ActiveMembership {

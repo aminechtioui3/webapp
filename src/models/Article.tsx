@@ -1,15 +1,24 @@
-import {ArticleProps} from "../sections/Articles/article-table-row";
+import type {ArticleProps} from "../sections/Articles/article-table-row";
 
 export class ArticleModel {
     id: number | null;
+
     title: string;
+
     description: string;
+
     header: string;
+
     image: string | null;
+
     video: string | null;
+
     date: Date;
+
     available: boolean;
+
     createdAt: Date;
+
     updatedAt: Date;
 
     constructor(
@@ -17,7 +26,9 @@ export class ArticleModel {
         title: string,
         description: string,
         header: string,
+        // eslint-disable-next-line @typescript-eslint/default-param-last
         image: string | null = null,
+        // eslint-disable-next-line @typescript-eslint/default-param-last
         video: string | null = null,
         date: Date,
         available: boolean,
@@ -70,7 +81,7 @@ export class ArticleModel {
 
     toArticleProps(): ArticleProps {
         return {
-            id: this.id,
+            id: this.id?? undefined,
             date:this.date,
             header:this.header,
             name: this.title,

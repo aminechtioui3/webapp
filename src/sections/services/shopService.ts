@@ -1,13 +1,15 @@
 
 
-import { UserAccount } from 'src/models/UserAccount';
 import { Properties } from 'src/properties';
-import ResponseModel from "../../models/ResponseModel";
-import {ActiveMembership} from "../../models/ActiveMembership";
+
 import api from "../../api/axiosConfig";
+// eslint-disable-next-line import/no-named-as-default
+import ResponseModel from "../../models/ResponseModel";
+// eslint-disable-next-line import/no-cycle
 import {ProductModel} from "../../models/ProductModel";
-import {ProductCategory} from "../../models/ProductCategoryModel";
+// eslint-disable-next-line import/no-cycle
 import {ProductOrderModel} from "../../models/ProductOrder";
+import {ProductCategory} from "../../models/ProductCategoryModel";
 
 const properties = Properties.getInstance();
 const client = api;

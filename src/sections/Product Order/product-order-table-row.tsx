@@ -10,17 +10,16 @@ import TableCell from '@mui/material/TableCell';
 import IconButton from '@mui/material/IconButton';
 import MenuItem, { menuItemClasses } from '@mui/material/MenuItem';
 
-import { Label } from 'src/components/label';
+
 import { Iconify } from 'src/components/iconify';
-import { timeStamp } from 'console';
-import {deleteMembership} from "../services/MembershipService";
-import {applyFilter, getComparator} from "./utils";
+
 import Dialog from "@mui/material/Dialog";
 import DialogTitle from "@mui/material/DialogTitle";
 import DialogContent from "@mui/material/DialogContent";
 import {DialogContentText} from "@mui/material";
 import DialogActions from "@mui/material/DialogActions";
 import Button from "@mui/material/Button";
+// eslint-disable-next-line import/no-cycle
 import {ProductModel} from "../../models/ProductModel";
 import {UserAccount} from "../../models/UserAccount";
 import {ProductOrderStatus} from "../../models/ProductOrderStatus";
@@ -90,7 +89,7 @@ export function ProductOrderTableRow({ row, selected, onSelectRow, updateData, o
 
     onDeleteSuccess();
     handleClosePopover(); // Close the popover when opening dialog
-  }, []);
+  }, [handleClosePopover, onDeleteSuccess]);
 
   const handleCloseDeleteDialog = useCallback(() => {
     setOpenDeleteDialog(false);

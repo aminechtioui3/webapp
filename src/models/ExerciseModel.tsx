@@ -1,21 +1,36 @@
 import {SessionModel} from "./SessionModel";
-import {ExerciseProps} from "../sections/Exercises/exercise-table-row";
+
+import type {ExerciseProps} from "../sections/Exercises/exercise-table-row";
 
 export class ExerciseModel {
   id: number;
+
   name: string;
+
   description: string;
+
   image?: string;
+
   durationInMinutes: number;
+
   video?: string;
+
   calorie: number;
+
   level?: string;
+
   muscles?: string;
+
   tags?: string;
+
   session: SessionModel
+
   repeatNumber?: string;
+
   available: boolean;
+
   createdAt: Date;
+
   updatedAt: Date;
 
   constructor(

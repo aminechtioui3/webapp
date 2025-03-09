@@ -1,16 +1,17 @@
 import React, { useState } from "react";
 import { Container, TextField, Button, Typography, Paper } from "@mui/material";
 import { useParams } from "react-router-dom";
-import { resetPasswordService } from "../../src/sections/services/authService";
+import { resetPasswordService } from "../sections/services/authService";
 
 const ResetPassword = () => {
   const { token } = useParams();
   const [password, setPassword] = useState("");
+  const [oldPassword, setOldPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e :any) => {
     e.preventDefault();
     setMessage("");
     setError("");
@@ -42,7 +43,7 @@ const ResetPassword = () => {
             variant="outlined"
             margin="normal"
             value={password}
-            onChange={}
+            onChange={(e) => setOldPassword(e.target.value)}
             required
           />
           <TextField

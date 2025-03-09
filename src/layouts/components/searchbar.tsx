@@ -31,6 +31,6 @@ export function Searchbar({ sx, ...other }: BoxProps) {
   }, []);
 
   return (
-    <div></div>
+    <div />
   );
 }

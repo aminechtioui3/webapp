@@ -22,16 +22,12 @@ interface Profile {
     picture: "https://via.placeholder.com/80",
   };
   
-  export const getProfile = async (clientId: string): Promise<Profile> => {
-    return new Promise((resolve) => {
+  export const getProfile = async (clientId: string): Promise<Profile> => new Promise((resolve) => {
       setTimeout(() => resolve(mockProfile), 1000);
     });
-  };
   
-  export const updateProfile = async (clientId: string, updatedProfile: Profile): Promise<void> => {
-    return new Promise((resolve) => {
+  export const updateProfile = async (clientId: string, updatedProfile: Profile): Promise<void> => new Promise((resolve) => {
       console.log("Updated profile:", updatedProfile);
       setTimeout(() => resolve(), 1000);
     });
-  };
   

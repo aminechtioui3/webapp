@@ -1,6 +1,9 @@
-import type { MembershipProps } from './user-table-row';
+
 
 // ----------------------------------------------------------------------
+
+
+import {ActiveMembershipProps} from "./user-table-row";
 
 export const visuallyHidden = {
   border: 0,
@@ -53,7 +56,7 @@ export function getComparator<Key extends keyof any>(
 // ----------------------------------------------------------------------
 
 type ApplyFilterProps = {
-  inputData: MembershipProps[];
+  inputData: ActiveMembershipProps[];
   filterName: string;
   comparator: (a: any, b: any) => number;
 };
@@ -71,7 +74,7 @@ export function applyFilter({ inputData, comparator, filterName }: ApplyFilterPr
 
   if (filterName) {
     inputData = inputData.filter(
-      (user) => user.name.toLowerCase().indexOf(filterName.toLowerCase()) !== -1
+      (user) => user.user.firstName.toLowerCase().indexOf(filterName.toLowerCase()) !== -1
     );
   }
 

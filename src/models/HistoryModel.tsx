@@ -1,15 +1,24 @@
-import {HistoryProps} from "../sections/History/history-table-row";
+import type {HistoryProps} from "../sections/History/history-table-row";
 
 export class HistoryModel {
     id: number;
+
     title: string;
+
     content: string;
+
     image?: string;
+
     notifyAdmin: boolean;
+
     seen: boolean;
+
     date: Date;
+
     available: boolean;
+
     createdAt: Date;
+
     updatedAt: Date;
 
     constructor(

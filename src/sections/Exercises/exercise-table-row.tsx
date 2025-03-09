@@ -2,26 +2,26 @@ import { useState, useCallback } from 'react';
 
 import Box from '@mui/material/Box';
 import Avatar from '@mui/material/Avatar';
+import Dialog from "@mui/material/Dialog";
+import Button from "@mui/material/Button";
 import Popover from '@mui/material/Popover';
 import TableRow from '@mui/material/TableRow';
 import Checkbox from '@mui/material/Checkbox';
 import MenuList from '@mui/material/MenuList';
 import TableCell from '@mui/material/TableCell';
+import {DialogContentText} from "@mui/material";
 import IconButton from '@mui/material/IconButton';
+import DialogTitle from "@mui/material/DialogTitle";
+import DialogContent from '@mui/material/DialogContent';
+import DialogActions from "@mui/material/DialogActions";
 import MenuItem, { menuItemClasses } from '@mui/material/MenuItem';
 
 import { Iconify } from 'src/components/iconify';
 
-import {deleteActiveMembership} from "../services/UserService";
-import Dialog from "@mui/material/Dialog";
-import DialogTitle from "@mui/material/DialogTitle";
-import DialogContent from '@mui/material/DialogContent';
-import DialogActions from "@mui/material/DialogActions";
-import Button from "@mui/material/Button";
-import {DialogContentText} from "@mui/material";
-
-import {SessionModel} from "../../models/SessionModel";
+// eslint-disable-next-line import/no-cycle
 import {deleteExercise} from "../services/ExerciseService";
+
+import type {SessionModel} from "../../models/SessionModel";
 
 // ----------------------------------------------------------------------
 
@@ -44,7 +44,7 @@ type UserTableRowProps = {
   row: ExerciseProps;
   selected: boolean;
   onSelectRow: () => void;
-  updateData: void;
+  updateData: (id: string) => void;
   onDeleteSuccess: () => void;
 };
 
@@ -82,7 +82,7 @@ export function ExerciseTableRow({ row, selected, onSelectRow, updateData, onDel
 
     onDeleteSuccess();
     handleClosePopover(); // Close the popover when opening dialog
-  }, []);
+  }, [handleClosePopover, onDeleteSuccess]);
 
   const handleCloseDeleteDialog = useCallback(() => {
     setOpenDeleteDialog(false);

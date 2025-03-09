@@ -214,13 +214,13 @@ export function ShopView() {
         console.log(data.membershipId);
         const newMembership = productCategory.find((m) => m.id === selectedProductCategory.id);
         const updatedProductModel = new ProductModel(
-            modifiedId,
+            modifiedId??-1,
             data.title,
             data.brand,
             data.model,
             data.description,
-            data.image,
             selectedProductCategory,
+            data.image,
             data.price,
             data.salePercent,
             data.availableNumber,
@@ -299,6 +299,7 @@ export function ShopView() {
         <DialogContent>
           <form onSubmit={handleSubmit(handleSubmitForm)}>
             <div style={{ marginBottom: '10px' }}>
+              {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
               <label>Membership</label>
               <Select
                 options={productCategory}
@@ -314,7 +315,7 @@ export function ShopView() {
             <input
               type="hidden"
               {...register('categoryId')}
-              value={selectedProductCategory?.value || ''}
+              value={selectedProductCategory?.id || ''}
             />
 
             title: this.title,

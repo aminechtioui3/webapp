@@ -6,13 +6,21 @@ export enum ApplicationReceivers {
 
 export class NotificationModel {
   id: number;
+
   title: string;
+
   description: string;
+
   header: string;
+
   image?: string;
+
   about?: string;
+
   receiversIds?: string;
+
   receiversType: ApplicationReceivers;
+
   createdAt: string;
 
   constructor(

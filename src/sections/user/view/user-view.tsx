@@ -1,9 +1,10 @@
-import { UserAccount } from 'src/models/UserAccount';
-import Select from 'react-select';
+import type { UserAccount } from 'src/models/UserAccount';
+
 import * as z from 'zod';
+import Select from 'react-select';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useCallback, useEffect, useState } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 
 import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
@@ -20,23 +21,23 @@ import TableContainer from '@mui/material/TableContainer';
 import TablePagination from '@mui/material/TablePagination';
 
 import { DashboardContent } from 'src/layouts/dashboard';
+
 import { Iconify } from 'src/components/iconify';
 import { Scrollbar } from 'src/components/scrollbar';
 
 import { TableNoData } from '../table-no-data';
-import { ActiveMembershipProps, UserTableRow } from '../user-table-row';
+import { UserTableRow } from '../user-table-row';
 import { UserTableHead } from '../user-table-head';
 import { UserTableToolbar } from '../user-table-toolbar';
-import { applyFilter, emptyRows, getComparator } from '../utils';
-
+import { TableEmptyRows } from '../user-table-empty-rows';
+import { emptyRows, applyFilter, getComparator } from '../utils';
+import { getMemberships } from '../../services/MembershipService';
 import { ActiveMembership } from '../../../models/ActiveMembership';
 import { ActiveMembershipCreationDTO } from '../../../models/ActivateMembershipCreationDTO';
-import { createActiveMembership, getMembers, updateActiveMembership } from '../../services/UserService';
-import { getMemberships } from '../../services/MembershipService';
-import { TableEmptyRows } from '../user-table-empty-rows';
-import { Role } from '../../../models/Role';
-import {MembershipModel} from "../../../models/MembershipModel";
-import {Snackbar} from "@mui/material";
+import { getMembers, createActiveMembership, updateActiveMembership } from '../../services/UserService';
+
+import type { ActiveMembershipProps} from '../user-table-row';
+import type {MembershipModel} from "../../../models/MembershipModel";
 
 // ----------------------------------------------------------------------
 
@@ -221,7 +222,7 @@ export function UserView() {
         console.log(data.membershipId);
         const newMembership = memberships.find((m) => m.id === selectedMembership.id);
         const updatedMembership = new ActiveMembership(
-            modifiedId,
+            modifiedId??-1,
             selectedMembership,
             updatedUserProfile || data.user,
             new Date(data.startDate),
@@ -272,11 +273,12 @@ export function UserView() {
     setModifiedId(Number(id));
     const selectedMem = _users.find((user) => user.id.toString() === id);
     if (selectedMem) {
-      let account= _users.find((user) => user.id.toString() === id);
+      const account= _users.find((user) => user.id.toString() === id);
       console.log("the selected account is",account)
-      setUpdatedUserProfile(account?.user);
+      setUpdatedUserProfile(account?.user!);
     }
   };
+
 
 
   return (
@@ -303,6 +305,7 @@ export function UserView() {
         <DialogContent>
           <form onSubmit={handleSubmit(handleSubmitForm)}>
             <div style={{ marginBottom: '10px' }}>
+              {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
               <label>Membership</label>
               <Select
                 options={memberships}
@@ -318,7 +321,7 @@ export function UserView() {
             <input
               type="hidden"
               {...register('membershipId')}
-              value={selectedMembership?.value || ''}
+              value={selectedMembership?.id || ''}
             />
 
             {/* Show these fields only when adding new member */}
@@ -352,13 +355,14 @@ export function UserView() {
                 <TextField label="Location" fullWidth margin="dense" {...register('location')} />
                 <TextField label="Phone" fullWidth margin="dense" {...register('phone')} />
                 <div style={{ marginBottom: '10px' }}>
+                  {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
                   <label>Gender</label>
                   <Select
                     options={[
                       { value: 'MALE', label: 'Male' },
                       { value: 'FEMALE', label: 'Female' },
                     ]}
-                    onChange={(selectedOption) => setValue('gender', selectedOption?.value)}
+                    onChange={(selectedOption) => setValue('gender', selectedOption?.value!)}
                     placeholder="Select Gender..."
                   />
                 </div>

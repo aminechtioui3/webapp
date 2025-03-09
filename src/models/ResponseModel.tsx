@@ -1,7 +1,10 @@
 export class ResponseModel<T> {
     status: boolean;
+
     errorMsg?: string;
+
     displayMsg?: string;
+
     data: T;
 
     constructor(status: boolean, data: T, errorMsg?: string, displayMsg?: string) {

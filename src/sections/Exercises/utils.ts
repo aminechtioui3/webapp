@@ -1,6 +1,7 @@
-import type { MembershipProps } from './exercise-table-row';
 
 // ----------------------------------------------------------------------
+
+import {ExerciseProps} from "./exercise-table-row";
 
 export const visuallyHidden = {
   border: 0,
@@ -53,7 +54,7 @@ export function getComparator<Key extends keyof any>(
 // ----------------------------------------------------------------------
 
 type ApplyFilterProps = {
-  inputData: MembershipProps[];
+  inputData: ExerciseProps[];
   filterName: string;
   comparator: (a: any, b: any) => number;
 };

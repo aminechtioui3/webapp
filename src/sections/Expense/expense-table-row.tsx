@@ -76,7 +76,7 @@ export function ExpenseTableRow({ row, selected, onSelectRow, updateData, onDele
 
     onDeleteSuccess();
     handleClosePopover(); // Close the popover when opening dialog
-  }, []);
+  }, [handleClosePopover, onDeleteSuccess]);
 
   const handleCloseDeleteDialog = useCallback(() => {
     setOpenDeleteDialog(false);

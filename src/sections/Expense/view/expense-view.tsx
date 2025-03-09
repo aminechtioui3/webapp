@@ -144,7 +144,7 @@ const schema = z.object({
 
   useEffect(() => {
     loadData();
-  }, [filterName, table.order, table.orderBy]); // ✅ No more infinite re-renders
+  }, [filterName, loadData, table.order, table.orderBy]); // ✅ No more infinite re-renders
   const notFound = dataFiltered && dataFiltered!.length && !!filterName;
   
   return (
@@ -173,6 +173,7 @@ const schema = z.object({
       <DialogContent>
 
         <form onSubmit={handleSubmit(onSubmit)}>
+          {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
           <label>Date</label>
           <TextField type="date" fullWidth margin="dense" {...register("date")} error={!!errors.date} helperText={errors.date?.message} />
           <TextField label="Note" fullWidth margin="dense" {...register("note")} error={!!errors.note} helperText={errors.note?.message} />
@@ -185,8 +186,7 @@ const schema = z.object({
             fullWidth
             error={!!errors.amount}
             helperText={errors.amount?.message}
-          /> <Box sx={{ width: 300, mt: 2 }}>
-          </Box>
+          /> <Box sx={{ width: 300, mt: 2 }} />
           <DialogActions>
             <Button onClick={handleClose}>Cancel</Button>
             <Button type="submit" variant="contained">Save</Button>

@@ -1,14 +1,22 @@
-import { MembershipProps } from '../sections/Membership/membership-table-row';
+import type { MembershipProps } from '../sections/Membership/membership-table-row';
 
 export class MembershipModel {
   id: number;
+
   title: string;
+
   subTitle: string;
+
   description: string;
+
   image?: string;
+
   price: number;
+
   available: boolean;
+
   createdAt: Date;
+
   updatedAt: Date;
 
   constructor(

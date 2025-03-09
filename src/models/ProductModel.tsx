@@ -1,19 +1,33 @@
+// eslint-disable-next-line import/no-cycle
 import {ProductCategory} from "./ProductCategoryModel";
-import {ShopProps} from "../sections/Shop/shop-table-row";
+
+import type {ShopProps} from "../sections/Shop/shop-table-row";
 
 export class ProductModel {
     id: number;
+
     title: string;
+
     brand: string;
+
     model: string;
+
     description: string;
+
     image?: string;
+
     category: ProductCategory;
+
     price: number;
+
     salePercent?: number;
+
     availableNumber?: number;
+
     available: boolean;
+
     createdAt: Date;
+
     updatedAt: Date;
 
     constructor(

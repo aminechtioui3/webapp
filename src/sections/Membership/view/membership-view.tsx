@@ -150,7 +150,7 @@ const schema = z.object({
 
   useEffect(() => {
     loadData();
-  }, [filterName, table.order, table.orderBy]); // ✅ No more infinite re-renders
+  }, [filterName, loadData, table.order, table.orderBy]); // ✅ No more infinite re-renders
   const notFound = dataFiltered && dataFiltered!.length && !!filterName;
   
   return (

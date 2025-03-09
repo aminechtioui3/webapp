@@ -1,13 +1,19 @@
-import {ProductCategoryProps} from "../sections/Product Category/product-category-table-row";
+import type {ProductCategoryProps} from "../sections/Product Category/product-category-table-row";
 
 
 export class ProductCategory {
     id: number;
+
     title: string;
+
     description?: string;
+
     image?: string;
+
     available: boolean;
+
     createdAt: Date;
+
     updatedAt: Date;
 
     constructor(

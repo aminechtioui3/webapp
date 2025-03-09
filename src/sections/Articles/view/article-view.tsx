@@ -81,10 +81,11 @@ const schema = z.object({
   });
 
   const updateData = async (id: string) => {
-    const userToEdit = _users.find(user => user.id.toString() === id.toString()); // Find user by ID
+    const userToEdit = _users.find(user => user.id!.toString() === id.toString()); // Find user by ID
 
     setModifiedId(Number.parseInt(id, 10));
     if (userToEdit) {
+      // @ts-ignore
       reset(userToEdit); // Populate form fields with user data
       handleOpen(); // Open the form modal
     }
@@ -153,7 +154,7 @@ const schema = z.object({
 
   useEffect(() => {
     loadData();
-  }, [filterName, table.order, table.orderBy]); // ✅ No more infinite re-renders
+  }, [filterName, loadData, table.order, table.orderBy]); // ✅ No more infinite re-renders
   const notFound = dataFiltered && dataFiltered!.length && !!filterName;
   
   return (
@@ -222,7 +223,7 @@ const schema = z.object({
                 onSelectAllRows={(checked) =>
                   table.onSelectAllRows(
                     checked,
-                    _users?.map((user) => user.id.toString())
+                    _users?.map((user) => user.id!==null?user.id.toString():"")
                   )
                 }
                 headLabel={[
@@ -246,8 +247,8 @@ const schema = z.object({
                     <ArticleTableRow
                       key={row.id}
                       row={row}
-                      selected={table.selected.includes(row.id.toString())}
-                      onSelectRow={() => table.onSelectRow(row.id.toString())}
+                      selected={table.selected.includes(row.id!==undefined?row.id.toString():"undefined")}
+                      onSelectRow={() => table.onSelectRow(row.id!==undefined?row.id.toString():"undefined")}
                       updateData={updateData}
                       onDeleteSuccess={loadData}
                     />

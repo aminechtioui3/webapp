@@ -72,13 +72,23 @@ export function NotificationView() {
           ),
       [users, userSearchInput]);
 
+  const getMembershipList = useCallback(async () => {
+    const response = await getMemberships();
+    if (response.status) setMemberships(response.data!);
+  }, []);
+
+  const getUserList = useCallback(async () => {
+    const response = await getAllAccounts();
+    if (response.status) setUsers(response.data!);
+  }, []);
+
   useEffect(() => {
     if (receiversType === "MEMBERSHIP") {
       getMembershipList();
     } else if (receiversType === "USER") {
       getUserList();
     }
-  }, [receiversType]);
+  }, [getMembershipList, getUserList, receiversType]);
 
   const handleReceiverTypeChange = (value: string) => {
     setReceiversType(value);
@@ -114,15 +124,7 @@ export function NotificationView() {
     if (response.status) setListOfNotifications(response.data!);
   }, []);
 
-  const getMembershipList = useCallback(async () => {
-    const response = await getMemberships();
-    if (response.status) setMemberships(response.data!);
-  }, []);
 
-  const getUserList = useCallback(async () => {
-    const response = await getAllAccounts();
-    if (response.status) setUsers(response.data!);
-  }, []);
 
   useEffect(() => { loadData(); }, [loadData]);
 

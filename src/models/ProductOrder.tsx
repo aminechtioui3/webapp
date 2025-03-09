@@ -1,20 +1,33 @@
-import { ProductModel } from "./ProductModel";
 import { UserAccount } from "./UserAccount";
-import { ProductOrderStatus } from "./ProductOrderStatus";
-import {ProductOrderProps} from "../sections/Product Order/product-order-table-row";
+// eslint-disable-next-line import/no-cycle
+import { ProductModel } from "./ProductModel";
+
+import type { ProductOrderStatus } from "./ProductOrderStatus";
+import type {ProductOrderProps} from "../sections/Product Order/product-order-table-row";
 
 export class ProductOrderModel {
     id: number;
+
     name: string;
+
     productModel: ProductModel;
+
     userModel: UserAccount;
+
     address: string;
+
     phone: string;
+
     note?: string;
+
     quantity: number;
+
     status: ProductOrderStatus;
+
     price: string;
+
     createdAt: Date;
+
     updatedAt: Date;
 
     constructor(

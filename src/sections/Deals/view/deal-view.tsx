@@ -24,18 +24,17 @@ import { DashboardContent } from 'src/layouts/dashboard';
 import { Iconify } from 'src/components/iconify';
 import { Scrollbar } from 'src/components/scrollbar';
 
-
+import {getDeals, createDeal, updateDeal} from 'src/sections/services/DealService';
 
 import { TableNoData } from '../table-no-data';
 import { DealTableRow } from '../deal-table-row';
 import { DealTableHead } from '../deal-table-head';
-import { TableEmptyRows } from '../deal-table-empty-rows';
+import {DealModel} from "../../../models/DealModel";
 import { DealTableToolbar } from '../deal-table-toolbar';
+import { TableEmptyRows } from '../deal-table-empty-rows';
 import { emptyRows, applyFilter, getComparator } from '../utils';
 
 import type { DealProps } from '../deal-table-row';
-import {DealModel} from "../../../models/DealModel";
-import {createDeal, getDeals, updateDeal} from 'src/sections/services/DealService';
 
 
 
@@ -153,7 +152,7 @@ const schema = z.object({
 
   useEffect(() => {
     loadData();
-  }, [filterName, table.order, table.orderBy]); // ✅ No more infinite re-renders
+  }, [filterName, loadData, table.order, table.orderBy]); // ✅ No more infinite re-renders
   const notFound = dataFiltered && dataFiltered!.length && !!filterName;
   
   return (

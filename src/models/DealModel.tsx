@@ -1,14 +1,22 @@
-import {DealProps} from "../sections/Deals/deal-table-row";
+import type {DealProps} from "../sections/Deals/deal-table-row";
 
 export class DealModel {
   id: number;
+
   title: string;
+
   description: string;
+
   header: string;
+
   image?: string;
+
   dealEndDate?: Date;
+
   available: boolean;
+
   createdAt: Date;
+
   updatedAt: Date;
 
   constructor(

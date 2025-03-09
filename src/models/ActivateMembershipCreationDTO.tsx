@@ -4,17 +4,29 @@ export class ActiveMembershipCreationDTO {
     membershipId?: number;
 
     email?: string;
+
     firstName?: string;
+
     lastName?: string;
+
     birthday?: Date;
+
     weight?: number;
+
     height?: number;
+
     location?: string;
+
     phone?: string;
+
     gender?: string;
+
     endDate?: Date;
+
     startDate?: Date;
+
     note?: string;
+
     status?: string;
 
     constructor(

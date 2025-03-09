@@ -6,8 +6,31 @@
   <component name="ChangeListManager">
     <list default="true" id="74813386-4e36-4a36-874f-73c4ba81e498" name="Changes" comment="f">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/properties.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/properties.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/yarn.lock" beforeDir="false" afterPath="$PROJECT_DIR$/yarn.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/app.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/models/Article.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/models/Article.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/models/DealModel.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/models/DealModel.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/models/ProductModel.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/models/ProductModel.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/models/UserAccount.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/models/UserAccount.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/AuthReset.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/AuthReset.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/home.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/home.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/settings.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/settings.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/sections/Articles/article-table-row.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/sections/Articles/article-table-row.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/sections/Articles/view/article-view.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/sections/Articles/view/article-view.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/sections/Deals/deal-table-row.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/sections/Deals/deal-table-row.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/sections/Exercises/exercise-table-row.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/sections/Exercises/exercise-table-row.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/sections/Exercises/utils.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/sections/Exercises/utils.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/sections/Exercises/view/exercise-view.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/sections/Exercises/view/exercise-view.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/sections/Expense/utils.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/sections/Expense/utils.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/sections/History/utils.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/sections/History/utils.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/sections/Product Order/view/product-order-view.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/sections/Product Order/view/product-order-view.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/sections/Sessions/utils.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/sections/Sessions/utils.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/sections/Shop/shop-table-row.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/sections/Shop/shop-table-row.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/sections/Shop/utils.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/sections/Shop/utils.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/sections/Shop/view/shop-view.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/sections/Shop/view/shop-view.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/sections/user/user-table-row.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/sections/user/user-table-row.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/sections/user/utils.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/sections/user/utils.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/sections/user/view/user-view.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/sections/user/view/user-view.tsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -26,7 +49,7 @@
   <component name="GithubPullRequestsUISettings">{
   &quot;selectedUrlAndAccountId&quot;: {
     &quot;url&quot;: &quot;https://github.com/aminechtioui3/webapp&quot;,
-    &quot;accountId&quot;: &quot;d3e38d92-b93b-4f7e-b160-9647938d2d07&quot;
+    &quot;accountId&quot;: &quot;63d3e3ca-5a6e-4e06-9742-6dbf00c59ec4&quot;
   }
 }</component>
   <component name="ProblemsViewState">
@@ -52,7 +75,7 @@
     &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
     &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
     &quot;nodejs_package_manager_path&quot;: &quot;yarn&quot;,
-    &quot;prettierjs.PrettierConfiguration.Package&quot;: &quot;C:\\Users\\mohaa\\Desktop\\Work Chtioui\\webapp\\node_modules\\prettier&quot;,
+    &quot;prettierjs.PrettierConfiguration.Package&quot;: &quot;D:\\projects\\GymApp\\webapp\\node_modules\\prettier&quot;,
     &quot;ts.external.directory.path&quot;: &quot;D:\\projects\\GymApp\\webapp\\node_modules\\typescript\\lib&quot;,
     &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
@@ -101,6 +124,8 @@
       <workItem from="1741039565177" duration="80000" />
       <workItem from="1741394200075" duration="179000" />
       <workItem from="1741476585474" duration="2323000" />
+      <workItem from="1741526088673" duration="741000" />
+      <workItem from="1741526849512" duration="4710000" />
     </task>
     <task id="LOCAL-00001" summary="d">
       <option name="closed" value="true" />

@@ -52,9 +52,7 @@ export default function ProfilePage() {
           {/* Profile Picture */}
           <Grid item xs={12} sm={4} textAlign="center">
             <Avatar src={profile.picture} sx={{ width: 120, height: 120, margin: "auto" }} />
-            <Typography variant="caption" display="block" gutterBottom>
-              
-            </Typography>
+            <Typography variant="caption" display="block" gutterBottom />
             <FormControlLabel control={<Switch checked={banned} onChange={() => setBanned(!banned)} />} label="Banned" />
             <FormControlLabel control={<Switch checked={emailVerified} onChange={() => setEmailVerified(!emailVerified)} />} label="Email Verified" />
           </Grid>

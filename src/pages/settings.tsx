@@ -10,7 +10,7 @@ const Settings = () => {
     productUpdates: true,
   });
 
-  const handleToggle = (event) => {
+  const handleToggle = (event :any) => {
     setSettings({ ...settings, [event.target.name]: event.target.checked });
   };
 

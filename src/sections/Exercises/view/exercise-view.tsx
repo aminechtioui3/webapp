@@ -216,7 +216,7 @@ export function ExerciseView() {
         const newMembership = sessions.find((m) => m.id === selectedSession.id);
         const updatedExercise = new ExerciseModel(
 
-            modifiedId,
+            modifiedId??-1,
             data.name ,
             data.description ,
 
@@ -277,9 +277,7 @@ export function ExerciseView() {
   const updateData = (id: string) => {
     setModifiedId(Number(id));
     const selectedMem = _exercises.find((user) => user.id.toString() === id);
-    if (selectedMem) {
-
-    }
+    if (selectedMem) { /* empty */ }
   };
 
 
@@ -307,6 +305,7 @@ export function ExerciseView() {
         <DialogContent>
           <form onSubmit={handleSubmit(handleSubmitForm)}>
             <div style={{ marginBottom: '10px' }}>
+              {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
               <label>Membership</label>
               <Select
                 options={sessions}
@@ -322,7 +321,7 @@ export function ExerciseView() {
             <input
               type="hidden"
               {...register('sessionId')}
-              value={selectedSession?.value || ''}
+              value={selectedSession?.id || ''}
             />
 
 

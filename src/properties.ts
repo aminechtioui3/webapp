@@ -165,7 +165,7 @@ export class Properties {
 
     private constructor() {
         this.baseURL = "https://gymapp-production-e339.up.railway.app/api/v1";
-        //this.baseURL = "http://localhost:5000/api/v1";
+        // this.baseURL = "http://localhost:5000/api/v1";
 
         // Active Membership
         this.ActivateMembership = "/protected/active-membership/start-active-membership";
@@ -214,7 +214,7 @@ export class Properties {
         this.getAllExpenses="/protected/Expense/get-all-expenses";
 
 
-        //HISTORY
+        // HISTORY
         this.deleteHistory="/protected/history/delete-history/{id}";
         this.markHistoryAsSeen="/protected/history/mark-history-as-seen/{id}";
         this.getAllHistory="/protected/history/get-all-history";

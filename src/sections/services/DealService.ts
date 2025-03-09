@@ -1,6 +1,7 @@
 
 import { UserAccount } from 'src/models/UserAccount';
 import { Properties } from 'src/properties';
+// eslint-disable-next-line import/no-named-as-default
 import ResponseModel from "../../models/ResponseModel";
 
 import api from "../../api/axiosConfig";

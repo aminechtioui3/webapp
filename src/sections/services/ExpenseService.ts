@@ -1,7 +1,9 @@
 import { Properties } from 'src/properties';
+// eslint-disable-next-line import/no-named-as-default
 import ResponseModel from "../../models/ResponseModel";
 
 import api from "../../api/axiosConfig";
+// eslint-disable-next-line import/no-cycle
 import {ExpenseModel} from "../../models/ExpenseModel";
 
 

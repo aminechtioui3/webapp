@@ -17,6 +17,7 @@ import DialogContent from "@mui/material/DialogContent";
 import {DialogContentText} from "@mui/material";
 import DialogActions from "@mui/material/DialogActions";
 import Button from "@mui/material/Button";
+// eslint-disable-next-line import/no-cycle
 import {deleteArticle} from "../services/ArticleService";
 
 
@@ -24,7 +25,7 @@ import {deleteArticle} from "../services/ArticleService";
 
 export type ArticleProps = {
 
-  id: number;
+  id?: number;
   name: string;
   header: string;
   date: Date;
@@ -79,14 +80,14 @@ export function ArticleTableRow({ row, selected, onSelectRow, updateData, onDele
 
     onDeleteSuccess();
     handleClosePopover(); // Close the popover when opening dialog
-  }, []);
+  }, [handleClosePopover, onDeleteSuccess]);
 
   const handleCloseDeleteDialog = useCallback(() => {
     setOpenDeleteDialog(false);
   }, []);
 
   const deleteM = useCallback(async () => {
-    const result = await deleteArticle(row.id.toString());
+    const result = await deleteArticle(row.id!==undefined?row.id.toString():"undefined");
     if (result.status) {
       onDeleteSuccess();
       handleCloseDeleteDialog();

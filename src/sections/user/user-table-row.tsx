@@ -2,28 +2,28 @@ import { useState, useCallback } from 'react';
 
 import Box from '@mui/material/Box';
 import Avatar from '@mui/material/Avatar';
+import Dialog from "@mui/material/Dialog";
+import Button from "@mui/material/Button";
 import Popover from '@mui/material/Popover';
 import TableRow from '@mui/material/TableRow';
 import Checkbox from '@mui/material/Checkbox';
 import MenuList from '@mui/material/MenuList';
 import TableCell from '@mui/material/TableCell';
+import {DialogContentText} from "@mui/material";
 import IconButton from '@mui/material/IconButton';
-import MenuItem, { menuItemClasses } from '@mui/material/MenuItem';
-
-import { Label } from 'src/components/label';
-import { Iconify } from 'src/components/iconify';
-import { timeStamp } from 'console';
-
-import {applyFilter, getComparator} from "./utils";
-import {MembershipModel} from "../../models/MembershipModel";
-import {deleteActiveMembership} from "../services/UserService";
-import Dialog from "@mui/material/Dialog";
 import DialogTitle from "@mui/material/DialogTitle";
 import DialogContent from '@mui/material/DialogContent';
 import DialogActions from "@mui/material/DialogActions";
-import Button from "@mui/material/Button";
-import {DialogContentText} from "@mui/material";
-import {UserAccount} from "../../models/UserAccount";
+import MenuItem, { menuItemClasses } from '@mui/material/MenuItem';
+
+import { Iconify } from 'src/components/iconify';
+
+// eslint-disable-next-line import/no-cycle
+import {deleteActiveMembership} from "../services/UserService";
+
+import type {UserAccount} from "../../models/UserAccount";
+// eslint-disable-next-line import/no-cycle
+import type {MembershipModel} from "../../models/MembershipModel";
 
 // ----------------------------------------------------------------------
 
@@ -41,7 +41,7 @@ type UserTableRowProps = {
   row: ActiveMembershipProps;
   selected: boolean;
   onSelectRow: () => void;
-  updateData: void;
+  updateData: (id: string) => void ;
   onDeleteSuccess: () => void;
 };
 
@@ -79,7 +79,7 @@ export function UserTableRow({ row, selected, onSelectRow, updateData, onDeleteS
 
     onDeleteSuccess();
     handleClosePopover(); // Close the popover when opening dialog
-  }, []);
+  }, [handleClosePopover, onDeleteSuccess]);
 
   const handleCloseDeleteDialog = useCallback(() => {
     setOpenDeleteDialog(false);
