@@ -221,11 +221,12 @@ const schema = z.object({
                   )
                 }
                 headLabel={[
-                  { id: 'image', label: 'Image', width: '20%' },
+                  
 
-                  { id: 'status', label: 'Status', width: '10%' },
-                  { id: 'price', label: 'Price', width: '10%' },
-                  { id: 'description', label: 'description', width: '60%' },
+                  { id: 'status', label: 'Status', width: '20%' },
+                  { id: 'price', label: 'Price', width: '20%' },
+                  { id: 'type', label: 'type', width: '40%' },
+                  {id:'description',label :'description', width:'20%'}
 
 
 
@@ -264,7 +265,7 @@ const schema = z.object({
           count={_users.length}
           rowsPerPage={table.rowsPerPage}
           onPageChange={table.onChangePage}
-          rowsPerPageOptions={[5, 10, 25]}
+          rowsPerPageOptions={[5, 10, 50]}
           onRowsPerPageChange={table.onChangeRowsPerPage}
         />
       </Card>

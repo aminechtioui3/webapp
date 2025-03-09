@@ -52,19 +52,7 @@ export function LanguagePopover({ data = [], sx, ...other }: LanguagePopoverProp
 
   return (
     <>
-      <IconButton
-        onClick={handleOpenPopover}
-        sx={{
-          width: 40,
-          height: 40,
-          ...(openPopover && { bgcolor: 'action.selected' }),
-          ...sx,
-        }}
-        {...other}
-      >
-        {renderFlag(currentLang?.label, currentLang?.icon)}
-      </IconButton>
-
+    
       <Popover
         open={!!openPopover}
         anchorEl={openPopover}
