@@ -100,8 +100,8 @@ export function OverviewAnalyticsView() {
             chart={{
               categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep'],
               series: [
-                { name: 'Entré', data: [43, 33, 22, 37, 67, 68, 37, 24, 55] },
-                { name: 'sortie', data: [10, 20, 11, 0, 11, 5, 12, 33, 5] } 
+                { name: 'income', data: [43, 33, 22, 37, 67, 68, 37, 24, 55] },
+                { name: 'expense', data: [10, 20, 11, 0, 11, 5, 12, 33, 5] } 
               ],
             }}
           />
