@@ -112,7 +112,7 @@ export function OverviewAnalyticsView() {
             title="Male to female reports"
             color=''
             chart={{
-              categories: ['Family gym 1', 'Family gym 2'],
+              categories: ['Family gym souani', 'Family gym R4'],
               series: [
                 { name: 'male', data: [44, 55] },
                 { name: 'female', data: [53, 32] },
