@@ -42,8 +42,53 @@ import type {MembershipModel} from "../../../models/MembershipModel";
 // ----------------------------------------------------------------------
 
 export function UserView() {
-  const table = useTable();
-  const [filterName, setFilterName] = useState('');
+
+     function useTable() {
+    const [page, setPage] = useState(0);
+    const [orderBy, setOrderBy] = useState('name');
+    const [rowsPerPage, setRowsPerPage] = useState(5);
+    const [selected, setSelected] = useState<string[]>([]);
+    const [order, setOrder] = useState<'asc' | 'desc'>('asc');
+  
+    const onSort = useCallback(
+      (id: string) => {
+        const isAsc = orderBy === id && order === 'asc';
+        setOrder(isAsc ? 'desc' : 'asc');
+        setOrderBy(id);
+      },
+      [order, orderBy]
+    );
+  
+    const onSelectAllRows = useCallback((checked: boolean, newSelecteds: string[]) => {
+      setSelected(checked ? newSelecteds : []);
+    }, []);
+  
+    const onSelectRow = useCallback(
+      (inputValue: string) => {
+        setSelected((prev) =>
+          prev.includes(inputValue) ? prev.filter((value) => value !== inputValue) : [...prev, inputValue]
+        );
+      },
+      []
+    );
+  
+  
+  
+    const onResetPage = useCallback(() => setPage(0), []);
+    const onChangePage = useCallback((event: unknown, newPage: number) => setPage(newPage), []);
+    const onChangeRowsPerPage = useCallback(
+      (event: React.ChangeEvent<HTMLInputElement>) => {
+        setRowsPerPage(parseInt(event.target.value, 10));
+        onResetPage();
+      },
+      [onResetPage]
+    );
+    
+  
+  
+    return { page, order, onSort, orderBy, selected, rowsPerPage, onSelectRow, onResetPage, onChangePage, onSelectAllRows, onChangeRowsPerPage };
+  }
+    const [filterName, setFilterName] = useState('');
   const [open, setOpen] = useState(false);
   const [notFoundTrigger, setNotFoundTrigger] = useState(false);
   const [modifiedId, setModifiedId] = useState<number | null>(null);
@@ -85,6 +130,7 @@ export function UserView() {
       gender: "Male"
     }
   });
+  
 
   // Sync selected membership with form state
   useEffect(() => {
