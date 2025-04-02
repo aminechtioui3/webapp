@@ -42,8 +42,9 @@ import type {MembershipModel} from "../../../models/MembershipModel";
 // ----------------------------------------------------------------------
 
 export function UserView() {
+    const table = useTable(); // Ensure this is before defining loadData()
 
-     function useTable() {
+    function useTable() {
     const [page, setPage] = useState(0);
     const [orderBy, setOrderBy] = useState('name');
     const [rowsPerPage, setRowsPerPage] = useState(5);
