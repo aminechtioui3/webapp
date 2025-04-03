@@ -1,4 +1,3 @@
-import type { UserAccount } from 'src/models/UserAccount';
 
 import * as z from "zod";
 import { useForm } from "react-hook-form";
@@ -35,7 +34,7 @@ import { emptyRows, applyFilter, getComparator } from '../utils';
 
 import type { ArticleProps } from '../article-table-row';
 import {getArticles, createArticle, updateArticle} from "../../services/ArticleService";
-import {ArticleModel} from "../../../models/Article";
+import {ArticleModel} from "../../../models/ArticleModel";
 
 
 
@@ -110,18 +109,19 @@ const schema = z.object({
       }
     } else {
       // Update existing membership
-      const m = new ArticleModel(
-          modifiedId,  // ID stays the same
-          data.title,  // Populate fields from form
-          data.description,
-          data.header,
-          data.image,
-          data.video,
-          data.date,
-          data.available,
-          new Date(),
-          new Date(),
-      );
+      const m = new ArticleModel({
+          id:modifiedId,  // ID stays the same
+         title: data.title,  // Populate fields from form
+          description:data.description,
+          header:data.header,
+          image:data.image,
+          video:data.video,
+          date:data.date,
+          available:data.available,
+          createdAt:new Date(),
+          updatedAt:new Date(),
+          gym:data.gym,
+    });
 
       const result = await updateArticle(m);
       console.log(result);
@@ -227,11 +227,9 @@ const schema = z.object({
                   )
                 }
                 headLabel={[
-                  { id: 'image', label: 'Image', width: '30%' },
-                  { id: 'name', label: 'Name', width: '20%' },
-                  { id: 'header', label: 'Header', width: '20%' },
-                  { id: 'status', label: 'Status', width: '10%' },
-                  { id: 'date', label: 'Date', width: '10%' },
+                  { id: 'title', label: 'Title', width: '30%' },
+                  { id: 'description', label: 'description', width: '50%' },
+                  { id: 'date', label: 'Date', width: '20%' },
 
 
 

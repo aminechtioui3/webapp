@@ -107,17 +107,18 @@ const schema = z.object({
       }
     } else {
       // Update existing membership
-      const m = new MembershipModel(
-          modifiedId,  // ID stays the same
-          data.title,  // Populate fields from form
-          data.subTitle,
-          data.description,
-          data.image,
-          data.price,
-          data.available,
-          new Date(),
-          new Date(),
-      );
+      const m = new MembershipModel({
+       id: modifiedId,
+       title: data.title,
+       subTitle: data.subTitle,
+       description: data.description,
+       image: data.image,
+       price: data.price,
+       available: data.available,
+       createdAt: new Date(),
+       updatedAt: new Date(),
+        gym:data.gym
+      });
 
       const result = await updateMembership(m);
       console.log(result);
@@ -134,7 +135,6 @@ const schema = z.object({
   const loadData = useCallback(async () => {
     const memberships = await getMemberships();
     console.log(memberships);
-
     if (memberships.status) {
       setUsers(memberships.data!);
       setDataFiltered(applyFilter({
@@ -151,6 +151,7 @@ const schema = z.object({
   useEffect(() => {
     loadData();
   }, [filterName, loadData, table.order, table.orderBy]); // ✅ No more infinite re-renders
+
   const notFound = dataFiltered && dataFiltered!.length && !!filterName;
   
   return (
@@ -231,10 +232,10 @@ const schema = z.object({
                   )
                 }
                 headLabel={[
-                  { id: 'image', label: 'Image', width: '20%' },
+                  { id: 'name', label: 'name', width: '20%' },
 
-                  { id: 'status', label: 'Status', width: '10%' },
-                  { id: 'price', label: 'Price', width: '10%' },
+                  { id: 'status', label: 'status', width: '10%' },
+                  { id: 'price', label: 'price', width: '10%' },
                   { id: 'description', label: 'description', width: '40%' },
 
 

@@ -23,17 +23,27 @@ export class NotificationModel {
 
   createdAt: string;
 
-  constructor(
-    id: number,
-    title: string,
-    description: string,
-    header: string,
-    image?: string,
-    about?: string,
-    receiversIds?: string,
-    receiversType: ApplicationReceivers = ApplicationReceivers.ALL,
-    createdAt: string = new Date().toISOString()
-  ) {
+  constructor({
+                id,
+                title,
+                description,
+                header,
+                image = undefined,
+                about = undefined,
+                receiversIds = undefined,
+                receiversType = ApplicationReceivers.ALL,
+                createdAt = new Date().toISOString(),
+              }: {
+    id: number;
+    title: string;
+    description: string;
+    header: string;
+    image?: string;
+    about?: string;
+    receiversIds?: string;
+    receiversType?: ApplicationReceivers;
+    createdAt?: string;
+  }) {
     this.id = id;
     this.title = title;
     this.description = description;
@@ -46,17 +56,17 @@ export class NotificationModel {
   }
 
   static fromJson(json: any): NotificationModel {
-    return new NotificationModel(
-      json.id,
-      json.title,
-      json.description,
-      json.header,
-      json.image,
-      json.about,
-      json.receiversIds,
-      json.receiversType,
-      json.createdAt
-    );
+    return new NotificationModel({
+      id: json.id,
+      title: json.title,
+      description: json.description,
+      header: json.header,
+      image: json.image,
+      about: json.about,
+      receiversIds: json.receiversIds,
+      receiversType: json.receiversType,
+      createdAt: json.createdAt,
+    });
   }
 
   toJson(): any {

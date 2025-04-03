@@ -1,23 +1,21 @@
 import { GymModel } from "./GymModel";
 
-import type { HistoryProps } from "../sections/History/history-table-row";
+import type { ArticleProps } from "../sections/Articles/article-table-row";
 
-export class HistoryModel {
+export class ArticleModel {
     id: number;
 
     title: string;
 
-    content: string;
+    description: string;
+
+    header: string;
 
     image?: string;
 
-    notifyAdmin: boolean;
-
-    seen: boolean;
+    video?: string;
 
     date: Date;
-
-    gym: GymModel;
 
     available: boolean;
 
@@ -25,57 +23,59 @@ export class HistoryModel {
 
     updatedAt: Date;
 
+    gym: GymModel;
+
     constructor({
                     id,
                     title,
-                    content,
+                    description,
+                    header,
                     date,
-                    gym,
                     available,
                     createdAt,
                     updatedAt,
-                    image = undefined,
-                    notifyAdmin = false,
-                    seen = false,
+                    gym,
+                    image,
+                    video,
                 }: {
         id: number;
         title: string;
-        content: string;
+        description: string;
+        header: string;
         date: Date;
-        gym: GymModel;
         available: boolean;
         createdAt: Date;
         updatedAt: Date;
+        gym: GymModel;
         image?: string;
-        notifyAdmin?: boolean;
-        seen?: boolean;
+        video?: string;
     }) {
         this.id = id;
         this.title = title;
-        this.content = content;
-        this.image = image;
-        this.notifyAdmin = notifyAdmin;
-        this.seen = seen;
+        this.description = description;
+        this.header = header;
         this.date = date;
-        this.gym = gym;
         this.available = available;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
+        this.gym = gym;
+        this.image = image;
+        this.video = video;
     }
 
-    static fromJson(json: any): HistoryModel {
-        return new HistoryModel({
+    static fromJson(json: any): ArticleModel {
+        return new ArticleModel({
             id: json.id,
             title: json.title,
-            content: json.content,
+            description: json.description,
+            header: json.header,
             date: new Date(json.date),
-            gym: GymModel.fromJson(json.gym),
             available: json.available,
             createdAt: new Date(json.createdAt),
             updatedAt: new Date(json.updatedAt),
+            gym: GymModel.fromJson(json.gym),
             image: json.image,
-            notifyAdmin: json.notifyAdmin,
-            seen: json.seen,
+            video: json.video,
         });
     }
 
@@ -83,26 +83,27 @@ export class HistoryModel {
         return {
             id: this.id,
             title: this.title,
-            content: this.content,
+            description: this.description,
+            header: this.header,
             image: this.image,
-            notifyAdmin: this.notifyAdmin,
-            seen: this.seen,
+            video: this.video,
             date: this.date.toISOString(),
-            gym: this.gym.toJson(),
             available: this.available,
             createdAt: this.createdAt.toISOString(),
             updatedAt: this.updatedAt.toISOString(),
+            gym: this.gym.toJson(),
         };
     }
 
-    toHistoryProps(): HistoryProps {
+    toArticleProps(): ArticleProps {
         return {
-            id: this.id,
-            title: this.title,
-            content: this.content,
-            seen: this.seen,
+            id: this.id ?? undefined,
             date: this.date,
-            image: this.image ?? 'https://example.com/avatar.jpg',
+            header: this.header,
+            title: this.title,
+            status: this.available,
+            image: this.image ? this.image : 'https://example.com/avatar.jpg',
+            description: this.description, // Consider making this a boolean instead of a string
         };
     }
 }

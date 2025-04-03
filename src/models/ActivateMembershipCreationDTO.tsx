@@ -1,109 +1,123 @@
 export class ActiveMembershipCreationDTO {
     id?: number;
 
-    membershipId?: number;
+    gymId: number;
 
-    email?: string;
+    membershipId: number;
 
-    firstName?: string;
+    email: string;
 
-    lastName?: string;
+    firstName: string;
 
-    birthday?: Date;
+    lastName: string;
 
-    weight?: number;
+    birthday: Date;
 
-    height?: number;
+    location: string;
 
-    location?: string;
+    phone: string;
 
-    phone?: string;
+    gender: string;
 
-    gender?: string;
+    endDate: Date;
 
-    endDate?: Date;
+    startDate: Date;
 
-    startDate?: Date;
+    price: number;
+
+    paymentPercent: number = 100;
 
     note?: string;
 
     status?: string;
 
-    constructor(
-        id?: number,
-
-    membershipId?: number,
-
-    email?: string,
-    firstName?: string,
-    lastName?: string,
-    birthday?: Date,
-    weight?: number,
-    height?: number,
-    location?: string,
-    phone?: string,
-    gender?: string,
-    endDate?: Date,
-    startDate?: Date,
-    note?: string,
-    status?: string,
-    ) {
-
-            this.id = id;
-            this.membershipId = membershipId;
-            this.email = email;
-            this.firstName = firstName;
-            this.lastName = lastName;
-            this.birthday = birthday;
-            this.weight = weight;
-            this.height = height;
-            this.location = location;
-            this.phone = phone;
-            this.gender = gender;
-            this.endDate = endDate ? new Date(endDate) : undefined;
-            this.startDate = startDate ? new Date(startDate) : undefined;
-            this.note = note;
-            this.status = status;
-
+    constructor({
+                    gymId,
+                    membershipId,
+                    email,
+                    firstName,
+                    lastName,
+                    birthday,
+                    location,
+                    phone,
+                    gender,
+                    endDate,
+                    startDate,
+                    price,
+                    paymentPercent = 100,
+                    note,
+                    status,
+                }: {
+        gymId: number;
+        membershipId: number;
+        email: string;
+        firstName: string;
+        lastName: string;
+        birthday: Date;
+        location: string;
+        phone: string;
+        gender: string;
+        endDate: Date;
+        startDate: Date;
+        price: number;
+        paymentPercent?: number;
+        note?: string;
+        status?: string;
+    }) {
+        this.gymId = gymId;
+        this.membershipId = membershipId;
+        this.email = email;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.birthday = birthday;
+        this.location = location;
+        this.phone = phone;
+        this.gender = gender;
+        this.endDate = endDate;
+        this.startDate = startDate;
+        this.price = price;
+        this.paymentPercent = paymentPercent;
+        this.note = note;
+        this.status = status;
     }
 
-    toJSON(): any {
+    static fromJson(json: any): ActiveMembershipCreationDTO {
+        return new ActiveMembershipCreationDTO({
+            gymId: json.gymId,
+            membershipId: json.membershipId,
+            email: json.email,
+            firstName: json.firstName,
+            lastName: json.lastName,
+            birthday: new Date(json.birthday),
+            location: json.location,
+            phone: json.phone,
+            gender: json.gender,
+            endDate: new Date(json.endDate),
+            startDate: new Date(json.startDate),
+            price: json.price,
+            paymentPercent: json.paymentPercent,
+            note: json.note,
+            status: json.status,
+        });
+    }
+
+    toJson(): any {
         return {
-            id: this.id,
+            gymId: this.gymId,
             membershipId: this.membershipId,
             email: this.email,
             firstName: this.firstName,
             lastName: this.lastName,
-            birthday: this.birthday,
-            weight: this.weight,
-            height: this.height,
+            birthday: this.birthday.toISOString(),
             location: this.location,
             phone: this.phone,
             gender: this.gender,
-            endDate: this.endDate?.toISOString(),
-            startDate: this.startDate?.toISOString(),
+            endDate: this.endDate.toISOString(),
+            startDate: this.startDate.toISOString(),
+            price: this.price,
+            paymentPercent: this.paymentPercent,
             note: this.note,
             status: this.status,
         };
-    }
-
-    static fromJSON(json: any): ActiveMembershipCreationDTO {
-        return new ActiveMembershipCreationDTO(
-            undefined,
-            json.membershipId,
-            json.email,
-            json.firstName,
-            json.lastName,
-           json.birthday,
-           json.weight,
-           json.height,
-            json.location,
-             json.phone,
-             json.gender,
-            json.endDate ? new Date(json.endDate) : undefined,
-             json.startDate ? new Date(json.startDate) : undefined,
-            json.note,
-            json.status,
-        );
     }
 }

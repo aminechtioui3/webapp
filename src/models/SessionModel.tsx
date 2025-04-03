@@ -1,4 +1,4 @@
-import type {SessionProps} from "../sections/Sessions/session-table-row";
+import type { SessionProps } from "../sections/Sessions/session-table-row";
 
 export class SessionModel {
   id: number;
@@ -17,16 +17,25 @@ export class SessionModel {
 
   updatedAt: Date;
 
-  constructor(
-    id: number,
-    title: string,
-    subTitle: string,
-    description: string,
-    available: boolean,
-    image?: string,
-    createdAt: Date = new Date(),
-    updatedAt: Date = new Date()
-  ) {
+  constructor({
+                id,
+                title,
+                subTitle,
+                description,
+                available,
+                image = "", // Default to an empty string if not provided
+                createdAt = new Date(),
+                updatedAt = new Date(),
+              }: {
+    id: number;
+    title: string;
+    subTitle: string;
+    description: string;
+    available: boolean;
+    image?: string;
+    createdAt?: Date;
+    updatedAt?: Date;
+  }) {
     this.id = id;
     this.title = title;
     this.subTitle = subTitle;
@@ -38,16 +47,16 @@ export class SessionModel {
   }
 
   static fromJson(json: any): SessionModel {
-    return new SessionModel(
-      json.id,
-      json.title,
-      json.subTitle,
-      json.description,
-      json.available,
-      json.image ?? undefined,
-      new Date(json.createdAt),
-      new Date(json.updatedAt)
-    );
+    return new SessionModel({
+      id: json.id,
+      title: json.title,
+      subTitle: json.subTitle,
+      description: json.description,
+      available: json.available,
+      image: json.image ?? "",  // Default to empty string if not provided
+      createdAt: new Date(json.createdAt),
+      updatedAt: new Date(json.updatedAt),
+    });
   }
 
   toJson(): any {
@@ -62,7 +71,7 @@ export class SessionModel {
       updatedAt: this.updatedAt.toISOString(),
     };
   }
-  
+
   toSessionProps(): SessionProps {
     return {
       id: this.id,
@@ -70,9 +79,7 @@ export class SessionModel {
       subTitle: this.subTitle,
       description: this.description,
       available: this.available,
-      image:( this.image)?this.image:'https://example.com/avatar.jpg',
-
+      image: this.image || 'https://example.com/avatar.jpg',  // Provide default image if missing
     };
   }
-
 }

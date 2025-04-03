@@ -39,6 +39,7 @@ export type ProductOrderProps = {
   status: ProductOrderStatus,
   price: string,
   note?: string,
+  createdAt: Date,
 
 
 };
@@ -114,25 +115,33 @@ export function ProductOrderTableRow({ row, selected, onSelectRow, updateData, o
         </TableCell>
 
         <TableCell component="th" scope="row">
-          <Box gap={2} display="flex" alignItems="center">
+          <Box display="flex" gap={2} alignItems="center">
             <Avatar alt={row.name} src={row.productModel.image} />
-            {row.name}
+            <Box display="flex" flexDirection="column">
+              <span>{row.userModel.firstName} {row.userModel.lastName}</span>
+              <span style={{ color: 'gray', fontSize: '0.9rem' }}>{row.phone}</span>
+            </Box>
           </Box>
         </TableCell>
-        <TableCell>{row.userModel.firstName} {row.userModel.lastName}</TableCell>
-        <TableCell>{row.phone}</TableCell>
-        <TableCell>{row.quantity}</TableCell>
-
-
-
-        <TableCell>{row.status}</TableCell>
-
-
 
         <TableCell>
-          {/* <Label color={(row.status === 'banned' && 'error') || 'success'}>{row.status}</Label> */}
-          
-        </TableCell>
+          <Box display="flex" flexDirection="column">
+
+          <span>{row.productModel.title}</span>
+          <span style={{ color: 'gray', fontSize: '0.9rem' }}>{row.productModel.brand}{"["}{row.productModel.model}{"]"}</span>
+           </Box>
+           </TableCell>
+        <TableCell>{row.price}</TableCell>
+        <TableCell>{row.quantity}</TableCell>
+        <TableCell>{row.status}</TableCell>
+        <TableCell>{row.createdAt.toLocaleString()}</TableCell>
+
+
+
+
+
+
+
 
         <TableCell align="right">
           <IconButton onClick={handleOpenPopover}>

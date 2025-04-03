@@ -27,7 +27,7 @@ import {deleteProductCategory} from "../services/shopService";
 
 export type ProductCategoryProps = {
   id: number;
-  name: string;
+  title: string;
   available: boolean;
   image: string;
   description?: string;
@@ -105,8 +105,8 @@ export function ProductCategoryTableRow({ row, selected, onSelectRow, updateData
 
         <TableCell component="th" scope="row">
           <Box gap={2} display="flex" alignItems="center">
-            <Avatar alt={row.name} src={row.image} />
-            {row.name}
+            <Avatar alt={row.title} src={row.image} />
+            {row.title}
           </Box>
         </TableCell>
 
@@ -180,7 +180,7 @@ export function ProductCategoryTableRow({ row, selected, onSelectRow, updateData
         </DialogTitle>
         <DialogContent>
           <DialogContentText id="alert-dialog-description">
-            Are you sure you want to delete the {row.name} membership!
+            Are you sure you want to delete the {row.title} membership!
           </DialogContentText>
         </DialogContent>
         <DialogActions>

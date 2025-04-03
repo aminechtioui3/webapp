@@ -1,4 +1,4 @@
-import type {DealProps} from "../sections/Deals/deal-table-row";
+import type { DealProps } from "../sections/Deals/deal-table-row";
 
 export class DealModel {
   id: number;
@@ -19,17 +19,27 @@ export class DealModel {
 
   updatedAt: Date;
 
-  constructor(
-    id: number,
-    title: string,
-    description: string,
-    header: string,
-    available: boolean,
-    image?: string,
-    dealEndDate?: Date,
-    createdAt: Date = new Date(),
-    updatedAt: Date = new Date()
-  ) {
+  constructor({
+                id,
+                title,
+                description,
+                header,
+                available,
+                image,
+                dealEndDate,
+                createdAt = new Date(),
+                updatedAt = new Date(),
+              }: {
+    id: number;
+    title: string;
+    description: string;
+    header: string;
+    available: boolean;
+    image?: string;
+    dealEndDate?: Date;
+    createdAt?: Date;
+    updatedAt?: Date;
+  }) {
     this.id = id;
     this.title = title;
     this.description = description;
@@ -42,17 +52,17 @@ export class DealModel {
   }
 
   static fromJson(json: any): DealModel {
-    return new DealModel(
-      json.id,
-      json.title,
-      json.description,
-      json.header,
-      json.available,
-      json.image ?? undefined,
-      json.dealEndDate ? new Date(json.dealEndDate) : undefined,
-      new Date(json.createdAt),
-      new Date(json.updatedAt)
-    );
+    return new DealModel({
+      id: json.id,
+      title: json.title,
+      description: json.description,
+      header: json.header,
+      available: json.available,
+      image: json.image ?? undefined,
+      dealEndDate: json.dealEndDate ? new Date(json.dealEndDate) : undefined,
+      createdAt: new Date(json.createdAt),
+      updatedAt: new Date(json.updatedAt),
+    });
   }
 
   toJson(): any {
@@ -76,8 +86,8 @@ export class DealModel {
       header: this.header,
       dealEndDate: this.dealEndDate,
       status: this.available,
-      image:( this.image)?this.image:'https://example.com/avatar.jpg',
-      description: this.description, // Consider making this a boolean instead of a string
+      image: this.image ?? 'https://example.com/avatar.jpg',
+      description: this.description,
     };
   }
 }

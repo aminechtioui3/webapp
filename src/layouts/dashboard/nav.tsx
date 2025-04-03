@@ -39,77 +39,99 @@ export type NavContentProps = {
 };
 
 export function NavDesktop({
-  sx,
-  data,
-  slots,
-  workspaces,
-  layoutQuery,
-}: NavContentProps & { layoutQuery: Breakpoint }) {
-  const theme = useTheme();
+                               sx,
+                               data,
+                               slots,
+                               workspaces,
+                               layoutQuery,
+                           }: NavContentProps & { layoutQuery: Breakpoint }) {
+    const theme = useTheme();
 
-  return (
-    <Box
-      sx={{
-        pt: 2.5,
-        px: 2.5,
-        top: 0,
-        left: 0,
-        height: 1,
-        display: 'none',
-        position: 'fixed',
-        flexDirection: 'column',
-        bgcolor: 'var(--layout-nav-bg)',
-        zIndex: 'var(--layout-nav-zIndex)',
-        width: 'var(--layout-nav-vertical-width)',
-        borderRight: `1px solid var(--layout-nav-border-color, ${varAlpha(theme.vars.palette.grey['500Channel'], 0.12)})`,
-        [theme.breakpoints.up(layoutQuery)]: {
-          display: 'flex',
-        },
-        ...sx,
-      }}
-    >
-      <NavContent data={data} slots={slots} workspaces={workspaces} />
-    </Box>
-  );
+    return (
+        <Box
+            sx={{
+                pt: 2.5,
+                px: 2.5,
+                top: 0,
+                left: 0,
+                height: 1,
+                display: 'none',
+                position: 'fixed',
+                flexDirection: 'column',
+                bgcolor: 'var(--layout-nav-bg)',
+                zIndex: 'var(--layout-nav-zIndex)',
+                width: 'var(--layout-nav-vertical-width)',
+                borderRight: `1px solid var(--layout-nav-border-color, ${varAlpha(theme.vars.palette.grey['500Channel'], 0.12)})`,
+                [theme.breakpoints.up(layoutQuery)]: {
+                    display: 'flex',
+                },
+                ...sx,
+            }}
+        >
+            <Logo />
+            {slots?.topArea}
+
+            <WorkspacesPopover data={workspaces} sx={{ my: 2 }} />
+
+            <Scrollbar fillContent>
+                <NavContent data={data} slots={slots} workspaces={workspaces} sx={sx} />
+            </Scrollbar>
+
+            {slots?.bottomArea}
+
+
+        </Box>
+    );
 }
 
 // ----------------------------------------------------------------------
 
 export function NavMobile({
-  sx,
-  data,
-  open,
-  slots,
-  onClose,
-  workspaces,
-}: NavContentProps & { open: boolean; onClose: () => void }) {
-  const pathname = usePathname();
+                              sx,
+                              data,
+                              open,
+                              slots,
+                              onClose,
+                              workspaces,
+                          }: NavContentProps & { open: boolean; onClose: () => void }) {
+    const pathname = usePathname();
 
-  useEffect(() => {
-    if (open) {
-      onClose();
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [pathname]);
+    useEffect(() => {
+        if (open) {
+            onClose();
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [pathname]);
 
-  return (
-    <Drawer
-      open={open}
-      onClose={onClose}
-      sx={{
-        [`& .${drawerClasses.paper}`]: {
-          pt: 2.5,
-          px: 2.5,
-          overflow: 'unset',
-          bgcolor: 'var(--layout-nav-bg)',
-          width: 'var(--layout-nav-mobile-width)',
-          ...sx,
-        },
-      }}
-    >
-      <NavContent data={data} slots={slots} workspaces={workspaces} />
-    </Drawer>
-  );
+    return (
+        <Drawer
+            open={open}
+            onClose={onClose}
+            sx={{
+                [`& .${drawerClasses.paper}`]: {
+                    pt: 2.5,
+                    px: 2.5,
+                    overflow: 'unset',
+                    bgcolor: 'var(--layout-nav-bg)',
+                    width: 'var(--layout-nav-mobile-width)',
+                    ...sx,
+                },
+            }}
+        >
+            <Logo />
+            {slots?.topArea}
+
+            <WorkspacesPopover data={workspaces} sx={{ my: 2 }} />
+
+            <Scrollbar fillContent>
+                <NavContent data={data} slots={slots} workspaces={workspaces} sx={sx} />
+            </Scrollbar>
+
+            {slots?.bottomArea}
+
+            <NavUpgrade />
+        </Drawer>
+    );
 }
 
 // ----------------------------------------------------------------------
@@ -120,9 +142,7 @@ export function NavContent({ data, slots, workspaces, sx }: NavContentProps) {
   return (
     <>
 
-      {slots?.topArea}
 
-      <WorkspacesPopover data={workspaces} sx={{ my: 2 }} />
 
       <Scrollbar fillContent>
         <Box component="nav" display="flex" flex="1 1 auto" flexDirection="column" sx={sx}>

@@ -1,4 +1,3 @@
-
 import type { Role } from './Role';
 
 export class UserAccount {
@@ -46,62 +45,95 @@ export class UserAccount {
 
   tikTok?: string;
 
-  contractIsActivated: boolean = false;
+  contractIsActivated: boolean | undefined;
 
   contractActivatedUntil?: Date;
 
-  isVerified: boolean = true;
+  isVerified: boolean;
 
-  accountNonExpired: boolean = true;
+  accountNonExpired: boolean;
 
-  accountNonLocked: boolean = true;
+  accountNonLocked: boolean;
 
-  credentialsNonExpired: boolean = true;
+  credentialsNonExpired: boolean;
 
-  enabled: boolean = true;
+  enabled: boolean;
 
   available?: boolean;
 
-  canUseCommunityChat: boolean = true;
+  canUseCommunityChat: boolean;
 
   createdAt: Date;
 
   updatedAt: Date;
 
-  constructor(
-    id: number,
-    email: string,
-    password: string,
-    role: Role,
-    firstName: string,
-    lastName: string,
-    phone: string,
-    createdAt: Date,
-    updatedAt: Date,
-    lastSeen?: Date,
-    image?: string,
-    birthday?: Date,
-    weight?: number,
-    height?: number,
-    physicalActivity?: string,
-    gender?: string,
-    deviceToken?: string,
-    facebook?: string,
-    twitter?: string,
-    linkedin?: string,
-    instagram?: string,
-    youtube?: string,
-    webSite?: string,
-    tikTok?: string,
-    contractActivatedUntil?: Date,
-    isVerified: boolean = true,
-    accountNonExpired: boolean = true,
-    accountNonLocked: boolean = true,
-    credentialsNonExpired: boolean = true,
-    enabled: boolean = true,
-    available?: boolean,
-    canUseCommunityChat: boolean = true
-  ) {
+  constructor({
+    id,
+    email,
+    password,
+    role,
+    firstName,
+    lastName,
+    phone,
+    createdAt,
+    updatedAt,
+    lastSeen = undefined,
+    image = 'https://example.com/avatar.jpg', // Default to an example avatar if no image is provided
+    birthday,
+    weight,
+    height,
+    physicalActivity,
+    gender,
+    deviceToken,
+    facebook,
+    twitter,
+    linkedin,
+    instagram,
+    youtube,
+    webSite,
+    tikTok,
+    contractActivatedUntil,
+    isVerified = true, // Default to true
+    accountNonExpired = true, // Default to true
+    accountNonLocked = true, // Default to true
+    credentialsNonExpired = true, // Default to true
+    enabled = true, // Default to true
+    available,
+    canUseCommunityChat = true, // Default to true
+  }: {
+    id: number;
+    email: string;
+    password: string;
+    role: Role;
+    firstName: string;
+    lastName: string;
+    phone: string;
+    createdAt: Date;
+    updatedAt: Date;
+    lastSeen?: Date;
+    image?: string;
+    birthday?: Date;
+    weight?: number;
+    height?: number;
+    physicalActivity?: string;
+    gender?: string;
+    deviceToken?: string;
+    facebook?: string;
+    twitter?: string;
+    linkedin?: string;
+    instagram?: string;
+    youtube?: string;
+    webSite?: string;
+    tikTok?: string;
+    contractActivatedUntil?: Date;
+    isVerified?: boolean;
+    accountNonExpired?: boolean;
+    accountNonLocked?: boolean;
+    credentialsNonExpired?: boolean;
+    enabled?: boolean;
+    available?: boolean;
+    canUseCommunityChat?: boolean;
+  }) {
     this.id = id;
     this.email = email;
     this.password = password;
@@ -177,43 +209,45 @@ export class UserAccount {
 
   // Convert JSON back to a class instance
   static fromJson(json: any): UserAccount {
-    return new UserAccount(
-      json.id,
-      json.email,
-      json.password,
-      json.role,
-      json.firstName,
-      json.lastName,
-      json.phone,
-      new Date(json.createdAt),
-      new Date(json.updatedAt),
-      json.lastSeen ? new Date(json.lastSeen) : undefined,
-      json.image != null || json.image !== '' ? json.image : 'https://example.com/avatar.jpg',
-      json.birthday,
-      json.weight,
-      json.height,
-      json.physicalActivity,
-      json.gender,
-      json.deviceToken,
-      json.facebook,
-      json.twitter,
-      json.linkedin,
-      json.instagram,
-      json.youtube,
-      json.webSite,
-      json.tikTok,
-      json.contractActivatedUntil ? new Date(json.contractActivatedUntil) : undefined,
-      json.isVerified,
-      json.accountNonExpired,
-      json.accountNonLocked,
-      json.credentialsNonExpired,
-      json.enabled,
-      json.available,
-      json.canUseCommunityChat
-    );
+    return new UserAccount({
+      id: json.id,
+      email: json.email,
+      password: json.password,
+      role: json.role,
+      firstName: json.firstName,
+      lastName: json.lastName,
+      phone: json.phone,
+      createdAt: new Date(json.createdAt),
+      updatedAt: new Date(json.updatedAt),
+      lastSeen: json.lastSeen ? new Date(json.lastSeen) : undefined,
+      image: json.image ?? 'https://example.com/avatar.jpg',
+      birthday: json.birthday,
+      weight: json.weight,
+      height: json.height,
+      physicalActivity: json.physicalActivity,
+      gender: json.gender,
+      deviceToken: json.deviceToken,
+      facebook: json.facebook,
+      twitter: json.twitter,
+      linkedin: json.linkedin,
+      instagram: json.instagram,
+      youtube: json.youtube,
+      webSite: json.webSite,
+      tikTok: json.tikTok,
+      contractActivatedUntil: json.contractActivatedUntil
+        ? new Date(json.contractActivatedUntil)
+        : undefined,
+      isVerified: json.isVerified,
+      accountNonExpired: json.accountNonExpired,
+      accountNonLocked: json.accountNonLocked,
+      credentialsNonExpired: json.credentialsNonExpired,
+      enabled: json.enabled,
+      available: json.available,
+      canUseCommunityChat: json.canUseCommunityChat,
+    });
   }
 
-/*  toUserProps(): UserProps {
+  /*  toUserProps(): UserProps {
       return {
       id: this.id,
       name: this.firstName,

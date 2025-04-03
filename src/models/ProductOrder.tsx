@@ -3,7 +3,7 @@ import { UserAccount } from "./UserAccount";
 import { ProductModel } from "./ProductModel";
 
 import type { ProductOrderStatus } from "./ProductOrderStatus";
-import type {ProductOrderProps} from "../sections/Product Order/product-order-table-row";
+import type { ProductOrderProps } from "../sections/Product Order/product-order-table-row";
 
 export class ProductOrderModel {
     id: number;
@@ -30,20 +30,33 @@ export class ProductOrderModel {
 
     updatedAt: Date;
 
-    constructor(
-        id: number,
-        name: string,
-        productModel: ProductModel,
-        userModel: UserAccount,
-        address: string,
-        phone: string,
-        quantity: number,
-        status: ProductOrderStatus,
-        price: string,
-        note?: string,
-        createdAt: Date = new Date(),
-        updatedAt: Date = new Date()
-    ) {
+    constructor({
+                    id,
+                    name,
+                    productModel,
+                    userModel,
+                    address,
+                    phone,
+                    quantity,
+                    status,
+                    price,
+                    note = "", // Default to empty string if not provided
+                    createdAt = new Date(),
+                    updatedAt = new Date(),
+                }: {
+        id: number;
+        name: string;
+        productModel: ProductModel;
+        userModel: UserAccount;
+        address: string;
+        phone: string;
+        quantity: number;
+        status: ProductOrderStatus;
+        price: string;
+        note?: string;
+        createdAt?: Date;
+        updatedAt?: Date;
+    }) {
         this.id = id;
         this.name = name;
         this.productModel = productModel;
@@ -59,20 +72,20 @@ export class ProductOrderModel {
     }
 
     static fromJson(json: any): ProductOrderModel {
-        return new ProductOrderModel(
-            json.id,
-            json.name,
-            ProductModel.fromJson(json.productModel),
-            UserAccount.fromJson(json.userModel),
-            json.address,
-            json.phone,
-            json.quantity,
-            json.status as ProductOrderStatus,
-            json.price,
-            json.note ?? undefined,
-            new Date(json.createdAt),
-            new Date(json.updatedAt)
-        );
+        return new ProductOrderModel({
+            id: json.id,
+            name: json.name,
+            productModel: ProductModel.fromJson(json.productModel),
+            userModel: UserAccount.fromJson(json.userModel),
+            address: json.address,
+            phone: json.phone,
+            quantity: json.quantity,
+            status: json.status as ProductOrderStatus,
+            price: json.price,
+            note: json.note ?? "",
+            createdAt: new Date(json.createdAt),
+            updatedAt: new Date(json.updatedAt),
+        });
     }
 
     toJson(): any {
@@ -104,6 +117,7 @@ export class ProductOrderModel {
             status: this.status,
             price: this.price,
             note: this.note,
+            createdAt:this.createdAt,
         };
     }
 }

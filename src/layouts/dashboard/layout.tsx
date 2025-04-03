@@ -22,6 +22,7 @@ import { HeaderSection } from '../core/header-section';
 import { AccountPopover } from '../components/account-popover';
 import { LanguagePopover } from '../components/language-popover';
 import { NotificationsPopover } from '../components/notifications-popover';
+import {GymModel} from "../../models/GymModel";
 
 // ----------------------------------------------------------------------
 
@@ -70,12 +71,13 @@ export function DashboardLayout({ sx, children, header }: DashboardLayoutProps) 
                     [theme.breakpoints.up(layoutQuery)]: { display: 'none' },
                   }}
                 />
-                <NavMobile
-                  data={navData}
-                  open={navOpen}
-                  onClose={() => setNavOpen(false)}
-                  workspaces={_workspaces}
-                />
+                  <NavMobile
+                      data={navData}
+                      open={navOpen}
+                      onClose={() => setNavOpen(false)}
+                      workspaces={_workspaces.map((workspace) => GymModel.fromJson(workspace))}
+                  />
+
               </>
             ),
             rightArea: (
@@ -111,7 +113,11 @@ export function DashboardLayout({ sx, children, header }: DashboardLayoutProps) 
        * Sidebar
        *************************************** */
       sidebarSection={
-        <NavDesktop data={navData} layoutQuery={layoutQuery} workspaces={_workspaces} />
+          <NavDesktop
+              data={navData}
+              layoutQuery={layoutQuery}
+              workspaces={_workspaces.map((workspace) => GymModel.fromJson(workspace))}
+          />
       }
       /** **************************************
        * Footer

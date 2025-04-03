@@ -5,6 +5,10 @@ export class Properties {
 
     public loginURL;
 
+    public GetGymStatics;
+
+    public GetGymMoneyTransactionHistory;
+
     public GetAllActiveMembership;
 
     public ActivateMembership;
@@ -161,11 +165,29 @@ export class Properties {
 
     public getLastHistoryNotifications;
 
+    
+    public createGymFacility;
+
+    public updateGymFacility;
+
+    public deleteGymFacility;
+
+    public getGymFacilityById;
+
+    public getAllGymFacilities;
+
+
 
 
     private constructor() {
-        this.baseURL = "https://gymapp-production-e339.up.railway.app/api/v1";
+         this.baseURL = "https://gymapp-production-e339.up.railway.app/api/v1";
         // this.baseURL = "http://localhost:5000/api/v1";
+
+        // GYM INFO
+        this.GetGymStatics="/protected/gym-info/get-gym-statics";
+        this.GetGymMoneyTransactionHistory="/protected/gym-info/get-gym-money-transaction-history";
+
+
 
         // Active Membership
         this.ActivateMembership = "/protected/active-membership/start-active-membership";
@@ -182,6 +204,14 @@ export class Properties {
         this.DeleteDeal = "/protected/deal/delete-deal";
         this.GetDealById = "/connected/deal/get-deal-by-id";
         this.GetAllDeals = "/connected/deal/get-all-deals";
+
+        // GYM
+        this.createGymFacility="/protected/gym/create-gym-facility";
+        this.updateGymFacility="/protected/gym/update-gym-facility";
+        this.deleteGymFacility="/protected/gym/delete-gym-facility";
+        this.getGymFacilityById="/connected/gym/get-gym-facility-by-id";
+        this.getAllGymFacilities="/connected/gym/get-all-gym-facilities";
+
 
         // Exercise
         this.GetAllExercises = "/connected/exercise/get-all-exercises";

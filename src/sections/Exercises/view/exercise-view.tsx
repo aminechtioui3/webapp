@@ -170,30 +170,24 @@ export function ExerciseView() {
 
       if (modifiedId === -1) {
         // Create new membership
-        const exerciseModel = new ExerciseModel(
-            -1,
-            data.name ,
-            data.description ,
+        const exerciseModel = new ExerciseModel({
+            id:- 1,
+            name:data.name,
+            description:data.description,
+            durationInMinutes:data.durationInMinutes,
+            calorie:data.calorie,
+            session:selectedSession,
+            available:data.available,
+            image:data.image,
+            video:data.video,
+            level:data.level,
+            muscles:data.muscles,
+            tags:data.tags,
+            repeatNumber:data.repeatNumber,
+            createdAt:new Date(),
+            updatedAt:new Date(),
 
-            data.durationInMinutes ,
-
-            data.calorie ,
-
-            selectedSession,
-
-            data.available ,
-
-            data.image ,
-            data.video ,
-            data.level ,
-            data.muscles ,
-            data.tags ,
-
-            data.repeatNumber ,
-            new Date() ,
-            new Date() ,
-
-        );
+      });
 
 
 
@@ -214,28 +208,25 @@ export function ExerciseView() {
         console.log("selectedMembershipId");
         console.log(data.membershipId);
         const newMembership = sessions.find((m) => m.id === selectedSession.id);
-        const updatedExercise = new ExerciseModel(
+        const updatedExercise = new ExerciseModel({
+          id: modifiedId??-1,
+          name:data.name,
+          description:data.description,
+          durationInMinutes:data.durationInMinutes,
+          calorie:data.calorie,
+          session:selectedSession,
+          available:data.available,
+          image:data.image,
+          video:data.video,
+          level:data.level,
+          muscles:data.muscles,
+          tags:data.tags,
+          repeatNumber:data.repeatNumber,
+          createdAt:new Date(),
+          updatedAt:new Date(),
+        }
 
-            modifiedId??-1,
-            data.name ,
-            data.description ,
 
-            data.durationInMinutes ,
-
-            data.calorie ,
-
-            selectedSession,
-
-            data.available ,
-
-            data.image ,
-            data.video ,
-            data.level ,
-            data.muscles ,
-            data.tags ,
-            data.repeatNumber ,
-            new Date() ,
-            new Date() ,
 
         );
         console.log("update exercise", updatedExercise);

@@ -45,7 +45,7 @@ export function AnalyticsWebsiteVisits({ title, subheader, chart, ...other }: Pr
     },
     tooltip: {
       y: {
-        formatter: (value: number) => `${value} visits`,
+        formatter: (value: number) => `${value} $`,
       },
     },
     ...chart.options,
@@ -56,6 +56,7 @@ export function AnalyticsWebsiteVisits({ title, subheader, chart, ...other }: Pr
       <CardHeader title={title} subheader={subheader} />
 
       <Chart
+
         type="bar"
         series={chart.series}
         options={chartOptions}

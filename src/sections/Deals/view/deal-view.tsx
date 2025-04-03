@@ -107,19 +107,18 @@ const schema = z.object({
       }
     } else {
       // Update existing membership
-      const m = new DealModel(
-          modifiedId,  // ID stays the same
-          data.title,  // Populate fields from form
+      const m = new DealModel({
+        id:modifiedId,  // ID stays the same
+        title:data.title,  // Populate fields from form
+        description:data.description,
+        header:data.header,
+        available:data.available,
+        image:data.image,
+        dealEndDate:data.dealEndDate,
 
-          data.description,
-          data.header,
-          data.available,
-          data.image,
-          data.dealEndDate,
-
-          new Date(),
-          new Date(),
-      );
+        createdAt:new Date(),
+        updatedAt:new Date(),
+      });
 
       const result = await updateDeal(m);
       console.log(result);

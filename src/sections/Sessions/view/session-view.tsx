@@ -110,18 +110,16 @@ const schema = z.object({
       }
     } else {
       // Update existing membership
-      const m = new SessionModel(
-
-          modifiedId,
-          data.title ,
-          data.subTitle ,
-          data.description ,
-          data.image ,
-
-          data.available ,
-          new Date(),
-          new Date(),
-      );
+      const m = new SessionModel({
+       id: modifiedId,
+       title: data.title,
+       subTitle: data.subTitle,
+       description: data.description,
+       available: data.available,
+       image: data.image,
+       createdAt: new Date(),
+       updatedAt: new Date(),
+      });
 
       const result = await updateSession(m);
       console.log(result);
@@ -155,8 +153,7 @@ const schema = z.object({
   useEffect(() => {
     loadData();
   }, [filterName, loadData, table.order, table.orderBy]); // ✅ No more infinite re-renders
-  const notFound = dataFiltered && dataFiltered!.length && !!filterName;
-  
+
   return (
     <DashboardContent>
       <Box display="flex" alignItems="center" mb={5}>

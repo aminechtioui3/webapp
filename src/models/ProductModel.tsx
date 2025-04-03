@@ -1,7 +1,7 @@
 // eslint-disable-next-line import/no-cycle
-import {ProductCategory} from "./ProductCategoryModel";
+import { ProductCategory } from "./ProductCategoryModel";
 
-import type {ShopProps} from "../sections/Shop/shop-table-row";
+import type { ShopProps } from "../sections/Shop/shop-table-row";
 
 export class ProductModel {
     id: number;
@@ -30,21 +30,35 @@ export class ProductModel {
 
     updatedAt: Date;
 
-    constructor(
-        id: number,
-        title: string,
-        brand: string,
-        model: string,
-        description: string,
-        category: ProductCategory,
-        price: number,
-        available: boolean,
-        image?: string,
-        salePercent?: number,
-        availableNumber?: number,
-        createdAt: Date = new Date(),
-        updatedAt: Date = new Date()
-    ) {
+    constructor({
+                    id,
+                    title,
+                    brand,
+                    model,
+                    description,
+                    category,
+                    price,
+                    available,
+                    image = "", // Default to empty string if not provided
+                    salePercent = undefined,
+                    availableNumber = undefined,
+                    createdAt = new Date(),
+                    updatedAt = new Date(),
+                }: {
+        id: number;
+        title: string;
+        brand: string;
+        model: string;
+        description: string;
+        category: ProductCategory;
+        price: number;
+        available: boolean;
+        image?: string;
+        salePercent?: number;
+        availableNumber?: number;
+        createdAt?: Date;
+        updatedAt?: Date;
+    }) {
         this.id = id;
         this.title = title;
         this.brand = brand;
@@ -61,21 +75,21 @@ export class ProductModel {
     }
 
     static fromJson(json: any): ProductModel {
-        return new ProductModel(
-            json.id,
-            json.title,
-            json.brand,
-            json.model,
-            json.description,
-            ProductCategory.fromJson(json.category),
-            json.price,
-            json.available,
-            json.image ?? undefined,
-            json.salePercent ?? undefined,
-            json.availableNumber ?? undefined,
-            new Date(json.createdAt),
-            new Date(json.updatedAt)
-        );
+        return new ProductModel({
+            id: json.id,
+            title: json.title,
+            brand: json.brand,
+            model: json.model,
+            description: json.description,
+            category: ProductCategory.fromJson(json.category),
+            price: json.price,
+            available: json.available,
+            image: json.image ?? "",  // Default to empty string if missing
+            salePercent: json.salePercent ?? undefined,
+            availableNumber: json.availableNumber ?? undefined,
+            createdAt: new Date(json.createdAt),
+            updatedAt: new Date(json.updatedAt),
+        });
     }
 
     toJson(): any {
@@ -96,11 +110,8 @@ export class ProductModel {
         };
     }
 
-
     toShopProps(): ShopProps {
         return {
-
-
             id: this.id,
             title: this.title,
             brand: this.brand,
@@ -111,9 +122,7 @@ export class ProductModel {
             salePercent: this.salePercent,
             availableNumber: this.availableNumber,
             available: this.available,
-
-            image:( this.image)?this.image:'https://example.com/avatar.jpg',
-
+            image: this.image ? this.image : 'https://example.com/avatar.jpg', // Provide default image if missing
         };
     }
 }

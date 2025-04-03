@@ -12,21 +12,20 @@ import TimelineConnector from '@mui/lab/TimelineConnector';
 import TimelineItem, { timelineItemClasses } from '@mui/lab/TimelineItem';
 
 import { fDateTime } from 'src/utils/format-time';
+import {HistoryModel} from "../../models/HistoryModel";
+import {MoneyTransactionHistory} from "../../models/MoneyTransactionHistory";
 
 // ----------------------------------------------------------------------
 
 type Props = CardProps & {
   title?: string;
   subheader?: string;
-  list: {
-    id: string;
-    type: string;
-    title: string;
-    time: string | number | null;
-  }[];
+  isHistory: boolean;
+  historyList: HistoryModel[];
+  moneyTransactionHistoryList: MoneyTransactionHistory[];
 };
 
-export function AnalyticsOrderTimeline({ title, subheader, list, ...other }: Props) {
+export function AnalyticsOrderTimeline({ title, subheader, historyList,moneyTransactionHistoryList, ...other }: Props) {
   return (
     <Card {...other}>
       <CardHeader title={title} subheader={subheader} />
@@ -41,8 +40,11 @@ export function AnalyticsOrderTimeline({ title, subheader, list, ...other }: Pro
           },
         }}
       >
-        {list.map((item, index) => (
-          <Item key={item.id} item={item} lastItem={index === list.length - 1} />
+        {historyList.map((item, index) => (
+          <Item key={item.id} item={item} isHistory lastItem={index === historyList.length - 1} />
+        ))}
+          {moneyTransactionHistoryList.map((item, index) => (
+          <Item key={item.id} element={item} isHistory={false} lastItem={index === historyList.length - 1} />
         ))}
       </Timeline>
     </Card>
@@ -53,18 +55,25 @@ export function AnalyticsOrderTimeline({ title, subheader, list, ...other }: Pro
 
 type ItemProps = TimelineItemProps & {
   lastItem: boolean;
-  item: Props['list'][number];
+  item?: Props['historyList'][number];
+  element?: Props['moneyTransactionHistoryList'][number];
+  isHistory: boolean;
 };
 
-function Item({ item, lastItem, ...other }: ItemProps) {
+function Item({ item,element,isHistory, lastItem, ...other }: ItemProps) {
   return (
     <TimelineItem {...other}>
       <TimelineContent>
-        <Typography variant="subtitle2">{item.title}</Typography>
+
+        <Typography variant="subtitle2">{isHistory? item!.title!:element?.note}</Typography>
 
         <Typography variant="caption" sx={{ color: 'text.disabled' }}>
-          {fDateTime(item.time)}
+          {fDateTime(isHistory?item!.date:element?.date)}
         </Typography>
+          {!isHistory?<Typography variant="caption" sx={{ color: 'text.disabled' }}>
+              {element?.category}
+          </Typography>:null}
+
       </TimelineContent>
     </TimelineItem>
   );

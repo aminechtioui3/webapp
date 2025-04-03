@@ -33,6 +33,8 @@ export type ActiveMembershipProps = {
   membership: MembershipModel;
   endDate: Date;
   startDate: Date;
+  price: number;
+  paymentPercent: number;
   note?: string;
   status?: string;
 };
@@ -118,8 +120,8 @@ export function UserTableRow({ row, selected, onSelectRow, updateData, onDeleteS
 
 
 
-        <TableCell>{row.startDate.toISOString()}</TableCell>
-        <TableCell>{row.endDate.toISOString()}</TableCell>
+        <TableCell>{row.startDate.toLocaleDateString()}</TableCell>
+        <TableCell>{row.endDate.toLocaleDateString()}</TableCell>
         <TableCell >
           {row.status ? (
               <Iconify width={22} icon="solar:check-circle-bold" sx={{ color: 'success.main' }} />

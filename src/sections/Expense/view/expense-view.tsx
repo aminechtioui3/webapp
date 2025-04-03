@@ -105,13 +105,16 @@ const schema = z.object({
       }
     } else {
 
-      const m = new ExpenseModel(
-          data.id,
-      data.date,
-      data.note,
-      data.amount,
-      data.type,
-      );
+      const m = new ExpenseModel({
+        id:data.id,
+        date:data.date,
+        note:data.note,
+        amount:data.amount,
+        type:data.type,
+        createdAt:new Date(),
+        updatedAt:new Date(),
+        gym:data.gym,
+      });
 
       const result = await updateExpense(m);
       console.log(result);
@@ -223,10 +226,10 @@ const schema = z.object({
                 headLabel={[
                   
 
-                  { id: 'status', label: 'Status', width: '20%' },
-                  { id: 'price', label: 'Price', width: '20%' },
-                  { id: 'type', label: 'type', width: '40%' },
-                  {id:'description',label :'description', width:'20%'}
+                  { id: 'date', label: 'Date', width: '20%' },
+                  { id: 'amount', label: 'Price', width: '20%' },
+                  { id: 'type', label: 'Type', width: '20%' },
+                  { id:'note',label :'Note', width:'40%'}
 
 
 

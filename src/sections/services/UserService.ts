@@ -43,10 +43,10 @@ export async function getMembers(): Promise<ResponseModel<ActiveMembership[]>> {
 
 export async function createActiveMembership(data: any): Promise<ResponseModel<String>> {
  console.log(data);
-  const model = ActiveMembershipCreationDTO.fromJSON(data);
+  const model = ActiveMembershipCreationDTO.fromJson(data);
 
   console.log(model);
-  console.log(model.toJSON());
+  console.log(model.toJson());
   try {
     const response = await client.post(properties.ActivateMembership, model);
     console.log(response);

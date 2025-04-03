@@ -181,18 +181,21 @@ export function ShopView() {
 
       if (modifiedId === -1) {
         // Create new membership
-        const productModel = new ProductModel(
-            data.title,
-            data.brand,
-            data.model,
-            data.description,
-            data.image,
-            selectedProductCategory,
-            data.price,
-            data.salePercent,
-            data.availableNumber,
-            data.available,
-        );
+        const productModel = new ProductModel({
+          id:-1,
+         title: data.title,
+         brand: data.brand,
+         model: data.model,
+         description: data.description,
+         image: data.image,
+         category: selectedProductCategory,
+         price: data.price,
+         salePercent: data.salePercent,
+         availableNumber: data.availableNumber,
+         available: data.available,
+         createdAt: new Date(),
+         updatedAt: new Date(),
+        });
 
 
 
@@ -212,22 +215,22 @@ export function ShopView() {
         console.log(selectedProductCategory);
         console.log("selected ProductCategory Id");
         console.log(data.membershipId);
-        const newMembership = productCategory.find((m) => m.id === selectedProductCategory.id);
-        const updatedProductModel = new ProductModel(
-            modifiedId??-1,
-            data.title,
-            data.brand,
-            data.model,
-            data.description,
-            selectedProductCategory,
-            data.image,
-            data.price,
-            data.salePercent,
-            data.availableNumber,
-            data.available,
+        const updatedProductModel = new ProductModel({
+            id:modifiedId ?? -1,
+            title: data.title,
+            brand: data.brand,
+            model: data.model,
+            description: data.description,
+            image: data.image,
+            category: selectedProductCategory,
+            price: data.price,
+            salePercent: data.salePercent,
+            availableNumber: data.availableNumber,
+            available: data.available,
+            createdAt: new Date(),
+            updatedAt: new Date(),
 
-
-        );
+      }  );
         console.log("update membership");
         console.log(updatedProductModel);
 
@@ -421,11 +424,11 @@ export function ShopView() {
                 }
                 headLabel={[
 
-                  { id: 'name', label: 'Name', width: '20%' },
-                  { id: 'membership', label: 'Membership', width: '20%' },
-                  { id: 'startAt', label: 'Start at', width: '20%' },
-                  { id: 'endAt', label: 'End at', width: '20%' },
-                  { id: 'status', label: 'Status', width: '20%' },
+                  { id: 'title', label: 'Name', width: '20%' },
+                  { id: 'price', label: 'Price', width: '20%' },
+                  { id: 'category.title', label: 'Category', width: '20%' },
+                  { id: 'availableNumber', label: 'Quantity', width: '20%' },
+                  { id: 'available', label: 'Available', width: '20%' },
                 ]}
               />
               <TableBody>

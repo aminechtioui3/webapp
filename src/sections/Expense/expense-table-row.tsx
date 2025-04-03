@@ -102,7 +102,7 @@ export function ExpenseTableRow({ row, selected, onSelectRow, updateData, onDele
 
 
 
-        <TableCell>{row.date.toISOString().split('T')[0]}</TableCell>
+        <TableCell>{row.date.toLocaleString()}</TableCell>
         <TableCell>{row.amount}</TableCell>
         <TableCell>{row.type}</TableCell>
         <TableCell>{row.note}</TableCell>

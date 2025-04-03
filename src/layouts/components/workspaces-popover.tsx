@@ -1,99 +1,139 @@
-import type { ButtonBaseProps } from '@mui/material/ButtonBase';
-
-import { useState, useCallback } from 'react';
-
+import { useState, useCallback, useEffect } from 'react';
+import Cookies from 'js-cookie';
 import Box from '@mui/material/Box';
 import Popover from '@mui/material/Popover';
 import MenuList from '@mui/material/MenuList';
 import ButtonBase from '@mui/material/ButtonBase';
 import MenuItem, { menuItemClasses } from '@mui/material/MenuItem';
-
-import { varAlpha } from 'src/theme/styles';
-
 import { Label } from 'src/components/label';
 import { Iconify } from 'src/components/iconify';
+import { GymModel } from 'src/models/GymModel';
+import type { SxProps, Theme } from '@mui/material/styles';
 
-// ----------------------------------------------------------------------
+// Function to get gyms from cookies
+function getGymModelsFromCookies(): GymModel[] {
+    const gymModelsJson = Cookies.get('gymFacilities');
 
-export type WorkspacesPopoverProps = ButtonBaseProps & {
-  data?: {
-    id: string;
-    name: string;
-    logo: string;
-    plan: string;
-  }[];
+    if (gymModelsJson) {
+        const gymModelsArray = JSON.parse(gymModelsJson).map((gym: any) => GymModel.fromJson(gym));
+
+        if (gymModelsArray.length === 0) {
+            return [new GymModel({ id: -1, name: "Select a gym" })];
+        }
+
+        return gymModelsArray;
+    }
+
+    return [new GymModel({ id: -1, name: "Select a gym" })];
+}
+
+// Function to get selected gym from cookies
+function getSelectedGymFromCookies(): GymModel {
+    const selectedGymJson = Cookies.get('selectedGym');
+    if (selectedGymJson) {
+        return GymModel.fromJson(JSON.parse(selectedGymJson));
+    }
+
+    return new GymModel({ id: -1, name: "Select a gym" });
+}
+
+export type WorkspacesPopoverProps = {
+    data?: GymModel[];
+    sx?: SxProps<Theme>; // Add this line
 };
 
 export function WorkspacesPopover({ data = [], sx, ...other }: WorkspacesPopoverProps) {
-  const [workspace, setWorkspace] = useState(data[0]);
 
-  const [openPopover, setOpenPopover] = useState<HTMLButtonElement | null>(null);
+    const gymModels = getGymModelsFromCookies();
 
-  const handleOpenPopover = useCallback((event: React.MouseEvent<HTMLButtonElement>) => {
-    setOpenPopover(event.currentTarget);
-  }, []);
+    const [workspace, setWorkspace] = useState<GymModel>(getSelectedGymFromCookies());
+    const [openPopover, setOpenPopover] = useState<HTMLButtonElement | null>(null);
 
-  const handleClosePopover = useCallback(() => {
-    setOpenPopover(null);
-  }, []);
+    useEffect(() => {
+        // Ensure the selected gym is saved in cookies when component loads
+        Cookies.set("selectedGym", JSON.stringify(workspace), { expires: 7, secure: true });
+    }, [workspace]);
 
-  const handleChangeWorkspace = useCallback(
-    (newValue: (typeof data)[number]) => {
-      setWorkspace(newValue);
-      handleClosePopover();
-    },
-    [handleClosePopover]
-  );
+    const handleOpenPopover = useCallback((event: React.MouseEvent<HTMLButtonElement>) => {
+        setOpenPopover(event.currentTarget);
+    }, []);
 
-  const renderAvatar = (alt: string, src: string) => (
-    <Box component="img" alt={alt} src={src} sx={{ width: 24, height: 24, borderRadius: '50%' }} />
-  );
+    const handleClosePopover = useCallback(() => {
+        setOpenPopover(null);
+    }, []);
 
-  const renderLabel = (plan: string) => (
-    <Label color={plan === 'Free' ? 'default' : 'info'}>{plan}</Label>
-  );
+    const handleChangeWorkspace = useCallback(
+        (newValue: GymModel) => {
+            let updatedGyms = [...gymModels];
 
-  return (
-    <>
-      
+            // If selecting a real gym, remove "Select a gym" from the list
+            if (workspace.id === -1 && newValue.id !== -1) {
+                updatedGyms = updatedGyms.filter((gym) => gym.id !== -1);
+            }
 
-      <Popover open={!!openPopover} anchorEl={openPopover} onClose={handleClosePopover}>
-        <MenuList
-          disablePadding
-          sx={{
-            p: 0.5,
-            gap: 0.5,
-            width: 260,
-            display: 'flex',
-            flexDirection: 'column',
-            [`& .${menuItemClasses.root}`]: {
-              p: 1.5,
-              gap: 1.5,
-              borderRadius: 0.75,
-              [`&.${menuItemClasses.selected}`]: {
-                bgcolor: 'action.selected',
-                fontWeight: 'fontWeightSemiBold',
-              },
-            },
-          }}
-        >
-          {data.map((option) => (
-            <MenuItem
-              key={option.id}
-              selected={option.id === workspace?.id}
-              onClick={() => handleChangeWorkspace(option)}
+            setWorkspace(newValue);
+            Cookies.set("selectedGym", JSON.stringify(newValue), { expires: 7, secure: true });
+
+            handleClosePopover();
+
+            // 🔄 Refresh the page after gym selection
+            setTimeout(() => {
+                window.location.reload();
+            }, 100);
+        },
+        [gymModels, workspace, handleClosePopover]
+    );
+
+
+    const renderLabel = (name: string) => <Label>{name}</Label>;
+
+    return (
+        <>
+            <ButtonBase
+                disableRipple
+                onClick={handleOpenPopover}
+                sx={{
+                    pl: 2,
+                    py: 3,
+                    gap: 1.5,
+                    pr: 1.5,
+                    width: 1,
+                    borderRadius: 1.5,
+                    textAlign: 'left',
+                    justifyContent: 'flex-start',
+                    bgcolor: (theme) => theme.vars.palette.grey['500Channel'],
+                }}
             >
-              {renderAvatar(option.name, option.logo)}
+                <Box flexGrow={1} display="flex" alignItems="center" sx={{ typography: 'body2' }}>
 
-              <Box component="span" sx={{ flexGrow: 1 }}>
-                {option.name}
-              </Box>
+                    {renderLabel(workspace.name)}
+                </Box>
+                <Iconify width={16} icon="carbon:chevron-sort" sx={{ color: 'text.disabled' }} />
+            </ButtonBase>
 
-              {renderLabel(option.plan)}
-            </MenuItem>
-          ))}
-        </MenuList>
-      </Popover>
-    </>
-  );
+            <Popover open={!!openPopover} anchorEl={openPopover} onClose={handleClosePopover}>
+                <MenuList
+                    disablePadding
+                    sx={{
+                        p: 0.5,
+                        width: 260,
+                        display: 'flex',
+                        flexDirection: 'column',
+                    }}
+                >
+                    {gymModels.map((option) => (
+                        <MenuItem
+                            key={option.id}
+                            selected={option.id === workspace.id}
+                            onClick={() => handleChangeWorkspace(option)}
+                        >
+                            <Box component="span" sx={{ flexGrow: 1 }}>
+                                {option.name}
+                            </Box>
+                        </MenuItem>
+                    ))}
+                </MenuList>
+            </Popover>
+        </>
+    );
 }

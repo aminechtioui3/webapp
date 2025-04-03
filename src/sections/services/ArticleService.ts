@@ -1,13 +1,14 @@
 
 import { Properties } from 'src/properties';
-// eslint-disable-next-line import/no-named-as-default
-import ResponseModel from "../../models/ResponseModel";
 
 import api from "../../api/axiosConfig";
-import {ArticleModel} from "../../models/Article";
+// eslint-disable-next-line import/no-named-as-default
+import ResponseModel from "../../models/ResponseModel";
+import {ArticleModel} from "../../models/ArticleModel";
 
 const properties = Properties.getInstance();
 const client = api;
+
 
 export async function getArticles(): Promise<ResponseModel<ArticleModel[]>> {
     try {

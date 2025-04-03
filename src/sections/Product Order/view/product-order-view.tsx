@@ -183,15 +183,12 @@ const schema = z.object({
                 }
                 headLabel={[
 
-                  { id: 'image', label: 'Image', width: '20%' },
-                  { id: 'productModel', label: 'Product', width: '20%' },
-                  { id: 'userModel', label: 'User', width: '20%' },
-                  { id: 'address', label: 'Address', width: '20%' },
-                  { id: 'phone', label: 'Phone', width: '20%' },
-                  { id: 'quantity', label: 'Quantity', width: '20%' },
-                  { id: 'status', label: 'Status', width: '20%' },
-                  { id: 'price', label: 'Price', width: '20%' },
-                  { id: 'note', label: 'Note', width: '20%' },
+                  { id: 'userModel.firstName', label: 'user', width: '25%' },
+                  { id: 'productModel.title', label: 'Product', width: '20%' },
+                  { id: 'price', label: 'Price', width: '10%' },
+                  { id: 'quantity', label: 'Quantity', width: '10%' },
+                  { id: 'status', label: 'Status', width: '10%' },
+                  { id: 'createdAt', label: 'Date', width: '15%' },
 
 
 

@@ -1,8 +1,13 @@
-import { useState } from 'react';
-import { _tasks, _timeline } from 'src/_mock';
+import {useCallback, useEffect, useState} from 'react';
+
 import Grid from '@mui/material/Unstable_Grid2';
 import Typography from '@mui/material/Typography';
+import VisibilityIcon from '@mui/icons-material/Visibility';
+import { Stack, Button, Dialog, TextField, DialogTitle, DialogActions, DialogContent } from '@mui/material';
+
+import { _tasks, _timeline } from 'src/_mock';
 import { DashboardContent } from 'src/layouts/dashboard';
+
 import { AnalyticsTasks } from '../analytics-tasks';
 import { AnalyticsCurrentVisits } from '../analytics-current-visits';
 import { AnalyticsOrderTimeline } from '../analytics-order-timeline';
@@ -10,14 +15,22 @@ import { AnalyticsWebsiteVisits } from '../analytics-website-visits';
 import { AnalyticsWidgetSummary } from '../analytics-widget-summary';
 import { AnalyticsTrafficBySite } from '../analytics-traffic-by-site';
 import { AnalyticsConversionRates } from '../analytics-conversion-rates';
-import { Stack, Button, Dialog, DialogActions, DialogContent, DialogTitle, TextField } from '@mui/material';
-import VisibilityIcon from '@mui/icons-material/Visibility';
+import {getAllProductCategories} from "../../services/shopService";
+import {applyFilter, getComparator} from "../../Product Category/utils";
+import {getGymMoneyTransactionHistory, getGymStatistics} from "../../services/GymService";
+import {GymStatistics} from "../../../models/GymStatistics";
+import {getHistory} from "../../services/HistoryService";
+import {HistoryModel} from "../../../models/HistoryModel";
+import {MoneyTransactionHistory} from "../../../models/MoneyTransactionHistory";
 
 export function OverviewAnalyticsView() {
   const [isAuth, setIsAuth] = useState(false);
   const [openDialog, setOpenDialog] = useState(false);
   const [password, setPassword] = useState('');
   const correctPassword = '1234';
+  const [statistics, setStatistics] = useState<GymStatistics | null>(null);
+  const [history, setHistory] = useState<HistoryModel[] >([]);
+  const [moneyTransactionHistory, setMoneyTransactionHistory] = useState<MoneyTransactionHistory[]>([]);
 
   const handlePasswordSubmit = () => {
     if (password === correctPassword) {
@@ -27,6 +40,48 @@ export function OverviewAnalyticsView() {
       alert('Incorrect password!');
     }
   };
+
+    const loadData = useCallback(async () => {
+        const model = await getGymStatistics();
+        console.log(model);
+
+        if (model.status) {
+            setStatistics(model.data!);
+            console.log(model.data!);
+        } else {
+            setStatistics(null);
+        }
+    }, []); // ✅ Dependencies are properly managed
+
+    const loadHistory = useCallback(async () => {
+        const model = await getHistory();
+        console.log(model);
+
+        if (model.status) {
+            setHistory(model.data!);
+
+        } else {
+            setHistory([]);
+        }
+    }, []);
+
+    const loadMoneyTransaction = useCallback(async () => {
+        const model = await getGymMoneyTransactionHistory();
+        console.log(model);
+
+        if (model.status) {
+            setMoneyTransactionHistory(model.data!);
+
+        } else {
+            setHistory([]);
+        }
+    }, []);
+
+    useEffect(() => {
+        loadData();
+        loadHistory();
+        loadMoneyTransaction();
+    }, [ loadData,loadHistory,loadMoneyTransaction]); // ✅ No more infinite re-renders
 
   return (
     <DashboardContent maxWidth="xl">
@@ -51,25 +106,80 @@ export function OverviewAnalyticsView() {
       
       <Grid container spacing={3}>
         <Grid xs={12} sm={6} md={3}>
-          <AnalyticsWidgetSummary title="Income" percent={2.6} total={isAuth ? 12000 : 'login'}
-            icon={<img alt="icon" src="/assets/icons/glass/ic-glass-bag.svg" />} chart={{ series: [22, 8, 35, 50] }} />
+          <AnalyticsWidgetSummary title="Members" percent={2.6} total={isAuth ? statistics? statistics.totalMembers:"error" : '****'}
+            icon={<img alt="icon" src="/assets/icons/glass/ic-glass-bag.svg" />} chart={{ series: [22, 8, 35, 50] ,categories:[]}} />
         </Grid>
         <Grid xs={12} sm={6} md={3}>
-          <AnalyticsWidgetSummary title="New subscriptions" percent={-0.1} total={isAuth ? 120 : '****'} color="secondary"
+          <AnalyticsWidgetSummary title="Valid subscriptions" percent={-0.1} total={isAuth ? statistics? statistics.totalActiveMembers:"error" : '****'} color="secondary"
             icon={<img alt="icon" src="/assets/icons/glass/ic-glass-users.svg" />} chart={{
               categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug'],
               series: [12, 12, 6, 13, 10, 6, 23, 54],
             }} />
         </Grid>
         <Grid xs={12} sm={6} md={3}>
-          <AnalyticsWidgetSummary title="Total subscriptions" percent={2.8} total={isAuth ? 398 : '****'} color="warning"
+          <AnalyticsWidgetSummary title="Invalid subscriptions" percent={2.8} total={isAuth ? statistics? statistics.totalInactiveMembers:"error" : '****'} color="warning"
             icon={<img alt="icon" src="/assets/icons/glass/ic-glass-buy.svg" />} chart={{
               categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug'],
               series: [40, 70, 50, 28, 70, 75, 7, 64],
             }} />
         </Grid>
         <Grid xs={12} sm={6} md={3}>
-          <AnalyticsWidgetSummary title="Unpaid subscriptions" percent={3.6} total={isAuth ? 23 : '****'} color="error"
+          <AnalyticsWidgetSummary title="Orders" percent={3.6} total={isAuth ? statistics? statistics.totalOfOrders:"error" : '****'} color="error"
+            icon={<img alt="icon" src="/assets/icons/glass/ic-glass-message.svg" />}  chart={{
+              categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug'],
+              series: [56, 30, 23, 54, 47, 40, 62, 73],
+            }} />
+        </Grid>
+
+
+        <Grid xs={12} sm={6} md={3}>
+          <AnalyticsWidgetSummary title="new Members last week" percent={2.6} total={isAuth ? statistics? statistics.newSubscriptionLastMonth:"error" : '****'}
+            icon={<img alt="icon" src="/assets/icons/glass/ic-glass-bag.svg" />} chart={{ series: [22, 8, 35, 50] ,categories:[]}} />
+        </Grid>
+        <Grid xs={12} sm={6} md={3}>
+          <AnalyticsWidgetSummary title="new Members last month" percent={-0.1} total={isAuth ? statistics? statistics.newSubscriptionLastMonth:"error" : '****'} color="secondary"
+            icon={<img alt="icon" src="/assets/icons/glass/ic-glass-users.svg" />} chart={{
+              categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug'],
+              series: [12, 12, 6, 13, 10, 6, 23, 54],
+            }} />
+        </Grid>
+        <Grid xs={12} sm={6} md={3}>
+          <AnalyticsWidgetSummary title="new Members this year" percent={2.8} total={isAuth ? statistics? statistics.newSubscriptionThisYear:"error" : '****'} color="warning"
+            icon={<img alt="icon" src="/assets/icons/glass/ic-glass-buy.svg" />} chart={{
+              categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug'],
+              series: [40, 70, 50, 28, 70, 75, 7, 64],
+            }} />
+        </Grid>
+        <Grid xs={12} sm={6} md={3}>
+          <AnalyticsWidgetSummary title="new Members last year" percent={3.6} total={isAuth ? statistics? statistics.newSubscriptionLastYear:"error" : '****'} color="error"
+            icon={<img alt="icon" src="/assets/icons/glass/ic-glass-message.svg" />}  chart={{
+              categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug'],
+              series: [56, 30, 23, 54, 47, 40, 62, 73],
+            }} />
+        </Grid>
+
+
+
+          <Grid xs={12} sm={6} md={3}>
+          <AnalyticsWidgetSummary title="Estimated incomes" percent={2.6} total={isAuth ? statistics? statistics.totalEstimatedIncomesFromMembershipsThisMonth:"error" : '****'}
+            icon={<img alt="icon" src="/assets/icons/glass/ic-glass-bag.svg" />} chart={{ series: [22, 8, 35, 50] ,categories:[]}} />
+        </Grid>
+        <Grid xs={12} sm={6} md={3}>
+          <AnalyticsWidgetSummary title="subscription about to expire" percent={-0.1} total={isAuth ? statistics? statistics.membershipsAboutToExpireThisMonth:"error" : '****'} color="secondary"
+            icon={<img alt="icon" src="/assets/icons/glass/ic-glass-users.svg" />} chart={{
+              categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug'],
+              series: [12, 12, 6, 13, 10, 6, 23, 54],
+            }} />
+        </Grid>
+        <Grid xs={12} sm={6} md={3}>
+          <AnalyticsWidgetSummary title="Products" percent={2.8} total={isAuth ? statistics? statistics.totalProductsInTheShop:"error" : '****'} color="warning"
+            icon={<img alt="icon" src="/assets/icons/glass/ic-glass-buy.svg" />} chart={{
+              categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug'],
+              series: [40, 70, 50, 28, 70, 75, 7, 64],
+            }} />
+        </Grid>
+        <Grid xs={12} sm={6} md={3}>
+          <AnalyticsWidgetSummary title="new orders" percent={3.6} total={isAuth ? statistics? statistics.ordersWaitingForConfirmation:"error" : '****'} color="error"
             icon={<img alt="icon" src="/assets/icons/glass/ic-glass-message.svg" />}  chart={{
               categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug'],
               series: [56, 30, 23, 54, 47, 40, 62, 73],
@@ -77,24 +187,29 @@ export function OverviewAnalyticsView() {
         </Grid>
         <Grid xs={12} md={6} lg={4}>
           <AnalyticsCurrentVisits title="Subscription types"  chart={{
-              series: [
-                { label: 'Free access', value: 90 },
-                { label: 'Private coaching', value: 12 },
-                { label: 'specific courses', value: 32 },
-                
-              ],
-            }} />
+              series: statistics? statistics.totalMembershipsTypesStatisticsModel.map((value, index, array) => ({ label: value.name, value: value.numberOfMembers }),
+              ):[]}} />
         </Grid>
         <Grid xs={12} md={6} lg={8}>
           <AnalyticsWebsiteVisits title="Last months' incomes"  chart={{
-              categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep'],
+              categories:  statistics? statistics.totalIncomesThisYear.map(value =>value.month.toString() ):[],
               series: [
-                { name: 'income', data: [43, 33, 22, 37, 67, 68, 37, 24, 55] },
-                { name: 'expense', data: [10, 20, 11, 0, 11, 5, 12, 33, 5] } 
+                { name: 'income', data: statistics? statistics.totalIncomesThisYear.map(value =>value.expenses ):[]},
+                { name: 'expense', data: statistics? statistics.totalIncomesThisYear.map(value =>value.incomes ):[]},
               ],
             }} />
         </Grid>
-        <Grid xs={12} md={6} lg={8}>
+
+          <Grid xs={12} md={12} lg={8}>
+          <AnalyticsWebsiteVisits title="This month incomes"  chart={{
+              categories:  statistics? statistics.totalIncomesThisMonth.map(value =>value.day.toString() ):[],
+              series: [
+                { name: 'income', data: statistics? statistics.totalIncomesThisMonth.map(value =>value.expenses ):[]},
+                { name: 'expense', data: statistics? statistics.totalIncomesThisMonth.map(value =>value.incomes ):[]},
+              ],
+            }} />
+        </Grid>
+       { /* <Grid xs={12} md={6} lg={8}>
           <AnalyticsConversionRates title="Male to female reports"  chart={{
               categories: ['Family gym souani', 'Family gym R4'],
               series: [
@@ -103,17 +218,22 @@ export function OverviewAnalyticsView() {
               ],
               
             }} />
-        </Grid>
+        </Grid> */ }
         <Grid xs={12} md={6} lg={4}>
-          <AnalyticsOrderTimeline title="Order timeline" list={_timeline} />
+          <AnalyticsOrderTimeline title="Order timeline" historyList={history} isHistory moneyTransactionHistoryList={[]} />
         </Grid>
-        <Grid xs={12} md={6} lg={4}>
-          <AnalyticsTrafficBySite title="Traffic by site" list={isAuth ? [ { label: 'Google', total: 341212 } ] : []} />
+
+          <Grid xs={12} md={6} lg={4}>
+          <AnalyticsOrderTimeline title="History" historyList={[]} isHistory={false} moneyTransactionHistoryList={moneyTransactionHistory} />
+        </Grid>
+        { /* <Grid xs={12} md={6} lg={4}>
+          <AnalyticsTrafficBySite title="Traffic by site" list={isAuth ? [ {value:"5", label: 'Google', total: 341212 } ] : []} />
         </Grid>
         <Grid xs={12} md={6} lg={8}>
           <AnalyticsTasks title="Tasks" list={_tasks} />
-        </Grid>
+        </Grid> */ }
       </Grid>
     </DashboardContent>
   );
 }
+

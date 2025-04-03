@@ -1,5 +1,4 @@
-import type {ProductCategoryProps} from "../sections/Product Category/product-category-table-row";
-
+import type { ProductCategoryProps } from "../sections/Product Category/product-category-table-row";
 
 export class ProductCategory {
     id: number;
@@ -16,15 +15,23 @@ export class ProductCategory {
 
     updatedAt: Date;
 
-    constructor(
-        id: number,
-        title: string,
-        description?: string,
-        image?: string,
-        available: boolean = true,
-        createdAt: Date = new Date(),
-        updatedAt: Date = new Date()
-    ) {
+    constructor({
+                    id,
+                    title,
+                    description = "", // Default to empty string if not provided
+                    image = "", // Default to empty string if not provided
+                    available = true,
+                    createdAt = new Date(),
+                    updatedAt = new Date(),
+                }: {
+        id: number;
+        title: string;
+        description?: string;
+        image?: string;
+        available?: boolean;
+        createdAt?: Date;
+        updatedAt?: Date;
+    }) {
         this.id = id;
         this.title = title;
         this.description = description;
@@ -35,15 +42,15 @@ export class ProductCategory {
     }
 
     static fromJson(json: any): ProductCategory {
-        return new ProductCategory(
-            json.id,
-            json.title,
-            json.description ?? undefined,
-            json.image ?? undefined,
-            json.available,
-            new Date(json.createdAt),
-            new Date(json.updatedAt)
-        );
+        return new ProductCategory({
+            id: json.id,
+            title: json.title,
+            description: json.description ?? "",  // Default to empty string if missing
+            image: json.image ?? "",  // Default to empty string if missing
+            available: json.available,
+            createdAt: new Date(json.createdAt),
+            updatedAt: new Date(json.updatedAt),
+        });
     }
 
     toJson(): any {
@@ -61,10 +68,10 @@ export class ProductCategory {
     toProductCategoryProps(): ProductCategoryProps {
         return {
             id: this.id,
-            name: this.title,
+            title: this.title,
             available: this.available,
-            image:( this.image)?this.image:'https://example.com/avatar.jpg',
-            description: this.description, // Consider making this a boolean instead of a string
+            image: this.image ? this.image : 'https://example.com/avatar.jpg', // Provide default image if missing
+            description: this.description, // Update if description needs to be a boolean
         };
     }
 }

@@ -104,15 +104,15 @@ const schema = z.object({
       }
     } else {
       // Update existing membership
-      const m = new ProductCategory(
-          modifiedId,  // ID stays the same
-          data.title,  // Populate fields from form
-          data.description,
-          data.image,
-          data.available,
-          new Date(),
-          new Date(),
-      );
+      const m = new ProductCategory({
+        id:modifiedId,  // ID stays the same
+        title:data.title,  // Populate fields from form
+        description:data.description,
+        image:data.image,
+        available:data.available,
+        createdAt:new Date(),
+        updatedAt:new Date(),
+      });
 
       const result = await updateProductCategory(m);
       console.log(result);
@@ -217,9 +217,9 @@ const schema = z.object({
                   )
                 }
                 headLabel={[
-                  { id: 'image', label: 'Image', width: '20%' },
+                  { id: 'title', label: 'Title', width: '20%' },
                   { id: 'description', label: 'description', width: '80%' },
-                  { id: 'status', label: 'Status', width: '10%' },
+                  { id: 'available', label: 'Available', width: '10%' },
 
 
 

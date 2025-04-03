@@ -42,8 +42,8 @@ import type {MembershipModel} from "../../../models/MembershipModel";
 // ----------------------------------------------------------------------
 
 export function UserView() {
-    const table = useTable(); // Ensure this is before defining loadData()
 
+  // eslint-disable-next-line @typescript-eslint/no-shadow
     function useTable() {
     const [page, setPage] = useState(0);
     const [orderBy, setOrderBy] = useState('name');
@@ -89,7 +89,10 @@ export function UserView() {
   
     return { page, order, onSort, orderBy, selected, rowsPerPage, onSelectRow, onResetPage, onChangePage, onSelectAllRows, onChangeRowsPerPage };
   }
-    const [filterName, setFilterName] = useState('');
+
+
+  const table = useTable();
+  const [filterName, setFilterName] = useState('');
   const [open, setOpen] = useState(false);
   const [notFoundTrigger, setNotFoundTrigger] = useState(false);
   const [modifiedId, setModifiedId] = useState<number | null>(null);
@@ -231,23 +234,24 @@ export function UserView() {
 
       if (modifiedId === -1) {
         // Create new membership
-        const activeMembershipCreationDto = new ActiveMembershipCreationDTO(
-            undefined,
-            selectedMembership.id,
-            data.email,
-            data.firstName,
-            data.lastName,
-            new Date(data.birthday),
-            data.weight,
-            data.height,
-            data.location,
-            data.phone,
-            data.gender,
-            new Date(data.startDate),
-            new Date(data.endDate),
-            data.note,
-            data.status,
-        );
+        const activeMembershipCreationDto = new ActiveMembershipCreationDTO({
+      // id:  undefined,
+         membershipId: selectedMembership.id,
+         gymId:1,
+         email: data.email,
+         firstName: data.firstName,
+         lastName: data.lastName,
+         birthday: new Date(data.birthday),
+         location: data.location,
+         phone: data.phone,
+         gender: data.gender,
+         price:selectedMembership.price,
+         paymentPercent:100,
+         startDate: new Date(data.startDate),
+         endDate: new Date(data.endDate),
+         note: data.note,
+         status: data.status,
+        } );
 
 
 
@@ -268,18 +272,20 @@ export function UserView() {
         console.log("selectedMembershipId");
         console.log(data.membershipId);
         const newMembership = memberships.find((m) => m.id === selectedMembership.id);
-        const updatedMembership = new ActiveMembership(
-            modifiedId??-1,
-            selectedMembership,
-            updatedUserProfile || data.user,
-            new Date(data.startDate),
-            new Date(data.endDate),
-            data.available,
-            new Date(),
-            new Date(),
-            data.note,
-            data.status
-        );
+        const updatedMembership = new ActiveMembership({
+            id: modifiedId ?? -1,
+            membership: selectedMembership,
+            user: updatedUserProfile || data.user,
+            startDate:new Date(data.startDate),
+            endDate:new Date(data.endDate),
+            price:selectedMembership.price,
+            paymentPercent:100,
+            available:data.available,
+            createdAt:new Date(),
+            updatedAt:new Date(),
+            note:data.note,
+            status:data.status
+      });
         console.log("update membership");
         console.log(updatedMembership);
 
@@ -299,22 +305,20 @@ export function UserView() {
     if (res.status) {
       setNotFoundTrigger(false)
       setUsers(res.data);
-      setDataFiltered(
-          applyFilter({
-            inputData: res.data.map((m) => m.toActiveMembershipProps()),
-            comparator: getComparator(table.order, table.orderBy),
-            filterName,
-          })
-      );
+      setDataFiltered(applyFilter({
+        inputData: res.data!.map(m => m.toActiveMembershipProps()),
+        comparator: getComparator(table.order, table.orderBy),
+        filterName,
+      }));
     }else{
       setUsers([]);
       setNotFoundTrigger(true)
     }
-  }, [filterName, table.order, table.orderBy]);
+  }, [filterName, table.order, table.orderBy]); // ✅ Dependencies are properly managed
 
   useEffect(() => {
     loadData();
-  }, [loadData]);
+  }, [filterName, loadData, table.order, table.orderBy]); // ✅ No more infinite re-renders
 
   const updateData = (id: string) => {
     setModifiedId(Number(id));
@@ -485,10 +489,10 @@ export function UserView() {
                 }
                 headLabel={[
 
-                  { id: 'name', label: 'Name', width: '20%' },
-                  { id: 'membership', label: 'Membership', width: '20%' },
-                  { id: 'startAt', label: 'Start at', width: '20%' },
-                  { id: 'endAt', label: 'End at', width: '20%' },
+                  { id: 'user.firstName', label: 'Name', width: '20%' },
+                  { id: 'membership.title', label: 'Membership', width: '20%' },
+                  { id: 'startDate', label: 'Start at', width: '20%' },
+                  { id: 'endDate', label: 'End at', width: '20%' },
                   { id: 'status', label: 'Status', width: '20%' },
                 ]}
               />

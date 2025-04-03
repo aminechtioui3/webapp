@@ -26,7 +26,7 @@ import {deleteArticle} from "../services/ArticleService";
 export type ArticleProps = {
 
   id?: number;
-  name: string;
+  title: string;
   header: string;
   date: Date;
   status: boolean;
@@ -106,30 +106,21 @@ export function ArticleTableRow({ row, selected, onSelectRow, updateData, onDele
 
         <TableCell component="th" scope="row">
           <Box gap={2} display="flex" alignItems="center">
-            <Avatar alt={row.name} src={row.image} />
-            {row.name}
+            <Avatar alt={row.title} src={row.image} />
+
+            <Box display="flex" flexDirection="column">
+              <span>{row.title}</span>
+              <span style={{ color: 'gray', fontSize: '0.9rem' }}>{row.header}</span>
+
+            </Box>
+
           </Box>
         </TableCell>
-        <TableCell>{row.header}</TableCell>
-        <TableCell>{row.date.toISOString()}</TableCell>
-
-        <TableCell >
-          {row.status ? (
-              <Iconify width={22} icon="solar:check-circle-bold" sx={{ color: 'success.main' }} />
-          ) : (
-              '-'
-          )}
-        </TableCell>
-
-
         <TableCell>{row.description}</TableCell>
+        <TableCell>{row.date.toLocaleDateString()}</TableCell>
 
 
 
-        <TableCell>
-          {/* <Label color={(row.status === 'banned' && 'error') || 'success'}>{row.status}</Label> */}
-          
-        </TableCell>
 
         <TableCell align="right">
           <IconButton onClick={handleOpenPopover}>
@@ -183,7 +174,7 @@ export function ArticleTableRow({ row, selected, onSelectRow, updateData, onDele
         </DialogTitle>
         <DialogContent>
           <DialogContentText id="alert-dialog-description">
-            Are you sure you want to delete the {row.name} membership!
+            Are you sure you want to delete the {row.title} membership!
           </DialogContentText>
         </DialogContent>
         <DialogActions>

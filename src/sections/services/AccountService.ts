@@ -8,6 +8,7 @@ import ResponseModel from "../../models/ResponseModel";
 
 import api from "../../api/axiosConfig";
 import {MembershipModel} from "../../models/MembershipModel";
+import {getAllGymFacilities} from "./GymService";
 
 
 const properties = Properties.getInstance();
@@ -82,14 +83,27 @@ export async function checkIfTokenExist(): Promise<boolean>{
 
 
 export async function login(email :string,password :string): Promise<ResponseModel<String>> {
-  try {const response = await client.post(properties.loginURL, {"email":email,"password":password});
+  try {
+      const response = await client.post(properties.loginURL, {"email":email,"password":password});
 
     if( response.status === 200 || response.status === 201){
         // save token
         const token=response.data;
         Cookies.set("token", token, { expires: 7, secure: true }); // Expires in 7 days
-        window.location.href = "/";
-        return new ResponseModel<String>(true, token, "Welcome Home!", response.statusText);
+
+        console.log(response);
+
+        const gymFacilitiesResponse=await getAllGymFacilities();
+        if(gymFacilitiesResponse.status){
+            console.log(gymFacilitiesResponse.data);
+            return new ResponseModel<String>(true, token, "Welcome Home!", response.statusText);
+
+        }
+            return new ResponseModel<String>(false, token, "Error in retrieving gym facilities!", response.statusText);
+        
+
+
+
 
     }
       return new ResponseModel<String>(false, "", response.data, response.statusText);

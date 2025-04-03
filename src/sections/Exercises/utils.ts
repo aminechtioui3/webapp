@@ -24,14 +24,27 @@ export function emptyRows(page: number, rowsPerPage: number, arrayLength: number
 // ----------------------------------------------------------------------
 
 function descendingComparator<T>(a: T, b: T, orderBy: keyof T) {
-  if (b[orderBy] < a[orderBy]) {
+  const getValue = (obj: any, key: string) => key.split('.').reduce((o, k) => (o ? o[k] : null), obj);
+
+  const aValue = getValue(a, orderBy as string);
+  const bValue = getValue(b, orderBy as string);
+
+  // Check if it's a Date
+  const isDateColumn = aValue instanceof Date || (typeof aValue === 'string' && !Number.isNaN(Date.parse(aValue)));
+
+  if (isDateColumn) {
+    return new Date(bValue).getTime() - new Date(aValue).getTime();
+  }
+
+  if (bValue < aValue) {
     return -1;
   }
-  if (b[orderBy] > a[orderBy]) {
+  if (bValue > aValue) {
     return 1;
   }
   return 0;
 }
+
 
 // ----------------------------------------------------------------------
 
