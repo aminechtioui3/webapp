@@ -1,3 +1,7 @@
+
+// eslint-disable-next-line import/no-cycle
+import {GymFacilitiesProps} from "../sections/GymFacilities/gym-facilities-table-row";
+
 export class GymModel {
     id: number;
 
@@ -16,6 +20,13 @@ export class GymModel {
     }
 
     toJson(): any {
+        return {
+            id: this.id,
+            name: this.name,
+        };
+    }
+
+    toGymModelProps(): GymFacilitiesProps {
         return {
             id: this.id,
             name: this.name,

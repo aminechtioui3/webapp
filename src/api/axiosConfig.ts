@@ -1,6 +1,7 @@
 import axios from "axios";
 import Cookies from "js-cookie";
 import { Properties } from 'src/properties';
+// eslint-disable-next-line import/no-cycle
 import {GymModel} from "../models/GymModel";
 // eslint-disable-next-line import/no-cycle
 

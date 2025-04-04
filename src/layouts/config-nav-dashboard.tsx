@@ -11,7 +11,7 @@ import {
   History,
   FitnessCenter,
   Lock,
-  ErrorOutline,
+  ErrorOutline, Home, HomeMini,
 } from '@mui/icons-material';
 import SettingsIcon from '@mui/icons-material/Settings';
 
@@ -96,6 +96,11 @@ export const navData = [
     title: 'Exercises',
     path: '/exercises',
     icon: <FitnessCenter />,
+  },
+  {
+    title: 'Facilities',
+    path: '/facilities',
+    icon: <HomeMini />,
   },
   
 ];

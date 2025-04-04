@@ -1,3 +1,4 @@
+// eslint-disable-next-line import/no-cycle
 import { GymModel } from "./GymModel";
 
 import type { MembershipProps } from '../sections/Membership/membership-table-row';

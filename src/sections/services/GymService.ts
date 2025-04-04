@@ -6,6 +6,7 @@ import { UserAccount } from 'src/models/UserAccount';
 // eslint-disable-next-line import/no-named-as-default
 import ResponseModel from "../../models/ResponseModel";
 
+// eslint-disable-next-line import/no-cycle
 import api from "../../api/axiosConfig";
 import {MembershipModel} from "../../models/MembershipModel";
 import {GymModel} from "../../models/GymModel";
@@ -13,6 +14,7 @@ import {ProductCategory} from "../../models/ProductCategoryModel";
 import {GymStatistics} from "../../models/GymStatistics";
 import {MoneyTransactionHistory} from "../../models/MoneyTransactionHistory";
 import {HistoryModel} from "../../models/HistoryModel";
+import {SessionModel} from "../../models/SessionModel";
 
 
 const properties = Properties.getInstance();
@@ -131,6 +133,66 @@ export async function getGymMoneyTransactionHistory(): Promise<ResponseModel<Mon
     } catch (error) {
         console.error("Error fetching products:", error);
         return new ResponseModel<MoneyTransactionHistory[]>(false, [], "An error occurred", undefined);
+    }
+}
+
+
+
+
+export async function createGymFacility (data: any): Promise<ResponseModel<String>> {
+    const model = GymModel.fromJson(data);
+
+    try {
+        const response = await client.post(properties.createGymFacility, model);
+
+        if (response.status === 200 || response.status === 200) {
+            return new ResponseModel<String>(true, "", undefined, 'Operation completed');
+        }
+        return new ResponseModel<String>(false, "", response.data, response.statusText);
+
+    } catch (error) {
+        console.error('Error Creating :', error);
+        return new ResponseModel<String>(false, "", "Error Creating Gym Model", error.message);
+
+    }
+}
+
+
+export async function updateGymFacility(data: any): Promise<ResponseModel<String>> {
+    const model = GymModel.fromJson(data);
+
+    try {
+        const response = await client.post(properties.updateGymFacility, model);
+
+        if (response.status === 200 || response.status === 200) {
+            return new ResponseModel<String>(true, "", undefined, 'Operation completed');
+        }
+        return new ResponseModel<String>(false, "", response.data, response.statusText);
+
+    } catch (error) {
+        console.error('Error Creating :', error);
+        return new ResponseModel<String>(false, "", "Error Creating ", error.message);
+
+    }
+}
+
+
+
+export async function deleteGymFacility(id: string): Promise<ResponseModel<String>> {
+
+
+    try {
+        const response = await client.post(`${properties.deleteGymFacility}/${id}`);
+
+        if (response.status === 200 || response.status === 201) {
+            return new ResponseModel<String>(true, "", undefined, 'Operation completed');
+        }
+        return new ResponseModel<String>(false, "", response.data, response.statusText);
+
+    } catch (error) {
+        console.error('Error Deleting :', error);
+        return new ResponseModel<String>(false, "", "Error Creating ", error.message);
+
     }
 }
 

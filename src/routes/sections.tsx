@@ -7,7 +7,6 @@ import LinearProgress, { linearProgressClasses } from '@mui/material/LinearProgr
 import { varAlpha } from 'src/theme/styles';
 import { AuthLayout } from 'src/layouts/auth';
 import { DashboardLayout } from 'src/layouts/dashboard';
-import exp from 'constants';
 
 // ----------------------------------------------------------------------
 
@@ -31,7 +30,7 @@ export const DealsPage = lazy(() =>import('src/pages/Deals'));
 export const HistoryPage = lazy(() =>import('src/pages/History'));
 export const SessionPage = lazy(() =>import('src/pages/Sessions'));
 export const ProductOrdersPage = lazy(() =>import('src/pages/ProductOrders'));
-
+export const GymFacilitiesPage = lazy(() =>import('src/pages/GymFacilities'));
 // ----------------------------------------------------------------------
 
 const renderFallback = (
@@ -74,6 +73,7 @@ export function Router() {
         { path: 'product-orders', element: <ProductOrdersPage /> },
         { path: 'history', element: <HistoryPage /> },
         {path: 'profile',element :<Profile/>},
+        {path: 'facilities',element :<GymFacilitiesPage/>},
         {path:'AuthReset', element:<AuthReset/>},
         {path :'Settings',element:<Settings/>},
 

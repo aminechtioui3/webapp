@@ -1,3 +1,4 @@
+// eslint-disable-next-line import/no-cycle
 import { GymModel } from "./GymModel";
 
 import type { HistoryProps } from "../sections/History/history-table-row";
