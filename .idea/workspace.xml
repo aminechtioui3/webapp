@@ -5,24 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="74813386-4e36-4a36-874f-73c4ba81e498" name="Changes" comment="f">
-      <change afterPath="$PROJECT_DIR$/src/pages/GymFacilities.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/sections/GymFacilities/gym-facilities-table-empty-rows.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/sections/GymFacilities/gym-facilities-table-head.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/sections/GymFacilities/gym-facilities-table-row.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/sections/GymFacilities/gym-facilities-table-toolbar.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/sections/GymFacilities/table-no-data.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/sections/GymFacilities/utils.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/sections/GymFacilities/view/gym-facilities-view.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/sections/GymFacilities/view/index.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/api/axiosConfig.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/api/axiosConfig.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/layouts/config-nav-dashboard.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/layouts/config-nav-dashboard.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/models/GymModel.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/models/GymModel.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/models/HistoryModel.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/models/HistoryModel.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/models/MembershipModel.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/models/MembershipModel.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/models/MoneyTransactionHistory.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/models/MoneyTransactionHistory.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/routes/sections.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/routes/sections.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/sections/services/GymService.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/sections/services/GymService.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/sections/Sessions/view/session-view.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/sections/Sessions/view/session-view.tsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -124,7 +107,7 @@
       <workItem from="1742765070536" duration="6284000" />
       <workItem from="1742946377230" duration="8000" />
       <workItem from="1743589337011" duration="36905000" />
-      <workItem from="1743758219244" duration="3199000" />
+      <workItem from="1743758219244" duration="3387000" />
     </task>
     <task id="LOCAL-00001" summary="d">
       <option name="closed" value="true" />

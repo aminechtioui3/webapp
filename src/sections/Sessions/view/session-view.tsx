@@ -35,10 +35,9 @@ import { emptyRows, applyFilter, getComparator } from '../utils';
 
 import type { SessionProps } from '../session-table-row';
 
-import {getMemberships, createMembership, updateMembership} from "../../services/MembershipService";
-import {MembershipModel} from "../../../models/MembershipModel";
+
 import {SessionModel} from "../../../models/SessionModel";
-import {getAllSessions, updateSession} from "../../services/SessionService";
+import {createSession, getAllSessions, updateSession} from "../../services/SessionService";
 
 
 // ----------------------------------------------------------------------
@@ -99,7 +98,7 @@ const schema = z.object({
 
     if (modifiedId === -1) {
       // Create new membership
-      const result = await createMembership(MembershipModel.fromJson(data));
+      const result = await createSession(SessionModel.fromJson(data));
       console.log(result);
 
       if (result.status) {

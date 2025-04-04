@@ -20,7 +20,7 @@ import DialogContent from "@mui/material/DialogContent";
 import {DialogContentText} from "@mui/material";
 import DialogActions from "@mui/material/DialogActions";
 import Button from "@mui/material/Button";
-import {deleteMembership} from "../services/MembershipService";
+import {deleteSession} from "../services/SessionService";
 
 
 // ----------------------------------------------------------------------
@@ -88,7 +88,7 @@ export function SessionTableRow({ row, selected, onSelectRow, updateData, onDele
   }, []);
 
   const deleteM = useCallback(async () => {
-    const result = await deleteMembership(row.id.toString());
+    const result = await deleteSession(row.id.toString());
     if (result.status) {
       onDeleteSuccess();
       handleCloseDeleteDialog();
