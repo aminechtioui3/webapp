@@ -402,6 +402,19 @@ export function UserView() {
                   margin="dense"
                   type="number"
                   {...register('height', { valueAsNumber: true })}
+
+
+
+
+
+
+
+
+
+
+
+
+                  
                 />
                 <TextField label="Location" fullWidth margin="dense" {...register('location')} />
                 <TextField label="Phone" fullWidth margin="dense" {...register('phone')} />
@@ -413,6 +426,17 @@ export function UserView() {
                       { value: 'MALE', label: 'Male' },
                       { value: 'FEMALE', label: 'Female' },
                     ]}
+
+
+
+
+
+
+
+
+
+
+
                     onChange={(selectedOption) => setValue('gender', selectedOption?.value!)}
                     placeholder="Select Gender..."
                   />
