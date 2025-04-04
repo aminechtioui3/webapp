@@ -14,6 +14,10 @@ type Props = CardProps & {
   subheader?: string;
   chart: {
     colors?: string[];
+
+
+
+    
     categories?: string[];
     series: {
       name: string;

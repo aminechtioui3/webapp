@@ -414,7 +414,7 @@ export function UserView() {
 
 
 
-                  
+
                 />
                 <TextField label="Location" fullWidth margin="dense" {...register('location')} />
                 <TextField label="Phone" fullWidth margin="dense" {...register('phone')} />
@@ -425,6 +425,21 @@ export function UserView() {
                     options={[
                       { value: 'MALE', label: 'Male' },
                       { value: 'FEMALE', label: 'Female' },
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                      
                     ]}
 
 
