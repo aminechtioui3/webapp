@@ -6,7 +6,7 @@
   <component name="ChangeListManager">
     <list default="true" id="74813386-4e36-4a36-874f-73c4ba81e498" name="Changes" comment="f">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/api/axiosConfig.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/api/axiosConfig.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/properties.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/properties.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -46,7 +46,7 @@
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.git.unshallow": "true",
     "git-widget-placeholder": "main",
-    "last_opened_file_path": "D:/projects/GymApp/webapp/src/sections/GymFacilities",
+    "last_opened_file_path": "D:/projects/GymApp/webapp",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
@@ -77,6 +77,19 @@
     <key name="MoveFile.RECENT_KEYS">
       <recent name="C:\Users\mohaa\Desktop\Work Chtioui\webapp\src\sections\Expense\view" />
     </key>
+  </component>
+  <component name="RunManager">
+    <configuration name="dev" type="js.build_tools.npm" nameIsGenerated="true">
+      <package-json value="$PROJECT_DIR$/package.json" />
+      <command value="run" />
+      <scripts>
+        <script value="dev" />
+      </scripts>
+      <node-interpreter value="project" />
+      <package-manager value="D:\projects\GymApp\webapp" />
+      <envs />
+      <method v="2" />
+    </configuration>
   </component>
   <component name="SharedIndexes">
     <attachedChunks>
@@ -112,7 +125,7 @@
       <workItem from="1743758219244" duration="3485000" />
       <workItem from="1743857460243" duration="5389000" />
       <workItem from="1743875369682" duration="19801000" />
-      <workItem from="1743927278522" duration="5995000" />
+      <workItem from="1743927278522" duration="7548000" />
     </task>
     <task id="LOCAL-00001" summary="d">
       <option name="closed" value="true" />
