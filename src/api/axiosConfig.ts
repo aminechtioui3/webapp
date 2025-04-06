@@ -34,8 +34,11 @@ api.interceptors.request.use(
         // Set gymId to the value of selectedGym or -1 if not found
         const gymId = selectedGym ? selectedGym.id : -1;
        // config.headers.Cookie = `gymId=${gymId}`;
-        Cookies.set("gymId",gymId.toString(), { expires: 7, secure: false }); // Expires in 7 days
-
+        Cookies.set("gymId", gymId.toString(), {
+            expires: 7,
+            secure: true,
+            sameSite: "None",
+        });
 
         console.log(gymId);
         console.log(config.headers);

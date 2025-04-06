@@ -6,30 +6,7 @@
   <component name="ChangeListManager">
     <list default="true" id="74813386-4e36-4a36-874f-73c4ba81e498" name="Changes" comment="f">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/layouts/components/notifications-popover.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/layouts/components/notifications-popover.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/layouts/dashboard/layout.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/layouts/dashboard/layout.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/models/ActivateMembershipCreationDTO.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/models/ActivateMembershipCreationDTO.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/models/HistoryModel.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/models/HistoryModel.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/models/NotificationModel.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/models/NotificationModel.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/models/ProductCategoryModel.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/models/ProductCategoryModel.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/models/UserAccount.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/models/UserAccount.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/properties.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/properties.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/sections/Articles/view/article-view.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/sections/Articles/view/article-view.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/sections/Deals/view/deal-view.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/sections/Deals/view/deal-view.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/sections/Exercises/exercise-table-row.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/sections/Exercises/exercise-table-row.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/sections/Exercises/view/exercise-view.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/sections/Exercises/view/exercise-view.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/sections/Expense/view/expense-view.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/sections/Expense/view/expense-view.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/sections/History/history-table-row.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/sections/History/history-table-row.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/sections/History/view/history-view.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/sections/History/view/history-view.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/sections/Membership/view/membership-view.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/sections/Membership/view/membership-view.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/sections/Notification/view/notification-view.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/sections/Notification/view/notification-view.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/sections/Product Category/view/product-category-view.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/sections/Product Category/view/product-category-view.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/sections/Shop/view/shop-view.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/sections/Shop/view/shop-view.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/sections/services/DealService.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/sections/services/DealService.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/sections/services/HistoryService.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/sections/services/HistoryService.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/sections/services/shopService.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/sections/services/shopService.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/sections/user/user-table-row.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/sections/user/user-table-row.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/sections/user/view/user-view.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/sections/user/view/user-view.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/api/axiosConfig.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/api/axiosConfig.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -133,7 +110,8 @@
       <workItem from="1743589337011" duration="36905000" />
       <workItem from="1743758219244" duration="3485000" />
       <workItem from="1743857460243" duration="5389000" />
-      <workItem from="1743875369682" duration="19496000" />
+      <workItem from="1743875369682" duration="19801000" />
+      <workItem from="1743927278522" duration="1361000" />
     </task>
     <task id="LOCAL-00001" summary="d">
       <option name="closed" value="true" />
