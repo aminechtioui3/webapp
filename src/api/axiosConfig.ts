@@ -27,7 +27,7 @@ api.interceptors.request.use(
 
         // Set gymId in custom header instead of cookie
         const gymId = selectedGym ? selectedGym.id : -1;
-        config.headers.gymId = gymId.toString(); // 👈 Key change
+        config.headers.gymid = gymId.toString(); // 👈 Key change
 
         return config;
     },
