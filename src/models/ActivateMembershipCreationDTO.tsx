@@ -13,8 +13,6 @@ export class ActiveMembershipCreationDTO {
 
     birthday: Date;
 
-    location: string;
-
     phone: string;
 
     gender: string;
@@ -38,7 +36,6 @@ export class ActiveMembershipCreationDTO {
                     firstName,
                     lastName,
                     birthday,
-                    location,
                     phone,
                     gender,
                     endDate,
@@ -54,7 +51,6 @@ export class ActiveMembershipCreationDTO {
         firstName: string;
         lastName: string;
         birthday: Date;
-        location: string;
         phone: string;
         gender: string;
         endDate: Date;
@@ -70,7 +66,6 @@ export class ActiveMembershipCreationDTO {
         this.firstName = firstName;
         this.lastName = lastName;
         this.birthday = birthday;
-        this.location = location;
         this.phone = phone;
         this.gender = gender;
         this.endDate = endDate;
@@ -89,7 +84,7 @@ export class ActiveMembershipCreationDTO {
             firstName: json.firstName,
             lastName: json.lastName,
             birthday: new Date(json.birthday),
-            location: json.location,
+
             phone: json.phone,
             gender: json.gender,
             endDate: new Date(json.endDate),
@@ -109,7 +104,7 @@ export class ActiveMembershipCreationDTO {
             firstName: this.firstName,
             lastName: this.lastName,
             birthday: this.birthday.toISOString(),
-            location: this.location,
+
             phone: this.phone,
             gender: this.gender,
             endDate: this.endDate.toISOString(),

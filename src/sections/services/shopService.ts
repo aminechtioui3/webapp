@@ -135,7 +135,7 @@ export async function getAllProductCategories(): Promise<ResponseModel<ProductCa
 
 
 export async function createProductCategory(data: any): Promise<ResponseModel<String>> {
-    const model = ProductModel.fromJson(data);
+    const model = ProductCategory.fromJson(data);
 
     try {
         const response = await client.post(properties.CreateProductCategory, model);
@@ -154,7 +154,7 @@ export async function createProductCategory(data: any): Promise<ResponseModel<St
 
 
 export async function updateProductCategory(data: any): Promise<ResponseModel<String>> {
-    const model = ProductModel.fromJson(data);
+    const model = ProductCategory.fromJson(data);
 
     try {
         const response = await client.post(properties.UpdateProductCategory, model);
@@ -221,7 +221,7 @@ export async function getAllProductOrders(): Promise<ResponseModel<ProductOrderM
 
 
 export async function updateProductOrder(data: any): Promise<ResponseModel<String>> {
-    const model = ProductModel.fromJson(data);
+    const model = ProductOrderModel.fromJson(data);
 
     try {
         const response = await client.post(properties.UpdateProductOrder, model);

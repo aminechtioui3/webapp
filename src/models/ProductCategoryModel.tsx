@@ -43,15 +43,16 @@ export class ProductCategory {
 
     static fromJson(json: any): ProductCategory {
         return new ProductCategory({
-            id: json.id,
+            id: json.id ?? -1,
             title: json.title,
-            description: json.description ?? "",  // Default to empty string if missing
-            image: json.image ?? "",  // Default to empty string if missing
-            available: json.available,
-            createdAt: new Date(json.createdAt),
-            updatedAt: new Date(json.updatedAt),
+            description: json.description ?? "",
+            image: json.image ?? "",
+            available: json.available ?? true,
+            createdAt: json.createdAt ? new Date(json.createdAt) : new Date(),
+            updatedAt: json.updatedAt ? new Date(json.updatedAt) : new Date(),
         });
     }
+
 
     toJson(): any {
         return {

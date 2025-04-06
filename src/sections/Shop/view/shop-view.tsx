@@ -149,10 +149,10 @@ export function ShopView() {
             const response = await getAllProductCategories();
             if (response.status) {
               setProductCategory(response.data);
-              const userMembership = response.data.find((m) => m.id === userToEdit.category.id);
-              if (userMembership) {
-                setSelectedProductCategory(userMembership);
-                setValue('categoryId', userMembership.id);
+              const userSelectedProductCategory = response.data.find((m) => m.id === userToEdit.category.id);
+              if (userSelectedProductCategory) {
+                setSelectedProductCategory(userSelectedProductCategory);
+                setValue('categoryId', userSelectedProductCategory.id);
               }
             }
           } catch (error) {
@@ -231,7 +231,7 @@ export function ShopView() {
             updatedAt: new Date(),
 
       }  );
-        console.log("update membership");
+        console.log("update product");
         console.log(updatedProductModel);
 
         const result = await updateProduct(updatedProductModel);
@@ -303,14 +303,14 @@ export function ShopView() {
           <form onSubmit={handleSubmit(handleSubmitForm)}>
             <div style={{ marginBottom: '10px' }}>
               {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
-              <label>Membership</label>
+              <label>Category</label>
               <Select
                 options={productCategory}
                 value={selectedProductCategory}
                 onChange={setSelectedProductCategory}
                 getOptionLabel={(option) => option.title}
                 getOptionValue={(option) => option.id.toString()}
-                placeholder="Select Membership..."
+                placeholder="Select Product..."
                 isSearchable
               />
             </div>
@@ -321,16 +321,7 @@ export function ShopView() {
               value={selectedProductCategory?.id || ''}
             />
 
-            title: this.title,
-            brand: this.brand,
-            model: this.model,
-            description: this.description,
-            image: this.image,
-            category: this.category.toJson(),
-            price: this.price,
-            salePercent: this.salePercent,
-            availableNumber: this.availableNumber,
-            available: this.available,
+
 
 
             <TextField label="Title" fullWidth margin="dense" {...register("title")} error={!!errors.title} helperText={errors.title?.message} />
@@ -342,8 +333,6 @@ export function ShopView() {
             <TextField label="Description" fullWidth margin="dense" {...register("description")} error={!!errors.description} helperText={errors.description?.message} />
 
             <TextField label="image" fullWidth margin="dense" {...register("image")} error={!!errors.image} helperText={errors.image?.message} />
-
-            <TextField label="image" fullWidth margin="dense" {...register("price")} error={!!errors.image} helperText={errors.image?.message} />
 
             <TextField
                 {...register("price", { valueAsNumber: true })}

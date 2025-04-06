@@ -157,6 +157,8 @@ export class Properties {
 
     public getAllExpenses;
 
+    public createHistory;
+
     public deleteHistory;
 
     public markHistoryAsSeen;
@@ -245,6 +247,7 @@ export class Properties {
 
 
         // HISTORY
+        this.createHistory="/protected/history/create-history";
         this.deleteHistory="/protected/history/delete-history/{id}";
         this.markHistoryAsSeen="/protected/history/mark-history-as-seen/{id}";
         this.getAllHistory="/protected/history/get-all-history";

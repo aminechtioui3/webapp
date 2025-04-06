@@ -38,6 +38,7 @@ import { getMembers, createActiveMembership, updateActiveMembership } from '../.
 
 import type { ActiveMembershipProps} from '../user-table-row';
 import type {MembershipModel} from "../../../models/MembershipModel";
+import {getSelectedGymFromCookies} from "../../services/GymService";
 
 // ----------------------------------------------------------------------
 
@@ -101,24 +102,44 @@ export function UserView() {
   const [_users, setUsers] = useState<ActiveMembership[]>([]);
   const [memberships, setMemberships] = useState<MembershipModel[]>([]);
   const [selectedMembership, setSelectedMembership] = useState<MembershipModel | null>(null);
+  // Add these constants at the top of the file
+  const NEW_THRESHOLD_PERCENT = 7; // 7% of total duration
+  const END_SOON_THRESHOLD_PERCENT = 85; // 85% of total duration
+
+  const genderOptions = [
+    { value: 'Male', label: 'Male' },
+    { value: 'Female', label: 'Female' },
+  ];
+
+  const defaultGymModel = (() => {
+    try {
+      const gymModel = getSelectedGymFromCookies();
+      if (gymModel) {
+        return gymModel.id;
+      }
+    } catch (e) {
+      console.error("Error parsing selectedGymModel:", e);
+    }
+    return -1; // fallback value
+  })();
 
   const schema = z.object({
     id: z.number().optional(),
     membershipId: z.number(),
+    gymId:z.number().default(defaultGymModel),
     email: z.string(),
     firstName: z.string(),
     lastName: z.string(),
     birthday: z.union([z.string(), z.date()]),
-    weight: z.number(),
-    height: z.number(),
-    location: z.string(),
     phone: z.string(),
-    gender: z.string(),
+    gender: z.string().default("Male"),
     startDate: z.union([z.string(), z.date()]),
     endDate: z.union([z.string(), z.date()]),
+    price: z.number(),
+    paymentPercent:z.number().default(100),
     note: z.string().optional(),
     status: z.string().optional(),
-    available: z.boolean(),
+
   });
 
   const {
@@ -126,12 +147,14 @@ export function UserView() {
     register,
     handleSubmit,
     setValue,
-    formState: { errors },
+      watch,
+    formState: { errors ,dirtyFields },
   } = useForm({
     resolver: zodResolver(schema),
     defaultValues:{
-      available:true,
-      gender: "Male"
+      gender: "Male",
+      gymId:defaultGymModel,
+      paymentPercent:100
     }
   });
   
@@ -171,6 +194,43 @@ export function UserView() {
     setOpen(true);
   };
 
+
+  // Add these useEffects
+  useEffect(() => {
+    // Set default dates when adding new member
+    if (modifiedId === -1) {
+      const today = new Date();
+      const endDate = new Date(today);
+      endDate.setDate(today.getDate() + 30);
+
+      setValue('startDate', today.toISOString().split('T')[0]);
+      setValue('endDate', endDate.toISOString().split('T')[0]);
+    }
+  }, [modifiedId, setValue]);
+
+// Update the price handling effect
+  useEffect(() => {
+    if (selectedMembership) {
+      // For new memberships, always use selected membership price
+      if (modifiedId === -1) {
+        setValue('price', Number(selectedMembership.price));
+      }
+          // For existing memberships, only update price if:
+          // 1. The user hasn't manually modified the price
+      // 2. The selected membership is different from the original
+      else {
+        const originalUser = _users.find(u => u.id === modifiedId);
+        const originalMembership = originalUser?.membership;
+
+        if (originalMembership?.id !== selectedMembership.id) {
+          const isPriceDirty = Object.keys(dirtyFields).includes('price');
+          if (!isPriceDirty) {
+            setValue('price', Number(selectedMembership.price));
+          }
+        }
+      }
+    }
+  }, [selectedMembership, modifiedId, dirtyFields, _users, setValue]);
   // Edit Member handler
   useEffect(() => {
     const loadUserDataAndOpenDialog = async () => {
@@ -179,14 +239,21 @@ export function UserView() {
         if (userToEdit) {
           const formattedUser = {
             ...userToEdit,
-            startDate: userToEdit.startDate?.toISOString().split('T')[0] || '',
-            endDate: userToEdit.endDate?.toISOString().split('T')[0] || '',
+            startDate: userToEdit.startDate
+                ? new Date(userToEdit.startDate).toISOString().split('T')[0]
+                : '',
+            endDate: userToEdit.endDate
+                ? new Date(userToEdit.endDate).toISOString().split('T')[0]
+                : '',
             email: userToEdit.user.email,
             firstName: userToEdit.user.firstName,
             lastName: userToEdit.user.lastName,
             birthday: userToEdit.user.birthday?.toISOString().split('T')[0] || '',
             weight: userToEdit.user.weight,
             height: userToEdit.user.height,
+            price: userToEdit.price, // Add this line
+
+            paymentPercent:userToEdit.paymentPercent,
             location: '',
             phone: userToEdit.user.phone,
             gender: userToEdit.user.gender,
@@ -197,6 +264,8 @@ export function UserView() {
           };
 
           reset(formattedUser);
+          setValue('price', userToEdit.price); // This ensures the price is correctly populated
+
 
           try {
             const response = await getMemberships();
@@ -237,16 +306,15 @@ export function UserView() {
         const activeMembershipCreationDto = new ActiveMembershipCreationDTO({
       // id:  undefined,
          membershipId: selectedMembership.id,
-         gymId:1,
+         gymId:getSelectedGymFromCookies().id??-1,
          email: data.email,
          firstName: data.firstName,
          lastName: data.lastName,
          birthday: new Date(data.birthday),
-         location: data.location,
          phone: data.phone,
          gender: data.gender,
-         price:selectedMembership.price,
-         paymentPercent:100,
+         price:data.price,
+         paymentPercent:data.paymentPercent,
          startDate: new Date(data.startDate),
          endDate: new Date(data.endDate),
          note: data.note,
@@ -271,15 +339,14 @@ export function UserView() {
         console.log(selectedMembership);
         console.log("selectedMembershipId");
         console.log(data.membershipId);
-        const newMembership = memberships.find((m) => m.id === selectedMembership.id);
         const updatedMembership = new ActiveMembership({
             id: modifiedId ?? -1,
             membership: selectedMembership,
             user: updatedUserProfile || data.user,
             startDate:new Date(data.startDate),
             endDate:new Date(data.endDate),
-            price:selectedMembership.price,
-            paymentPercent:100,
+            price:data.price,
+            paymentPercent:data.paymentPercent,
             available:data.available,
             createdAt:new Date(),
             updatedAt:new Date(),
@@ -329,6 +396,45 @@ export function UserView() {
       setUpdatedUserProfile(account?.user!);
     }
   };
+// Replace the existing calculateStatus function with this:
+  const calculateStatus = (startDate: Date, endDate: Date) => {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    const start = new Date(startDate);
+    const end = new Date(endDate);
+
+    // Handle invalid date ranges
+    if (end < start) return { status: 'Invalid Date', color: 'black' };
+
+    const totalDays = Math.ceil((end.getTime() - start.getTime()) / (1000 * 3600 * 24));
+    const elapsedDays = Math.ceil((today.getTime() - start.getTime()) / (1000 * 3600 * 24));
+    const elapsedPercentage = (elapsedDays / totalDays) * 100;
+
+    if (today < start) return { status: 'Not Active Yet', color: 'grey' };
+    if (today > end) return { status: 'Expired', color: 'red' };
+
+    // New status calculation
+    if (elapsedPercentage <= NEW_THRESHOLD_PERCENT) {
+      return { status: 'New', color: 'blue' };
+    }
+
+    // End soon calculation
+    if (elapsedPercentage >= END_SOON_THRESHOLD_PERCENT) {
+      return { status: 'End Soon', color: 'orange' };
+    }
+
+    return { status: 'Active', color: 'green' };
+  };
+// Add this status update useEffect
+  const startDate = watch('startDate');
+  const endDate = watch('endDate');
+
+  useEffect(() => {
+    if (startDate && endDate) {
+      const { status } = calculateStatus(new Date(startDate), new Date(endDate));
+      setValue('status', status);
+    }
+  }, [startDate, endDate, setValue]);
 
 
 
@@ -389,87 +495,97 @@ export function UserView() {
                   {...register('birthday')}
                   InputLabelProps={{ shrink: true }}
                 />
-                <TextField
-                  label="Weight"
-                  fullWidth
-                  margin="dense"
-                  type="number"
-                  {...register('weight', { valueAsNumber: true })}
-                />
-                <TextField
-                  label="Height"
-                  fullWidth
-                  margin="dense"
-                  type="number"
-                  {...register('height', { valueAsNumber: true })}
 
-
-
-
-
-
-
-
-
-
-
-
-                  
-                />
-                <TextField label="Location" fullWidth margin="dense" {...register('location')} />
                 <TextField label="Phone" fullWidth margin="dense" {...register('phone')} />
                 <div style={{ marginBottom: '10px' }}>
                   {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
                   <label>Gender</label>
+
                   <Select
-                    options={[
-                      { value: 'MALE', label: 'Male' },
-                      { value: 'FEMALE', label: 'Female' },
-                    ]}
-
-
-
-
-
-
-
-
-
-
-
-                    onChange={(selectedOption) => setValue('gender', selectedOption?.value!)}
-                    placeholder="Select Gender..."
+                      options={genderOptions}
+                      value={genderOptions.find(option => option.value === watch('gender'))}
+                      onChange={(selectedOption) => setValue('gender', selectedOption?.value!)}
+                      placeholder="Select Gender..."
                   />
                 </div>
               </>
             )}
 
             {/* Always show these fields */}
+
             <TextField
-              label="Start Date"
-              fullWidth
-              margin="dense"
-              type="date"
-              {...register('startDate')}
-              InputLabelProps={{ shrink: true }}
+                label="Start Date"
+                fullWidth
+                margin="dense"
+                type="date"
+                value={watch('startDate') || ''}
+                onChange={(e) => setValue('startDate', e.target.value)}
+                InputLabelProps={{ shrink: true }}
+                error={!!errors.startDate}
+                helperText={errors.startDate?.message}
+            />
+
+            <TextField
+                label="End Date"
+                fullWidth
+                margin="dense"
+                type="date"
+                value={watch('endDate') || ''}
+                onChange={(e) => setValue('endDate', e.target.value)}
+                InputLabelProps={{ shrink: true }}
+                error={!!errors.endDate}
+                helperText={errors.endDate?.message}
             />
             <TextField
-              label="End Date"
-              fullWidth
-              margin="dense"
-              type="date"
-              {...register('endDate')}
-              InputLabelProps={{ shrink: true }}
+                margin="dense"
+                label="Price"
+                type="number"
+                fullWidth
+                error={!!errors.price}
+                helperText={errors.price?.message}
+                value={watch("price") ?? ""}
+                onChange={(e) => {
+                  const value = parseFloat(e.target.value);
+                  setValue("price", Number.isNaN(value) ? 0 : value);
+                }}
+                inputProps={{
+                  step: "0.01" // Allows decimal values
+                }}
+            />
+
+
+            <TextField
+                {...register("paymentPercent", { valueAsNumber: true,max:100,min:0 })}
+                margin="dense"
+                label="Payment Percent"
+                type="number"
+                fullWidth
+                error={!!errors.paymentPercent}
+                helperText={errors.paymentPercent?.message}
             />
             <TextField label="Note" fullWidth margin="dense" {...register('note')} />
-            <TextField label="Status" fullWidth margin="dense" {...register('status')} />
+
             <TextField
-              type="checkbox"
-              label="Available"
-              fullWidth
-              margin="dense"
-              {...register('available')}
+                label="Status"
+                fullWidth
+                margin="dense"
+                value={watch('status') || ''}
+                InputProps={{
+                  readOnly: true,
+                  endAdornment: (
+                      <div style={{
+                        width: 20,
+                        height: 20,
+                        borderRadius: '50%',
+                        backgroundColor: startDate && endDate
+                            ? calculateStatus(new Date(startDate), new Date(endDate)).color
+                            : 'transparent',
+                        marginLeft: 1
+                      }} />
+                  ),
+                }}
             />
+
 
             <DialogActions>
               <Button

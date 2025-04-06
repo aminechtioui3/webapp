@@ -37,6 +37,7 @@ import type { MembershipProps } from '../membership-table-row';
 
 import {getMemberships, createMembership, updateMembership} from "../../services/MembershipService";
 import {MembershipModel} from "../../../models/MembershipModel";
+import {getSelectedGymFromCookies} from "../../services/GymService";
 
 
 // ----------------------------------------------------------------------
@@ -59,6 +60,23 @@ export function MembershipView() {
   }
 
 
+  const defaultGymModel = (() => {
+    try {
+      const gymModel = getSelectedGymFromCookies();
+      if (gymModel) {
+          return gymModel.toJson();
+      }
+    } catch (e) {
+      console.error("Error parsing selectedGymModel:", e);
+    }
+    return { id: 0, name: '' }; // fallback value
+  })();
+
+  const gymModelSchema = z.object({
+    id: z.number(),
+    name: z.string(),
+  });
+
 
 const schema = z.object({
   title: z.string().min(1, "Title is required"),
@@ -66,8 +84,9 @@ const schema = z.object({
   description: z.string().min(1, "Description is required"),
   image: z.string().optional(),
   price: z.number(),
-  available: z.boolean(),
-  
+  gym: gymModelSchema.default(defaultGymModel),
+  available: z.boolean().default(true),
+
 });
   const {
     register,
@@ -76,6 +95,10 @@ const schema = z.object({
     formState: { errors },
   } = useForm({
     resolver: zodResolver(schema),
+    defaultValues: {
+      gym: defaultGymModel,
+      available: true,
+    }
   });
 
   const updateData = async (id: string) => {

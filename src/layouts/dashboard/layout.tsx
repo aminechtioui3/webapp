@@ -1,18 +1,19 @@
 import type { Theme, SxProps, Breakpoint } from '@mui/material/styles';
 
-import { useState } from 'react';
+import {useState, useEffect} from 'react';
 
 import Box from '@mui/material/Box';
 import Alert from '@mui/material/Alert';
 import { useTheme } from '@mui/material/styles';
 
-import { _langs, _notifications } from 'src/_mock';
+import { _langs } from 'src/_mock';
 
 import { Iconify } from 'src/components/iconify';
 
 import { Main } from './main';
 import { layoutClasses } from '../classes';
 import { NavMobile, NavDesktop } from './nav';
+import {GymModel} from "../../models/GymModel";
 import { navData } from '../config-nav-dashboard';
 import { Searchbar } from '../components/searchbar';
 import { _workspaces } from '../config-nav-workspace';
@@ -21,8 +22,10 @@ import { LayoutSection } from '../core/layout-section';
 import { HeaderSection } from '../core/header-section';
 import { AccountPopover } from '../components/account-popover';
 import { LanguagePopover } from '../components/language-popover';
+import {getHistory} from "../../sections/services/HistoryService";
 import { NotificationsPopover } from '../components/notifications-popover';
-import {GymModel} from "../../models/GymModel";
+
+import type {HistoryModel} from "../../models/HistoryModel";
 
 // ----------------------------------------------------------------------
 
@@ -38,6 +41,23 @@ export function DashboardLayout({ sx, children, header }: DashboardLayoutProps) 
   const theme = useTheme();
 
   const [navOpen, setNavOpen] = useState(false);
+    const [notifications, setNotifications] = useState<HistoryModel[]>([]);
+
+
+    useEffect(() => {
+        const fetchData = async () => {
+            const response = await getHistory();
+            if (response.status) {
+                setNotifications(response.data);
+                console.log("history:", response.data);
+            } else {
+                console.error("Failed to load history notifications");
+            }
+        };
+
+        fetchData();
+    }, []); // ⬅️ Only runs once on mount
+
 
   const layoutQuery: Breakpoint = 'lg';
 
@@ -84,7 +104,7 @@ export function DashboardLayout({ sx, children, header }: DashboardLayoutProps) 
               <Box gap={1} display="flex" alignItems="center">
                 <Searchbar />
                 <LanguagePopover data={_langs} />
-                <NotificationsPopover data={_notifications} /> 
+                  <NotificationsPopover data={notifications.map(value => value.toHistoryProps())} />
                 <AccountPopover
                   data={[
                     {

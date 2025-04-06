@@ -35,6 +35,7 @@ import {createExpense, getExpenses, updateExpense} from "../../services/ExpenseS
 import {ExpenseTableToolbar} from "../expense-table-toolbar";
 import {ExpenseTableHead} from "../expense-table-head";
 import {TableEmptyRows} from "../expense-table-empty-rows";
+import {getSelectedGymFromCookies} from "../../services/GymService";
 
 
 
@@ -57,6 +58,24 @@ export function ExpenseView() {
     
   }
 
+  const gymModelSchema = z.object({
+    id: z.number(),
+    name: z.string(),
+  });
+
+  const defaultGymModel = (() => {
+    try {
+      const gymModel = getSelectedGymFromCookies();
+      if (gymModel) {
+        return gymModel.toJson();
+      }
+    } catch (e) {
+      console.error("Error parsing selectedGymModel:", e);
+    }
+    return { id: 0, name: '' }; // fallback value
+  })();
+
+
 
 
 const schema = z.object({
@@ -64,6 +83,7 @@ const schema = z.object({
   amount: z.number(),
   type: z.string().min(1, "type is required"),
   date: z.union([z.string(), z.date()]),
+  gym:gymModelSchema.default(defaultGymModel),
 
   
 });
@@ -74,6 +94,9 @@ const schema = z.object({
     formState: { errors },
   } = useForm({
     resolver: zodResolver(schema),
+    defaultValues: {
+      gym:defaultGymModel,
+    }
   });
 
   const updateData = async (id: string) => {
@@ -94,7 +117,18 @@ const schema = z.object({
 
     if (modifiedId === -1) {
 
-      const result = await createExpense(ExpenseModel.fromJson(data));
+      const m = new ExpenseModel({
+        id:-1,
+        date:data.date,
+        note:data.note,
+        amount:data.amount,
+        type:data.type,
+        createdAt:new Date(),
+        updatedAt:new Date(),
+        gym:getSelectedGymFromCookies(),
+      });
+      const result = await createExpense(m);
+
       console.log(result);
 
       if (result.status) {

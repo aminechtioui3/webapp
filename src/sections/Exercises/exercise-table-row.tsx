@@ -121,13 +121,8 @@ export function ExerciseTableRow({ row, selected, onSelectRow, updateData, onDel
 
         <TableCell>{row.calorie}</TableCell>
         <TableCell>{row.level}</TableCell>
-        <TableCell >
-          {row.available ? (
-              <Iconify width={22} icon="solar:check-circle-bold" sx={{ color: 'success.main' }} />
-          ) : (
-              '-'
-          )}
-        </TableCell>
+        <TableCell>{row.durationInMinutes}</TableCell>
+
 
 
 

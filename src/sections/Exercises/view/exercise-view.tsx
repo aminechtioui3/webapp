@@ -29,12 +29,10 @@ import { ExerciseTableHead } from '../exercise-table-head';
 import { ExerciseTableToolbar } from '../exercise-table-toolbar';
 import { applyFilter, emptyRows, getComparator } from '../utils';
 
-import { createActiveMembership, getMembers, updateActiveMembership } from '../../services/UserService';
-
 import { TableEmptyRows } from '../exercise-table-empty-rows';
 import {ExerciseModel} from "../../../models/ExerciseModel";
 import {SessionModel} from "../../../models/SessionModel";
-import {getExercise, updateExercise} from "../../services/ExerciseService";
+import {createExercise, getExercise, updateExercise} from "../../services/ExerciseService";
 import {getAllSessions} from "../../services/SessionService";
 
 // ----------------------------------------------------------------------
@@ -65,7 +63,7 @@ export function ExerciseView() {
     muscles: z.string(),
     tags: z.string(),
     repeatNumber: z.string().optional(),
-    available: z.boolean(),
+    available: z.boolean().default(true),
   });
 
   const {
@@ -84,7 +82,7 @@ export function ExerciseView() {
     }
   });
 
-  // Sync selected membership with form state
+  // Sync selected session with form state
   useEffect(() => {
     if (selectedSession) {
       setValue('sessionId', selectedSession.id);
@@ -98,7 +96,7 @@ export function ExerciseView() {
     reset();
   };
 
-  // Add New Member handler
+  // Add New  handler
   const handleOpenAdd = async () => {
     setModifiedId(-1);
     reset();
@@ -138,10 +136,10 @@ export function ExerciseView() {
             const response = await getAllSessions();
             if (response.status) {
               setSessions(response.data);
-              const userMembership = response.data.find((m) => m.id === userToEdit.session.id);
-              if (userMembership) {
-                setSelectedSession(userMembership);
-                setValue('sessionId', userMembership.id);
+              const userSessions = response.data.find((m) => m.id === userToEdit.session.id);
+              if (userSessions) {
+                setSelectedSession(userSessions);
+                setValue('sessionId', userSessions.id);
               }
             }
           } catch (error) {
@@ -169,7 +167,7 @@ export function ExerciseView() {
       }
 
       if (modifiedId === -1) {
-        // Create new membership
+        // Create new exercise
         const exerciseModel = new ExerciseModel({
             id:- 1,
             name:data.name,
@@ -193,7 +191,7 @@ export function ExerciseView() {
 
         console.log(exerciseModel);
 
-        const result = await createActiveMembership(exerciseModel);
+        const result = await createExercise(exerciseModel);
         console.log(result);
         if (result.status) {
           console.log(result.status);
@@ -201,14 +199,13 @@ export function ExerciseView() {
           await loadData();
         }
       } else {
-        // Update existing membership
+        // Update existing exercise
 
-        console.log("selected Membership");
+        console.log("selected Session");
         console.log(selectedSession);
-        console.log("selectedMembershipId");
-        console.log(data.membershipId);
-        const newMembership = sessions.find((m) => m.id === selectedSession.id);
-        const updatedExercise = new ExerciseModel({
+        console.log("selected session id");
+        console.log(data.sessionId);
+       const updatedExercise = new ExerciseModel({
           id: modifiedId??-1,
           name:data.name,
           description:data.description,
@@ -277,7 +274,7 @@ export function ExerciseView() {
 
       <Box display="flex" alignItems="center" mb={5}>
         <Typography variant="h4" flexGrow={1}>
-          Members
+          Exercise
         </Typography>
         <Button
           variant="contained"
@@ -291,20 +288,20 @@ export function ExerciseView() {
 
       <Dialog open={open} onClose={handleClose}>
         <DialogTitle>
-          {modifiedId && modifiedId !== -1 ? 'Update Member' : 'Add New Member'}
+          {modifiedId && modifiedId !== -1 ? 'Update exercise' : 'Add New Exercise'}
         </DialogTitle>
         <DialogContent>
           <form onSubmit={handleSubmit(handleSubmitForm)}>
             <div style={{ marginBottom: '10px' }}>
               {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
-              <label>Membership</label>
+              <label>Session</label>
               <Select
                 options={sessions}
                 value={selectedSession}
                 onChange={setSelectedSession}
                 getOptionLabel={(option) => option.title}
                 getOptionValue={(option) => option.id.toString()}
-                placeholder="Select Membership..."
+                placeholder="Select Session..."
                 isSearchable
               />
             </div>
@@ -417,10 +414,10 @@ export function ExerciseView() {
                 headLabel={[
 
                   { id: 'name', label: 'Name', width: '20%' },
-                  { id: 'membership', label: 'Membership', width: '20%' },
-                  { id: 'startAt', label: 'Start at', width: '20%' },
-                  { id: 'endAt', label: 'End at', width: '20%' },
-                  { id: 'status', label: 'Status', width: '20%' },
+                  { id: 'session.title', label: 'Session', width: '20%' },
+                  { id: 'calorie', label: 'calories', width: '20%' },
+                  { id: 'level', label: 'Level', width: '20%' },
+                  { id: 'durationInMinutes', label: 'Duration', width: '20%' },
                 ]}
               />
               <TableBody>

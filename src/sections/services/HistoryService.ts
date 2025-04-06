@@ -6,6 +6,7 @@ import ResponseModel from "../../models/ResponseModel";
 
 import api from "../../api/axiosConfig";
 import {HistoryModel} from "../../models/HistoryModel";
+import {MembershipModel} from "../../models/MembershipModel";
 
 
 const properties = Properties.getInstance();
@@ -57,6 +58,25 @@ export async function deleteHistory(id: string): Promise<ResponseModel<String>> 
 
     } catch (error) {
         console.error('Error Deleting membership:', error);
+        return new ResponseModel<String>(false, "", "Error Creating Membership", error.message);
+
+    }
+}
+
+
+export async function createHistory(data: any): Promise<ResponseModel<String>> {
+    const model = HistoryModel.fromJson(data);
+
+    try {
+        const response = await client.post(properties.createHistory, model);
+
+        if (response.status === 200 || response.status === 200) {
+            return new ResponseModel<String>(true, "", undefined, 'Operation completed');
+        }
+        return new ResponseModel<String>(false, "", response.data, response.statusText);
+
+    } catch (error) {
+        console.error('Error Creating membership:', error);
         return new ResponseModel<String>(false, "", "Error Creating Membership", error.message);
 
     }

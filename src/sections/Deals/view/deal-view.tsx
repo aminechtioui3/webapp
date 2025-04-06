@@ -61,7 +61,7 @@ export function DealView() {
 
 const schema = z.object({
 
-  name: z.string().min(1, "Name is required"),
+  title: z.string().min(1, "Name is required"),
   header: z.string().min(1, "Subtitle is required"),
   description: z.string().min(1, "Description is required"),
   image: z.string().optional(),
@@ -95,18 +95,19 @@ const schema = z.object({
     console.log("Form submitted: ", data);
 
     if (modifiedId === -1) {
-      // Create new membership
+      // Create new deal
       const result = await createDeal(DealModel.fromJson(data));
       console.log(result);
 
       if (result.status) {
+        console.log("deal", result.status);
         handleClose();
         await loadData(); // ✅ Reload data after successful creation
       } else {
         console.log(result);
       }
     } else {
-      // Update existing membership
+      // Update existing deal
       const m = new DealModel({
         id:modifiedId,  // ID stays the same
         title:data.title,  // Populate fields from form
@@ -133,13 +134,13 @@ const schema = z.object({
   };
 
   const loadData = useCallback(async () => {
-    const memberships = await getDeals();
-    console.log(memberships);
+    const deals = await getDeals();
+    console.log(deals);
 
-    if (memberships.status) {
-      setUsers(memberships.data!);
+    if (deals.status) {
+      setUsers(deals.data!);
       setDataFiltered(applyFilter({
-        inputData: memberships.data!.map(m => m.toDealProps()),
+        inputData: deals.data!.map(m => m.toDealProps()),
         comparator: getComparator(table.order, table.orderBy),
         filterName,
       }));
@@ -158,7 +159,7 @@ const schema = z.object({
     <DashboardContent>
       <Box display="flex" alignItems="center" mb={5}>
         <Typography variant="h4" flexGrow={1}>
-          Membership
+          Deal
         </Typography>
 
         <Button
@@ -167,13 +168,13 @@ const schema = z.object({
           startIcon={<Iconify icon="mingcute:add-line" />}
           onClick={handleOpen}
         >
-         Add New Membership
+         Add New Deal
         </Button>
         { }
       </Box>
 
       <p>
-        In this page you will find all the memberships you have in your gym
+        In this page you will find all the deals you have in your gym
       </p>
       <br/>
       
@@ -182,12 +183,12 @@ const schema = z.object({
       <DialogTitle>Add New Item</DialogTitle>
       <DialogContent>
         <form onSubmit={handleSubmit(onSubmit)}>
-          <TextField label="Name" fullWidth margin="dense" {...register("name")} error={!!errors.name} helperText={errors.name?.message} />
+          <TextField label="Name" fullWidth margin="dense" {...register("title")} error={!!errors.title} helperText={errors.title?.message} />
           <TextField label="Header" fullWidth margin="dense" {...register("header")} error={!!errors.header} helperText={errors.header?.message} />
           <TextField label="Description" fullWidth margin="dense" {...register("description")} error={!!errors.description} helperText={errors.description?.message} />
           <TextField label="Image URL" fullWidth margin="dense" {...register("image")} error={!!errors.image} helperText={errors.image?.message} />
-          <TextField label="End Date" fullWidth margin="dense" {...register("dealEndDate")} error={!!errors.dealEndDate} helperText={errors.dealEndDate?.message} />
-           <Box sx={{ width: 300, mt: 2 }}>
+          <TextField label="End Date" type="date" fullWidth margin="dense" {...register("dealEndDate")} error={!!errors.dealEndDate} helperText={errors.dealEndDate?.message} />
+          <Box sx={{ width: 300, mt: 2 }}>
             <Typography variant="h6">Available</Typography>
             <input type="checkbox" {...register("available")} />
           </Box>

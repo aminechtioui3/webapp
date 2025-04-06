@@ -103,6 +103,7 @@ export class HistoryModel {
             content: this.content,
             seen: this.seen,
             date: this.date,
+            notifyAdmin:this.notifyAdmin,
             image: this.image ?? 'https://example.com/avatar.jpg',
         };
     }

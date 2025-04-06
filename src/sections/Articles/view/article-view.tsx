@@ -35,6 +35,7 @@ import { emptyRows, applyFilter, getComparator } from '../utils';
 import type { ArticleProps } from '../article-table-row';
 import {getArticles, createArticle, updateArticle} from "../../services/ArticleService";
 import {ArticleModel} from "../../../models/ArticleModel";
+import {getSelectedGymFromCookies} from "../../services/GymService";
 
 
 
@@ -58,7 +59,22 @@ export function ArticleView() {
   }
 
 
+  const gymModelSchema = z.object({
+    id: z.number(),
+    name: z.string(),
+  });
 
+  const defaultGymModel = (() => {
+    try {
+      const gymModel = getSelectedGymFromCookies();
+      if (gymModel) {
+        return gymModel.toJson();
+      }
+    } catch (e) {
+      console.error("Error parsing selectedGymModel:", e);
+    }
+    return { id: 0, name: '' }; // fallback value
+  })();
 const schema = z.object({
 
   title: z.string().min(1, "Title is required"),
@@ -67,7 +83,8 @@ const schema = z.object({
   image: z.string().optional(),
   video: z.string().optional(),
   date: z.union([z.string(), z.date()]),
-  available: z.boolean(),
+  gym: gymModelSchema.default(defaultGymModel),
+  available: z.boolean().default(true),
   
 });
   const {
@@ -77,6 +94,10 @@ const schema = z.object({
     formState: { errors },
   } = useForm({
     resolver: zodResolver(schema),
+    defaultValues: {
+      gym:defaultGymModel,
+      available:true
+    }
   });
 
   const updateData = async (id: string) => {
@@ -97,7 +118,7 @@ const schema = z.object({
     console.log("Form submitted: ", data);
 
     if (modifiedId === -1) {
-      // Create new membership
+      // Create new article
       const result = await createArticle(ArticleModel.fromJson(data));
       console.log(result);
 
@@ -108,7 +129,7 @@ const schema = z.object({
         console.log(result);
       }
     } else {
-      // Update existing membership
+      // Update existing article
       const m = new ArticleModel({
           id:modifiedId,  // ID stays the same
          title: data.title,  // Populate fields from form
@@ -136,13 +157,13 @@ const schema = z.object({
   };
 
   const loadData = useCallback(async () => {
-    const memberships = await getArticles();
-    console.log(memberships);
+    const articlesResponse = await getArticles();
+    console.log(articlesResponse);
 
-    if (memberships.status) {
-      setUsers(memberships.data!);
+    if (articlesResponse.status) {
+      setUsers(articlesResponse.data!);
       setDataFiltered(applyFilter({
-        inputData: memberships.data!.map(m => m.toArticleProps()),
+        inputData: articlesResponse.data!.map(m => m.toArticleProps()),
         comparator: getComparator(table.order, table.orderBy),
         filterName,
       }));
@@ -161,7 +182,7 @@ const schema = z.object({
     <DashboardContent>
       <Box display="flex" alignItems="center" mb={5}>
         <Typography variant="h4" flexGrow={1}>
-          Membership
+          Articles
         </Typography>
 
         <Button
@@ -170,7 +191,7 @@ const schema = z.object({
           startIcon={<Iconify icon="mingcute:add-line" />}
           onClick={handleOpen}
         >
-         Add New Membership
+         Add New Article
         </Button>
         { }
       </Box>

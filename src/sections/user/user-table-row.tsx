@@ -19,6 +19,7 @@ import MenuItem, { menuItemClasses } from '@mui/material/MenuItem';
 import { Iconify } from 'src/components/iconify';
 
 // eslint-disable-next-line import/no-cycle
+import Tooltip from "@mui/material/Tooltip";
 import {deleteActiveMembership} from "../services/UserService";
 
 import type {UserAccount} from "../../models/UserAccount";
@@ -60,8 +61,84 @@ export function UserTableRow({ row, selected, onSelectRow, updateData, onDeleteS
 
 
 
+  const getStatusDetails = (startDate: Date, endDate: Date) => {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    const start = new Date(startDate);
+    const end = new Date(endDate);
 
+    const diffStart = Math.floor((today.getTime() - start.getTime()) / (1000 * 3600 * 24));
+    const diffEnd = Math.floor((end.getTime() - today.getTime()) / (1000 * 3600 * 24));
 
+    if (today < start) {
+      return {
+        color: 'grey',
+        tooltip: `Not Active Yet - Starts in ${  Math.ceil((start.getTime() - today.getTime()) / (1000 * 3600 * 24))  } days`
+      };
+    }
+    if (diffStart <= 5) {
+      return {
+        color: 'blue',
+        tooltip: `New - ${5 - diffStart} days since activation`
+      };
+    }
+    if (today > end) {
+      return { color: 'red', tooltip: 'Expired' };
+    }
+    if (diffEnd <= 7) {
+      return {
+        color: 'orange',
+        tooltip: `End Soon - ${diffEnd} days remaining`
+      };
+    }
+    return {
+      color: 'green',
+      tooltip: `Active - ${diffEnd} days remaining`
+    };
+  };
+
+  const statusDetails = getStatusDetails(row.startDate, row.endDate);
+  const NEW_THRESHOLD_PERCENT = 7; // 7% of total duration
+  const END_SOON_THRESHOLD_PERCENT = 85; // 85% of total duration
+
+  const calculateRowStatus = (start: Date, end: Date) => {
+    const today = new Date();
+    const startDate = new Date(start);
+    const endDate = new Date(end);
+
+    const totalDays = Math.ceil((endDate.getTime() - startDate.getTime()) / (1000 * 3600 * 24));
+    const elapsedDays = Math.ceil((today.getTime() - startDate.getTime()) / (1000 * 3600 * 24));
+    const elapsedPercentage = totalDays > 0 ? (elapsedDays / totalDays) * 100 : 0;
+
+    let status = 'Active';
+    let color = 'green';
+    let tooltip = '';
+
+    if (today < startDate) {
+      status = 'Not Active Yet';
+      color = 'grey';
+      const daysLeft = Math.ceil((startDate.getTime() - today.getTime()) / (1000 * 3600 * 24));
+      tooltip = `Starts in ${daysLeft} days`;
+    } else if (today > endDate) {
+      status = 'Expired';
+      color = 'red';
+      const daysExpired = Math.ceil((today.getTime() - endDate.getTime()) / (1000 * 3600 * 24));
+      tooltip = `Expired ${daysExpired} days ago`;
+    } else if (elapsedPercentage <= NEW_THRESHOLD_PERCENT) {
+      status = 'New';
+      color = 'blue';
+      tooltip = `New (${elapsedPercentage.toFixed(1)}% of duration)`;
+    } else if (elapsedPercentage >= END_SOON_THRESHOLD_PERCENT) {
+      status = 'End Soon';
+      color = 'orange';
+      tooltip = `Ending soon (${elapsedPercentage.toFixed(1)}% of duration)`;
+    } else {
+      const daysLeft = Math.ceil((endDate.getTime() - today.getTime()) / (1000 * 3600 * 24));
+      tooltip = `Active - ${daysLeft} days remaining (${elapsedPercentage.toFixed(1)}% elapsed)`;
+    }
+
+    return { status, color, tooltip };
+  };
 
   const handleClosePopover = useCallback( () => {
 
@@ -122,20 +199,18 @@ export function UserTableRow({ row, selected, onSelectRow, updateData, onDeleteS
 
         <TableCell>{row.startDate.toLocaleDateString()}</TableCell>
         <TableCell>{row.endDate.toLocaleDateString()}</TableCell>
-        <TableCell >
-          {row.status ? (
-              <Iconify width={22} icon="solar:check-circle-bold" sx={{ color: 'success.main' }} />
-          ) : (
-              '-'
-          )}
-        </TableCell>
-
-
-
 
         <TableCell>
-          {/* <Label color={(row.status === 'banned' && 'error') || 'success'}>{row.status}</Label> */}
-          
+          <Tooltip title={calculateRowStatus(row.startDate, row.endDate).tooltip}>
+            <div style={{
+              width: 20,
+              height: 20,
+              borderRadius: '50%',
+              backgroundColor: calculateRowStatus(row.startDate, row.endDate).color,
+              margin: '0 auto',
+              cursor: 'help'
+            }} />
+          </Tooltip>
         </TableCell>
 
         <TableCell align="right">

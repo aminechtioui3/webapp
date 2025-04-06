@@ -1,6 +1,6 @@
 import type { IconButtonProps } from '@mui/material/IconButton';
 
-import { useState, useCallback } from 'react';
+import {useState, useCallback, useEffect} from 'react';
 
 import Box from '@mui/material/Box';
 import List from '@mui/material/List';
@@ -21,27 +21,21 @@ import { fToNow } from 'src/utils/format-time';
 
 import { Iconify } from 'src/components/iconify';
 import { Scrollbar } from 'src/components/scrollbar';
+import {HistoryEduOutlined} from "@mui/icons-material";
+import {HistoryProps} from "../../sections/History/history-table-row";
 
 // ----------------------------------------------------------------------
 
-type NotificationItemProps = {
-  id: string;
-  type: string;
-  title: string;
-  isUnRead: boolean;
-  description: string;
-  avatarUrl: string | null;
-  postedAt: string | number | null;
-};
+
 
 export type NotificationsPopoverProps = IconButtonProps & {
-  data?: NotificationItemProps[];
+  data?: HistoryProps[];
 };
 
 export function NotificationsPopover({ data = [], sx, ...other }: NotificationsPopoverProps) {
   const [notifications, setNotifications] = useState(data);
 
-  const totalUnRead = notifications.filter((item) => item.isUnRead === true).length;
+  const totalUnRead = notifications.filter((item) => item.seen !== true).length;
 
   const [openPopover, setOpenPopover] = useState<HTMLButtonElement | null>(null);
 
@@ -52,11 +46,14 @@ export function NotificationsPopover({ data = [], sx, ...other }: NotificationsP
   const handleClosePopover = useCallback(() => {
     setOpenPopover(null);
   }, []);
+  useEffect(() => {
+    setNotifications(data);
+  }, [data]);
 
   const handleMarkAllAsRead = useCallback(() => {
     const updatedNotifications = notifications.map((notification) => ({
       ...notification,
-      isUnRead: false,
+      seen: true,
     }));
 
     setNotifications(updatedNotifications);
@@ -153,7 +150,7 @@ export function NotificationsPopover({ data = [], sx, ...other }: NotificationsP
 
 // ----------------------------------------------------------------------
 
-function NotificationItem({ notification }: { notification: NotificationItemProps }) {
+function NotificationItem({ notification }: { notification: HistoryProps }) {
   const { avatarUrl, title } = renderContent(notification);
 
   return (
@@ -162,7 +159,7 @@ function NotificationItem({ notification }: { notification: NotificationItemProp
         py: 1.5,
         px: 2.5,
         mt: '1px',
-        ...(notification.isUnRead && {
+        ...(!notification.seen && {
           bgcolor: 'action.selected',
         }),
       }}
@@ -184,7 +181,7 @@ function NotificationItem({ notification }: { notification: NotificationItemProp
             }}
           >
             <Iconify width={14} icon="solar:clock-circle-outline" />
-            {fToNow(notification.postedAt)}
+            {notification.date.toLocaleDateString()}
           </Typography>
         }
       />
@@ -194,58 +191,22 @@ function NotificationItem({ notification }: { notification: NotificationItemProp
 
 // ----------------------------------------------------------------------
 
-function renderContent(notification: NotificationItemProps) {
+function renderContent(notification: HistoryProps) {
   const title = (
     <Typography variant="subtitle2">
       {notification.title}
       <Typography component="span" variant="body2" sx={{ color: 'text.secondary' }}>
-        &nbsp; {notification.description}
+        &nbsp; {notification.content}
       </Typography>
     </Typography>
   );
 
-  if (notification.type === 'order-placed') {
-    return {
-      avatarUrl: (
-        <img
-          alt={notification.title}
-          src="/assets/icons/notification/ic-notification-package.svg"
-        />
-      ),
-      title,
-    };
-  }
-  if (notification.type === 'order-shipped') {
-    return {
-      avatarUrl: (
-        <img
-          alt={notification.title}
-          src="/assets/icons/notification/ic-notification-shipping.svg"
-        />
-      ),
-      title,
-    };
-  }
-  if (notification.type === 'mail') {
-    return {
-      avatarUrl: (
-        <img alt={notification.title} src="/assets/icons/notification/ic-notification-mail.svg" />
-      ),
-      title,
-    };
-  }
-  if (notification.type === 'chat-message') {
-    return {
-      avatarUrl: (
-        <img alt={notification.title} src="/assets/icons/notification/ic-notification-chat.svg" />
-      ),
-      title,
-    };
-  }
+
   return {
-    avatarUrl: notification.avatarUrl ? (
-      <img alt={notification.title} src={notification.avatarUrl} />
-    ) : null,
+    avatarUrl: (
+        <img alt={notification.title} src="/assets/icons/notification/ic-notification-mail.svg"/>
+    ),
     title,
   };
+
 }

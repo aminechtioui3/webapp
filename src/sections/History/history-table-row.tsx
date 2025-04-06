@@ -30,6 +30,7 @@ export type HistoryProps = {
   content: string;
   image: string;
   seen: boolean;
+  notifyAdmin:boolean,
   date: Date;
 
 
@@ -115,9 +116,16 @@ export function HistoryTableRow({ row, selected, onSelectRow, updateData, onDele
 
 
 
-        <TableCell>{row.date.toISOString()}</TableCell>
-        <TableCell>{row.content}</TableCell>
 
+        <TableCell>{row.content}</TableCell>
+        <TableCell>{row.date.toISOString()}</TableCell>
+        <TableCell >
+          {row.notifyAdmin ? (
+              <Iconify width={22} icon="solar:check-circle-bold" sx={{ color: 'success.main' }} />
+          ) : (
+              '-'
+          )}
+        </TableCell>
 
 
         <TableCell>

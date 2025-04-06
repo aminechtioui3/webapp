@@ -38,7 +38,11 @@ import type { HistoryProps } from '../history-table-row';
 
 import {HistoryModel} from "../../../models/HistoryModel";
 import {getExercise} from "../../services/ExerciseService";
-import {getHistory} from "../../services/HistoryService";
+import {createHistory, getHistory} from "../../services/HistoryService";
+import {getAllProductCategories} from "../../services/shopService";
+import {getSelectedGymFromCookies} from "../../services/GymService";
+import {ExpenseModel} from "../../../models/ExpenseModel";
+import {createExpense, updateExpense} from "../../services/ExpenseService";
 
 
 // ----------------------------------------------------------------------
@@ -59,10 +63,33 @@ export function HistoryView() {
     
   }
 
+  const gymModelSchema = z.object({
+    id: z.number(),
+    name: z.string(),
+  });
+
+  const defaultGymModel = (() => {
+    try {
+      const gymModel = getSelectedGymFromCookies();
+      if (gymModel) {
+        return gymModel.toJson();
+      }
+    } catch (e) {
+      console.error("Error parsing selectedGymModel:", e);
+    }
+    return { id: 0, name: '' }; // fallback value
+  })();
 
 
 const schema = z.object({
-
+  id:z.number().optional(),
+  title:z.string(),
+  content:z.string(),
+  image:z.string().optional(),
+  notifyAdmin:z.boolean().default(true),
+  seen:z.boolean().default(false),
+  date: z.union([z.string(), z.date()]),
+  gym:gymModelSchema.default(defaultGymModel)
 });
   const {
     register,
@@ -103,6 +130,11 @@ const schema = z.object({
   }, [loadData]);
 
 
+  const handleOpenAdd = async () => {
+    reset();
+    setOpen(true);
+  };
+
 
 
 
@@ -110,21 +142,80 @@ const schema = z.object({
     loadData();
   }, [filterName, loadData, table.order, table.orderBy]); // ✅ No more infinite re-renders
   const notFound = dataFiltered && dataFiltered!.length && !!filterName;
-  
+
+
+  const onSubmit = async (data: any) => {
+    console.log("Form submitted: ", data);
+
+
+
+    const m = new HistoryModel({
+      id:-1,
+      date:data.date,
+      content:data.content,
+      notifyAdmin:data.notifyAdmin,
+      seen:false,
+      title:data.title,
+      available:data.available,
+      image:data.image,
+      createdAt:new Date(),
+      updatedAt:new Date(),
+      gym:getSelectedGymFromCookies(),
+    });
+    const result = await createHistory(m);
+
+    console.log(result);
+
+    if (result.status) {
+      handleClose();
+      await loadData(); // ✅ Reload data after successful creation
+    } else {
+      console.log(result);
+    }
+
+  }
+
   return (
     <DashboardContent>
       <Box display="flex" alignItems="center" mb={5}>
         <Typography variant="h4" flexGrow={1}>
           History
         </Typography>
-
-
-        { }
+        <Button
+            variant="contained"
+            color="inherit"
+            startIcon={<Iconify icon="mingcute:add-line" />}
+            onClick={handleOpenAdd}
+        >
+          Add New History
+        </Button>
       </Box>
 
       <br/>
 
+      <Dialog open={open} onClose={handleClose}>
+        <DialogTitle>Add New Item</DialogTitle>
+        <DialogContent>
 
+          <form onSubmit={handleSubmit(onSubmit)}>
+            {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
+            <label>Date</label>
+            <TextField type="Date" fullWidth margin="dense" {...register("date")} error={!!errors.date} helperText={errors.date?.message} />
+            <TextField label="Title" fullWidth margin="dense" {...register("title")} error={!!errors.title} helperText={errors.title?.message} />
+            <TextField label="Content" fullWidth margin="dense" {...register("content")} error={!!errors.content} helperText={errors.content?.message} />
+            <TextField label="Image" fullWidth margin="dense" {...register("image")} error={!!errors.image} helperText={errors.image?.message} />
+            <Box sx={{ width: 300, mt: 2 }}>
+              <Typography variant="h6">notify Admin</Typography>
+              <input type="checkbox"  {...register("notifyAdmin")} />
+            </Box>
+
+            <DialogActions>
+              <Button onClick={handleClose}>Cancel</Button>
+              <Button type="submit" variant="contained">Save</Button>
+            </DialogActions>
+          </form>
+        </DialogContent>
+      </Dialog>
       <Card>
         <HistoryTableToolbar
           numSelected={table.selected.length}
@@ -152,10 +243,10 @@ const schema = z.object({
                 }
                 headLabel={[
 
-                  { id: 'image', label: 'Image', width: '30%' },
-
+                  { id: 'title', label: 'title', width: '30%' },
+                  { id: 'content', label: 'Content', width: '40%' },
                   { id: 'date', label: 'Date', width: '20%' },
-                  { id: 'content', label: 'Content', width: '50%' },
+                  { id: 'notifyAdmin', label: 'Notify Admin', width: '10%' },
 
 
 

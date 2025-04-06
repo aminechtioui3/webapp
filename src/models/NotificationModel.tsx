@@ -1,7 +1,9 @@
 export enum ApplicationReceivers {
   ALL,
   USER,
+  GYM,
   MEMBERSHIP,
+  NO_ONE,
 }
 
 export class NotificationModel {

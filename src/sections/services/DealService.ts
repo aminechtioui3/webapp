@@ -46,7 +46,7 @@ export async function createDeal(data: any): Promise<ResponseModel<String>> {
     try {
         const response = await client.post(properties.CreateDeal, model);
 
-        if (response.status === 200 || response.status === 200) {
+        if (response.status === 200 || response.status === 201) {
             return new ResponseModel<String>(true, "", undefined, 'Operation completed');
         }
         return new ResponseModel<String>(false, "", response.data, response.statusText);

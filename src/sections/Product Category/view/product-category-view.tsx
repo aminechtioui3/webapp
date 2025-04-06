@@ -33,7 +33,7 @@ import { ProductCategoryTableToolbar } from '../product-category-table-toolbar';
 import { emptyRows, applyFilter, getComparator } from '../utils';
 
 
-import {createProductCategory, getAllProductCategories, updateProductCategory} from "../../services/shopService";
+import {createProductCategory, updateProductCategory, getAllProductCategories} from "../../services/shopService";
 import {ProductCategory} from "../../../models/ProductCategoryModel";
 
 
@@ -63,7 +63,7 @@ const schema = z.object({
   title: z.string().min(1, "Title is required"),
   description: z.string().min(1, "Description is required"),
   image: z.string().optional(),
-  available: z.boolean(),
+  available: z.boolean().default(true),
   
 });
   const {
@@ -73,6 +73,9 @@ const schema = z.object({
     formState: { errors },
   } = useForm({
     resolver: zodResolver(schema),
+    defaultValues: {
+      available: true,
+    }
   });
 
   const updateData = async (id: string) => {
@@ -93,7 +96,19 @@ const schema = z.object({
 
     if (modifiedId === -1) {
       // Create new membership
-      const result = await createProductCategory(ProductCategory.fromJson(data));
+
+      const m = new ProductCategory({
+        id:modifiedId,  // ID stays the same
+        title:data.title,  // Populate fields from form
+        description:data.description,
+        image:data.image,
+        available:data.available,
+        createdAt:new Date(),
+        updatedAt:new Date(),
+      });
+      console.log("---");
+      console.log(m);
+      const result = await createProductCategory(m);
       console.log(result);
 
       if (result.status) {
@@ -152,7 +167,7 @@ const schema = z.object({
     <DashboardContent>
       <Box display="flex" alignItems="center" mb={5}>
         <Typography variant="h4" flexGrow={1}>
-          Membership
+          Product Category
         </Typography>
 
         <Button
@@ -161,13 +176,13 @@ const schema = z.object({
           startIcon={<Iconify icon="mingcute:add-line" />}
           onClick={handleOpen}
         >
-         Add New Membership
+         Add New Product Category
         </Button>
         { }
       </Box>
 
       <p>
-        In this page you will find all the memberships you have in your gym
+        In this page you will find all the product categories 
       </p>
       <br/>
       
@@ -181,7 +196,7 @@ const schema = z.object({
           <TextField label="Image URL" fullWidth margin="dense" {...register("image")} error={!!errors.image} helperText={errors.image?.message} />
           <Box sx={{ width: 300, mt: 2 }}>
             <Typography variant="h6">Available</Typography>
-            <input type="checkbox" {...register("available")} />
+            <input type="checkbox"  {...register("available")} />
           </Box>
           <DialogActions>
             <Button onClick={handleClose}>Cancel</Button>

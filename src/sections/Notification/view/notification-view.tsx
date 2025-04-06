@@ -1,31 +1,40 @@
 import type { UserAccount } from 'src/models/UserAccount';
+
 import * as z from "zod";
 import { useForm } from "react-hook-form";
+import { Helmet } from "react-helmet-async";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useState, useEffect, useCallback, useMemo } from 'react';
+import { useMemo, useState, useEffect, useCallback } from 'react';
+
+import Alert from "@mui/material/Alert";
+import Tooltip from "@mui/material/Tooltip";
+import {WarningAmber} from "@mui/icons-material";
 import {
   Box,
   Card,
   Button,
-  TextField,
-  Typography,
-  FormControl,
-  InputLabel,
   Select,
   MenuItem,
-  DialogActions,
-  Autocomplete
+  TextField,
+  Typography,
+  InputLabel,
+  FormControl,
+  Autocomplete,
+  DialogActions
 } from '@mui/material';
+
 import { DashboardContent } from 'src/layouts/dashboard';
-import { Iconify } from 'src/components/iconify';
-import { Helmet } from "react-helmet-async";
+
 import { CONFIG } from "../../../config-global";
-import CustomAlert from "../../../components/Alert/CustomAlert";
-import { createNotification, getAllNotifications } from "../../services/NotificationService";
-import { NotificationModel } from "../../../models/NotificationModel";
-import { MembershipModel } from "../../../models/MembershipModel";
-import { getMemberships } from "../../services/MembershipService";
 import { getAllAccounts } from "../../services/AccountService";
+import CustomAlert from "../../../components/Alert/CustomAlert";
+import { getMemberships } from "../../services/MembershipService";
+import { NotificationModel } from "../../../models/NotificationModel";
+import {getAllGymFacilities, getSelectedGymFromCookies} from "../../services/GymService";
+import { createNotification, getAllNotifications } from "../../services/NotificationService";
+
+import type {GymModel} from "../../../models/GymModel";
+import type { MembershipModel } from "../../../models/MembershipModel";
 
 const schema = z.object({
   title: z.string().min(1, "Title is required"),
@@ -41,7 +50,9 @@ export function NotificationView() {
   const [listOfNotifications, setListOfNotifications] = useState<NotificationModel[]>([]);
   const [memberships, setMemberships] = useState<MembershipModel[]>([]);
   const [users, setUsers] = useState<UserAccount[]>([]);
+  const [gymFacilities, setGymFacilities] = useState<GymModel[]>([]);
   const [receiversType, setReceiversType] = useState<string>("ALL");
+  const [selectedGymFacility , setSelectedGym] = useState<GymModel | null>(null);
   const [userSearchInput, setUserSearchInput] = useState("");
   const [alert, setAlert] = useState<{ show: boolean; type: "success" | "error" | "warning" | "info"; message: string }>({
     show: false,
@@ -82,13 +93,23 @@ export function NotificationView() {
     if (response.status) setUsers(response.data!);
   }, []);
 
+  const getGymFacilitiesList = useCallback(async () => {
+    const response = await getAllGymFacilities();
+    if (response.status) setGymFacilities(response.data!);
+  }, []);
+
   useEffect(() => {
+
+    setSelectedGym(getSelectedGymFromCookies);
+
     if (receiversType === "MEMBERSHIP") {
       getMembershipList();
     } else if (receiversType === "USER") {
       getUserList();
+    } else if (receiversType === "GYM") {
+      getGymFacilitiesList();
     }
-  }, [getMembershipList, getUserList, receiversType]);
+  }, [getMembershipList, getUserList, receiversType, getGymFacilitiesList]);
 
   const handleReceiverTypeChange = (value: string) => {
     setReceiversType(value);
@@ -164,10 +185,31 @@ export function NotificationView() {
                       label="Receiver Type"
                   >
                     <MenuItem value="ALL">All Users</MenuItem>
+                    <MenuItem value="GYM">This Gym</MenuItem>
+                    <MenuItem value="MEMBERSHIP">My Gym Membership Groups</MenuItem>
                     <MenuItem value="USER">Specific Users</MenuItem>
-                    <MenuItem value="MEMBERSHIP">Membership Groups</MenuItem>
+
+
                   </Select>
                 </FormControl>
+
+                {receiversType === "ALL" && (
+                    <Box sx={{ mb: 2 }}>
+                      <Alert
+                          icon={<WarningAmber fontSize="inherit" />}
+                          severity="warning"
+                          sx={{
+                            borderRadius: 2,
+                            backgroundColor: "#fff8e1",
+                            color: "#8d6e63",
+                            border: "1px solid #ffe082",
+                            fontWeight: 500,
+                          }}
+                      >
+                        This message will be sent to <strong>all users</strong> in <strong>every facility</strong>. Be careful before sending it.
+                      </Alert>
+                    </Box>
+                )}
 
                 {receiversType !== "ALL" && (
                     <FormControl fullWidth margin="normal">
@@ -179,9 +221,13 @@ export function NotificationView() {
                               }
                               inputValue={userSearchInput}
                               onInputChange={(_, newValue) => setUserSearchInput(newValue)}
-                              value={users.find(user => user.id.toString() === watch('receiversIds')?.toString()) || null}
+                              value={
+                                  users.find(
+                                      (user) => user.id.toString() === watch("receiversIds")?.toString()
+                                  ) || null
+                              }
                               onChange={(_, newValue) =>
-                                  handleReceiversChange(newValue?.id || '')
+                                  handleReceiversChange(newValue?.id || "")
                               }
                               renderInput={(params) => (
                                   <TextField
@@ -193,7 +239,9 @@ export function NotificationView() {
                               renderOption={(props, user) => (
                                   <MenuItem {...props} key={user.id}>
                                     <Box>
-                                      <Typography>{user.firstName} {user.lastName}</Typography>
+                                      <Typography>
+                                        {user.firstName} {user.lastName}
+                                      </Typography>
                                       <Typography variant="body2" color="text.secondary">
                                         {user.phone} • {user.email}
                                       </Typography>
@@ -201,21 +249,52 @@ export function NotificationView() {
                                   </MenuItem>
                               )}
                           />
-                      ) : (
+                      ) : receiversType === "GYM" ? (
                           <>
-                            <InputLabel>Select Memberships</InputLabel>
-                            <Select
-                                value={watch('receiversIds')?.toString()}
-                                onChange={(e) => handleReceiversChange(Number(e.target.value))}
-                                label="Select Memberships"
-                            >
-                              {memberships.map((membership) => (
-                                  <MenuItem key={membership.id} value={membership.id.toString()}>
-                                    {membership.title}
-                                  </MenuItem>
-                              ))}
-                            </Select>
+
+                            <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+                              <Select
+                                  value={selectedGymFacility?.name || ""}
+                                  disabled
+                                  fullWidth
+                              >
+                                <MenuItem value={selectedGymFacility?.name || ""}>
+                                  {selectedGymFacility?.name || "Unknown Facility"}
+                                </MenuItem>
+                              </Select>
+                              {!selectedGymFacility && (
+                                  <Tooltip title="Can't restore this gym facility from your session. Please select another one.">
+                                    <WarningAmber color="error" />
+                                  </Tooltip>
+                              )}
+                            </Box>
+                            {!selectedGymFacility && (
+                                <Typography
+                                    variant="body2"
+                                    color="error"
+                                    sx={{ mt: 0.5, ml: 0.5 }}
+                                >
+                                  ⚠️ Error: Cannot restore this gym facility. Please select another one.
+                                </Typography>
+                            )}
                           </>
+                      ) : (
+                          receiversType === "MEMBERSHIP" && (
+                              <>
+                                <InputLabel>Select Memberships</InputLabel>
+                                <Select
+                                    value={watch("receiversIds")?.toString()}
+                                    onChange={(e) => handleReceiversChange(Number(e.target.value))}
+                                    label="Select Memberships"
+                                >
+                                  {memberships.map((membership) => (
+                                      <MenuItem key={membership.id} value={membership.id.toString()}>
+                                        {membership.title}
+                                      </MenuItem>
+                                  ))}
+                                </Select>
+                              </>
+                          )
                       )}
                     </FormControl>
                 )}
