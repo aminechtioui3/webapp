@@ -38,7 +38,9 @@ api.interceptors.request.use(
             expires: 7,
             secure: true,
             sameSite: "None",
+            path: "/",
         });
+
 
         console.log(gymId);
         console.log(config.headers);
