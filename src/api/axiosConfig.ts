@@ -7,6 +7,7 @@ import {GymModel} from "../models/GymModel";
 
 
 const properties = Properties.getInstance();
+axios.defaults.withCredentials = true;
 
 const api = axios.create({
     baseURL: properties.baseURL,
@@ -23,6 +24,7 @@ api.interceptors.request.use(
         const token = Cookies.get("token");
         const selectedGym =getSelectedGymFromCookies();
 
+        config.withCredentials = true;
         console.log(token);
         console.log(config.url);
         // Set Authorization header if token is found
