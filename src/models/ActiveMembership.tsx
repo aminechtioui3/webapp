@@ -18,7 +18,7 @@ export class ActiveMembership {
 
     price: number;
 
-    paymentPercent: number = 100;
+    paymentPercent: number ;
 
     status?: string;
 

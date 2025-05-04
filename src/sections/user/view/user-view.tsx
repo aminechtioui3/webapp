@@ -130,13 +130,12 @@ export function UserView() {
     email: z.string(),
     firstName: z.string(),
     lastName: z.string(),
-    birthday: z.union([z.string(), z.date()]),
     phone: z.string(),
     gender: z.string().default("Male"),
     startDate: z.union([z.string(), z.date()]),
     endDate: z.union([z.string(), z.date()]),
     price: z.number(),
-    paymentPercent:z.number().default(100),
+    paymentPercent:z.number(),
     note: z.string().optional(),
     status: z.string().optional(),
 
@@ -154,7 +153,7 @@ export function UserView() {
     defaultValues:{
       gender: "Male",
       gymId:defaultGymModel,
-      paymentPercent:100
+      paymentPercent:0
     }
   });
   
@@ -310,7 +309,7 @@ export function UserView() {
          email: data.email,
          firstName: data.firstName,
          lastName: data.lastName,
-         birthday: new Date(data.birthday),
+
          phone: data.phone,
          gender: data.gender,
          price:data.price,
@@ -487,14 +486,6 @@ export function UserView() {
                 <TextField label="First Name" fullWidth margin="dense" {...register('firstName')} />
                 <TextField label="Last Name" fullWidth margin="dense" {...register('lastName')} />
                 <TextField label="Email" fullWidth type="email" margin="dense" {...register('email')} />
-                <TextField
-                  label="Birthday"
-                  fullWidth
-                  margin="dense"
-                  type="date"
-                  {...register('birthday')}
-                  InputLabelProps={{ shrink: true }}
-                />
 
                 <TextField label="Phone" fullWidth margin="dense" {...register('phone')} />
                 <div style={{ marginBottom: '10px' }}>
@@ -555,7 +546,7 @@ export function UserView() {
 
 
             <TextField
-                {...register("paymentPercent", { valueAsNumber: true,max:100,min:0 })}
+                {...register("paymentPercent", { valueAsNumber: true })}
                 margin="dense"
                 label="Payment Percent"
                 type="number"

@@ -13,7 +13,7 @@ import {
 // ----------------------------------------------------------------------
 
 export const _myAccount = {
-  displayName: 'AMINE CHTIOUI',
+  displayName: 'ADMIN',
   email: 'aminechtioui386@gmail.com',
   photoURL: '/assets/images/avatar/avatar-25.webp',
 };

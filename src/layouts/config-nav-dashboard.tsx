@@ -44,7 +44,7 @@ export const navData = [
     icon: <ShoppingCart />,
     info: <Label color="error" variant="inverted">5</Label>,
   },
-  {
+  /* {
     title: 'Shop',
     path: '/shop',
     icon: <ShoppingBag />,
@@ -70,7 +70,7 @@ export const navData = [
     title: 'Blog',
     path: '/blog',
     icon: <Article />,
-  },
+  }, */
   {
     title: 'Article',
     path: '/article',
@@ -92,11 +92,11 @@ export const navData = [
     path: '/session',
     icon: <ListAlt />,
   },
-  {
+/*  {
     title: 'Exercises',
     path: '/exercises',
     icon: <FitnessCenter />,
-  },
+  }, */
   {
     title: 'Facilities',
     path: '/facilities',

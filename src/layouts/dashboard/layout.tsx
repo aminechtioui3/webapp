@@ -102,17 +102,17 @@ export function DashboardLayout({ sx, children, header }: DashboardLayoutProps) 
             ),
             rightArea: (
               <Box gap={1} display="flex" alignItems="center">
-                <Searchbar />
-                <LanguagePopover data={_langs} />
-                  <NotificationsPopover data={notifications.map(value => value.toHistoryProps())} />
-                <AccountPopover
+               {/* <Searchbar />
+                */}<LanguagePopover data={_langs} />
+                {/*  <NotificationsPopover data={notifications.map(value => value.toHistoryProps())} />
+                */}<AccountPopover
                   data={[
                     {
                       label: 'Home',
                       href: '/',
                       icon: <Iconify width={22} icon="solar:home-angle-bold-duotone" />,
                     },
-                    {
+                   /* {
                       label: 'Profile',
                       href: '#',
                       icon: <Iconify width={22} icon="solar:shield-keyhole-bold-duotone" />,
@@ -121,7 +121,7 @@ export function DashboardLayout({ sx, children, header }: DashboardLayoutProps) 
                       label: 'Settings',
                       href: '#',
                       icon: <Iconify width={22} icon="solar:settings-bold-duotone" />,
-                    },
+                    }, */
                   ]}
                 />
               </Box>

@@ -11,8 +11,6 @@ export class ActiveMembershipCreationDTO {
 
     lastName: string;
 
-    birthday: Date;
-
     phone: string;
 
     gender: string;
@@ -23,7 +21,7 @@ export class ActiveMembershipCreationDTO {
 
     price: number;
 
-    paymentPercent: number = 100;
+    paymentPercent: number ;
 
     note?: string;
 
@@ -35,13 +33,12 @@ export class ActiveMembershipCreationDTO {
                     email,
                     firstName,
                     lastName,
-                    birthday,
                     phone,
                     gender,
                     endDate,
                     startDate,
                     price,
-                    paymentPercent = 100,
+                    paymentPercent ,
                     note,
                     status,
                 }: {
@@ -50,13 +47,12 @@ export class ActiveMembershipCreationDTO {
         email: string;
         firstName: string;
         lastName: string;
-        birthday: Date;
         phone: string;
         gender: string;
         endDate: Date;
         startDate: Date;
         price: number;
-        paymentPercent?: number;
+        paymentPercent: number;
         note?: string;
         status?: string;
     }) {
@@ -65,7 +61,7 @@ export class ActiveMembershipCreationDTO {
         this.email = email;
         this.firstName = firstName;
         this.lastName = lastName;
-        this.birthday = birthday;
+
         this.phone = phone;
         this.gender = gender;
         this.endDate = endDate;
@@ -83,7 +79,7 @@ export class ActiveMembershipCreationDTO {
             email: json.email,
             firstName: json.firstName,
             lastName: json.lastName,
-            birthday: new Date(json.birthday),
+
 
             phone: json.phone,
             gender: json.gender,
@@ -103,7 +99,7 @@ export class ActiveMembershipCreationDTO {
             email: this.email,
             firstName: this.firstName,
             lastName: this.lastName,
-            birthday: this.birthday.toISOString(),
+
 
             phone: this.phone,
             gender: this.gender,
