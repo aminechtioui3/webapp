@@ -6,15 +6,7 @@
   <component name="ChangeListManager">
     <list default="true" id="74813386-4e36-4a36-874f-73c4ba81e498" name="Changes" comment="f">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/_mock/_data.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/_mock/_data.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/layouts/components/account-popover.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/layouts/components/account-popover.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/layouts/config-nav-dashboard.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/layouts/config-nav-dashboard.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/layouts/dashboard/layout.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/layouts/dashboard/layout.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/models/ActivateMembershipCreationDTO.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/models/ActivateMembershipCreationDTO.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/models/ActiveMembership.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/models/ActiveMembership.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/properties.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/properties.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/sections/user/view/user-view.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/sections/user/view/user-view.tsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -145,7 +137,8 @@
       <workItem from="1744051993919" duration="370000" />
       <workItem from="1744736899723" duration="4150000" />
       <workItem from="1744924996226" duration="16000" />
-      <workItem from="1746351842029" duration="7836000" />
+      <workItem from="1746351842029" duration="12445000" />
+      <workItem from="1746404673837" duration="2000" />
     </task>
     <task id="LOCAL-00001" summary="d">
       <option name="closed" value="true" />

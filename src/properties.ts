@@ -183,7 +183,7 @@ export class Properties {
 
     private constructor() {
         // this.baseURL = "https://gymapp-production-e339.up.railway.app/api/v1";
-          this.baseURL = "http://217.154.10.157:5000/api/v1";
+          this.baseURL = "https://217.154.10.157:5000/api/v1";
 
         // GYM INFO
         this.GetGymStatics="/protected/gym-info/get-gym-statics";
