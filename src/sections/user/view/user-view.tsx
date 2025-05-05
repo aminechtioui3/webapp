@@ -548,7 +548,7 @@ export function UserView() {
             <TextField
                 {...register("paymentPercent", { valueAsNumber: true })}
                 margin="dense"
-                label="Payment Percent"
+                label="Avance"
                 type="number"
                 fullWidth
                 error={!!errors.paymentPercent}

@@ -39,6 +39,7 @@
     "axios": "^1.7.9",
     "dayjs": "^1.11.13",
     "history": "^5.3.0",
+    "hooks": "^0.3.2",
     "js-cookie": "^3.0.5",
     "js-cookies": "^1.0.4",
     "react": "^18.3.1",
@@ -49,6 +50,7 @@
     "react-router-dom": "^6.26.1",
     "react-select": "^5.10.0",
     "simplebar-react": "^3.2.6",
+    "sonner": "^2.0.3",
     "zod": "^3.24.2"
   },
   "devDependencies": {

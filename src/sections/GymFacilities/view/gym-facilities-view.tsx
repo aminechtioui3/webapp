@@ -6,8 +6,10 @@ import { useState, useEffect, useCallback } from 'react';
 import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
 import Table from '@mui/material/Table';
+import Alert from '@mui/material/Alert';
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
+import Snackbar from '@mui/material/Snackbar';
 import TableBody from '@mui/material/TableBody';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
@@ -16,8 +18,6 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogActions from '@mui/material/DialogActions';
 import TableContainer from '@mui/material/TableContainer';
 import TablePagination from '@mui/material/TablePagination';
-import Snackbar from '@mui/material/Snackbar';
-import Alert from '@mui/material/Alert';
 
 import { DashboardContent } from 'src/layouts/dashboard';
 
@@ -25,16 +25,15 @@ import { Iconify } from 'src/components/iconify';
 import { Scrollbar } from 'src/components/scrollbar';
 
 import { TableNoData } from '../table-no-data';
-import { GymFacilitiesTableRow } from '../gym-facilities-table-row';
-import { GymFacilitiesTableHead } from '../gym-facilities-table-head';
-import { TableEmptyRows } from '../gym-facilities-table-empty-rows';
-import { GymFacilitiesTableToolbar } from '../gym-facilities-table-toolbar';
+import { GymModel } from "../../../models/GymModel";
 import { emptyRows, applyFilter, getComparator } from '../utils';
+import { GymFacilitiesTableRow } from '../gym-facilities-table-row';
+import { TableEmptyRows } from '../gym-facilities-table-empty-rows';
+import { GymFacilitiesTableHead } from '../gym-facilities-table-head';
+import { GymFacilitiesTableToolbar } from '../gym-facilities-table-toolbar';
+import { createGymFacility, getAllGymFacilities, updateGymFacility } from "../../services/GymService";
 
 import type { GymFacilitiesProps } from '../gym-facilities-table-row';
-
-import {GymModel} from "../../../models/GymModel";
-import {createGymFacility, getAllGymFacilities, updateGymFacility} from "../../services/GymService";
 
 // ----------------------------------------------------------------------
 
@@ -47,12 +46,12 @@ export function GymFacilitiesView() {
   const [modifiedId, setModifiedId] = useState<number>(-1);
   const [_facilities, setGymFacilities] = useState<GymModel[]>([]);
 
-  // Snackbar state for errors
+  // Snackbar state for both error & success
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState('');
+  const [snackbarSeverity, setSnackbarSeverity] = useState<'success' | 'error'>('success');
 
   const handleSnackbarClose = () => setSnackbarOpen(false);
-
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
@@ -65,9 +64,7 @@ export function GymFacilitiesView() {
     handleSubmit,
     reset,
     formState: { errors },
-  } = useForm({
-    resolver: zodResolver(schema),
-  });
+  } = useForm({ resolver: zodResolver(schema) });
 
   const updateData = async (id: string) => {
     const userToEdit = _facilities.find(u => u.id.toString() === id);
@@ -79,15 +76,17 @@ export function GymFacilitiesView() {
   };
 
   const onSubmit = async (data: any) => {
-    console.log("Form submitted: ", data);
-
     if (modifiedId === -1) {
       const result = await createGymFacility(GymModel.fromJson(data));
       if (result.status) {
         handleClose();
         await loadData();
+        setSnackbarSeverity('success');
+        setSnackbarMessage('Gym facility created successfully');
+        setSnackbarOpen(true);
       } else {
         console.error(result);
+        setSnackbarSeverity('error');
         setSnackbarMessage(JSON.stringify(result.errorMsg, null, 2));
         setSnackbarOpen(true);
       }
@@ -97,15 +96,18 @@ export function GymFacilitiesView() {
       if (result.status) {
         handleClose();
         await loadData();
+        setSnackbarSeverity('success');
+        setSnackbarMessage('Gym facility updated successfully');
+        setSnackbarOpen(true);
       } else {
         console.error(result);
+        setSnackbarSeverity('error');
         setSnackbarMessage(JSON.stringify(result, null, 2));
         setSnackbarOpen(true);
       }
     }
   };
 
-  // Fetch raw data only
   const loadData = useCallback(async () => {
     const models = await getAllGymFacilities();
     if (models.status) {
@@ -117,7 +119,6 @@ export function GymFacilitiesView() {
     }
   }, []);
 
-  // Recompute filtered & sorted data whenever dependencies change
   useEffect(() => {
     setDataFiltered(
       applyFilter({
@@ -168,9 +169,26 @@ export function GymFacilitiesView() {
         </DialogContent>
       </Dialog>
 
-      {/* Snackbar for error notifications */}
-      <Snackbar open={snackbarOpen} autoHideDuration={6000} onClose={handleSnackbarClose}>
-        <Alert onClose={handleSnackbarClose} severity="error" sx={{ width: '100%' }}>
+      {/* Snackbar for error & success notifications */}
+      <Snackbar
+        anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+        open={snackbarOpen}
+        autoHideDuration={6000}
+        onClose={handleSnackbarClose}
+        sx={{
+          '& .MuiAlert-root': {
+            borderRadius: 2,
+            boxShadow: 3,
+            minWidth: 300,
+          },
+        }}
+      >
+        <Alert
+          onClose={handleSnackbarClose}
+          severity={snackbarSeverity}
+          variant="filled"
+          sx={{ width: '100%' }}
+        >
           {snackbarMessage}
         </Alert>
       </Snackbar>
@@ -275,5 +293,17 @@ export function useTable() {
     onResetPage();
   }, [onResetPage]);
 
-  return { page, order, onSort, orderBy, selected, rowsPerPage, onSelectRow, onResetPage, onChangePage, onSelectAllRows, onChangeRowsPerPage };
+  return {
+    page,
+    order,
+    onSort,
+    orderBy,
+    selected,
+    rowsPerPage,
+    onSelectRow,
+    onResetPage,
+    onChangePage,
+    onSelectAllRows,
+    onChangeRowsPerPage
+  };
 }
