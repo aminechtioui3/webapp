@@ -6,7 +6,11 @@
   <component name="ChangeListManager">
     <list default="true" id="74813386-4e36-4a36-874f-73c4ba81e498" name="Changes" comment="f">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/properties.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/properties.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/app.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/sections/GymFacilities/gym-facilities-table-row.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/sections/GymFacilities/gym-facilities-table-row.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/sections/GymFacilities/view/gym-facilities-view.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/sections/GymFacilities/view/gym-facilities-view.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/sections/overview/analytics-widget-summary.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/sections/overview/analytics-widget-summary.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/sections/overview/view/overview-analytics-view.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/sections/overview/view/overview-analytics-view.tsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -138,7 +142,8 @@
       <workItem from="1744736899723" duration="4150000" />
       <workItem from="1744924996226" duration="16000" />
       <workItem from="1746351842029" duration="12445000" />
-      <workItem from="1746404673837" duration="683000" />
+      <workItem from="1746404673837" duration="4595000" />
+      <workItem from="1746438536596" duration="3898000" />
     </task>
     <task id="LOCAL-00001" summary="d">
       <option name="closed" value="true" />

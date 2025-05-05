@@ -97,7 +97,7 @@ export function AnalyticsWidgetSummary({
     >
       <Box sx={{ width: 48, height: 48, mb: 3 }}>{icon}</Box>
 
-      {renderTrending}
+    {/*  {renderTrending} */}
 
       <Box
         sx={{

@@ -157,6 +157,7 @@ export function GymFacilitiesTableRow({ row, selected, onSelectRow, updateData, 
         <DialogContent>
           <DialogContentText id="alert-dialog-description">
             Are you sure you want to delete the {row.name} facility!
+            every think linked to it will be deleted, like members and expenses
           </DialogContentText>
         </DialogContent>
         <DialogActions>

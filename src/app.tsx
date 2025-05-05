@@ -10,11 +10,25 @@ import { ThemeProvider } from 'src/theme/theme-provider';
 
 import { Iconify } from 'src/components/iconify';
 
+import Select from 'react-select';
 // ----------------------------------------------------------------------
 
 export default function App() {
   useScrollToTop();
+  const selectStyles = {
+    control: (base: any) => ({ ...base, backgroundColor: 'white', opacity: 1, boxShadow: 'none' }),
+    menu:    (base: any) => ({ ...base, backgroundColor: 'white', opacity: 1 }),
+    menuPortal: (base: any) => ({ ...base, backgroundColor: 'white', opacity: 1, zIndex: 9999 }),
+    option:  (base: any, state: any) => ({ ...base, backgroundColor: state.isFocused ? '#f0f0f0' : 'white', color: 'black' }),
+    singleValue: (base: any) => ({ ...base, color: 'black' }),
+  };
 
+  ;(Select as any).defaultProps = {
+    ...((Select as any).defaultProps || {}),
+    styles: selectStyles,
+    menuPortalTarget: typeof document !== 'undefined' ? document.body : null,
+    classNamePrefix: 'react‑select‑global',
+  };
   const githubButton = (
     <Fab
       size="medium"

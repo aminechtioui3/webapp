@@ -16,13 +16,13 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogActions from '@mui/material/DialogActions';
 import TableContainer from '@mui/material/TableContainer';
 import TablePagination from '@mui/material/TablePagination';
+import Snackbar from '@mui/material/Snackbar';
+import Alert from '@mui/material/Alert';
 
 import { DashboardContent } from 'src/layouts/dashboard';
 
 import { Iconify } from 'src/components/iconify';
 import { Scrollbar } from 'src/components/scrollbar';
-
-
 
 import { TableNoData } from '../table-no-data';
 import { GymFacilitiesTableRow } from '../gym-facilities-table-row';
@@ -33,10 +33,8 @@ import { emptyRows, applyFilter, getComparator } from '../utils';
 
 import type { GymFacilitiesProps } from '../gym-facilities-table-row';
 
-
 import {GymModel} from "../../../models/GymModel";
 import {createGymFacility, getAllGymFacilities, updateGymFacility} from "../../services/GymService";
-
 
 // ----------------------------------------------------------------------
 
@@ -45,95 +43,94 @@ export function GymFacilitiesView() {
   const [filterName, setFilterName] = useState('');
   const [open, setOpen] = useState(false);
   const [notFoundTrigger, setNotFoundTrigger] = useState(false);
-  const [dataFiltered, setDataFiltered] = useState<GymFacilitiesProps[]>();
+  const [dataFiltered, setDataFiltered] = useState<GymFacilitiesProps[]>([]);
   const [modifiedId, setModifiedId] = useState<number>(-1);
   const [_facilities, setGymFacilities] = useState<GymModel[]>([]);
-  const handleOpen = async () => {setOpen(true)};
-  const handleClose = () =>(setOpen(false));
 
+  // Snackbar state for errors
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState('');
 
+  const handleSnackbarClose = () => setSnackbarOpen(false);
 
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
 
-const schema = z.object({
-
-  id: z.number().optional(),
-  name: z.string().min(1, "Name is required"),
-});
+  const schema = z.object({
+    id: z.number().optional(),
+    name: z.string().min(1, "Name is required"),
+  });
   const {
     register,
     handleSubmit,
-    reset, // <-- Add reset here
+    reset,
     formState: { errors },
   } = useForm({
     resolver: zodResolver(schema),
   });
 
   const updateData = async (id: string) => {
-    const userToEdit = _facilities.find(user => user.id.toString() === id.toString()); // Find user by ID
-
-    setModifiedId(Number.parseInt(id, 10));
+    const userToEdit = _facilities.find(u => u.id.toString() === id);
+    setModifiedId(Number(id));
     if (userToEdit) {
-      reset(userToEdit); // Populate form fields with user data
-      handleOpen(); // Open the form modal
+      reset(userToEdit);
+      handleOpen();
     }
   };
-
-
-
 
   const onSubmit = async (data: any) => {
     console.log("Form submitted: ", data);
 
     if (modifiedId === -1) {
-      // Create new membership
       const result = await createGymFacility(GymModel.fromJson(data));
-      console.log(result);
-
       if (result.status) {
         handleClose();
-        await loadData(); // ✅ Reload data after successful creation
+        await loadData();
       } else {
-        console.log(result);
+        console.error(result);
+        setSnackbarMessage(JSON.stringify(result.errorMsg, null, 2));
+        setSnackbarOpen(true);
       }
     } else {
-      // Update existing membership
-      const m = new GymModel({
-       id: modifiedId,
-       name: data.name,
-      });
-
+      const m = new GymModel({ id: modifiedId, name: data.name });
       const result = await updateGymFacility(m);
-      console.log(result);
-
       if (result.status) {
         handleClose();
-        await loadData(); // ✅ Reload data after successful update
+        await loadData();
       } else {
-        console.log(result);
+        console.error(result);
+        setSnackbarMessage(JSON.stringify(result, null, 2));
+        setSnackbarOpen(true);
       }
     }
   };
 
+  // Fetch raw data only
   const loadData = useCallback(async () => {
     const models = await getAllGymFacilities();
-    console.log(models);
-
     if (models.status) {
       setGymFacilities(models.data!);
-      setDataFiltered(applyFilter({
-        inputData: models.data!.map(m => m.toGymModelProps()),
-        comparator: getComparator(table.order, table.orderBy),
-        filterName,
-      }));
+      setNotFoundTrigger(false);
     } else {
-      setNotFoundTrigger(true)
+      setNotFoundTrigger(true);
       setGymFacilities([]);
     }
-  }, [filterName, table.order, table.orderBy]); // ✅ Dependencies are properly managed
+  }, []);
+
+  // Recompute filtered & sorted data whenever dependencies change
+  useEffect(() => {
+    setDataFiltered(
+      applyFilter({
+        inputData: _facilities.map(m => m.toGymModelProps()),
+        comparator: getComparator(table.order, table.orderBy),
+        filterName,
+      })
+    );
+  }, [ _facilities, filterName, table.order, table.orderBy ]);
 
   useEffect(() => {
     loadData();
-  }, [filterName, loadData, table.order, table.orderBy]); // ✅ No more infinite re-renders
+  }, [loadData]);
 
   return (
     <DashboardContent>
@@ -141,47 +138,53 @@ const schema = z.object({
         <Typography variant="h4" flexGrow={1}>
           Gym Facilities
         </Typography>
-
         <Button
           variant="contained"
           color="inherit"
           startIcon={<Iconify icon="mingcute:add-line" />}
-          onClick={handleOpen}
+          onClick={() => { reset(); setModifiedId(-1); handleOpen(); }}
         >
-         Add New Gym Facility
+          Add New Gym Facility
         </Button>
-        { }
       </Box>
-      <br/>
-      
-      {/* User Form Modal */}
-      <Dialog open={open} onClose={handleClose}>
-      <DialogTitle>Add New Item</DialogTitle>
-      <DialogContent>
-        <form onSubmit={handleSubmit(onSubmit)}>
 
-          <TextField label="Name" fullWidth margin="dense" {...register("name")} error={!!errors.name} helperText={errors.name?.message} />
-          <DialogActions>
-            <Button onClick={handleClose}>Cancel</Button>
-            <Button type="submit" variant="contained">Save</Button>
-          </DialogActions>
-        </form>
-      </DialogContent>
-    </Dialog>
+      <Dialog open={open} onClose={handleClose}>
+        <DialogTitle>{modifiedId === -1 ? 'Add New Item' : 'Edit Item'}</DialogTitle>
+        <DialogContent>
+          <form onSubmit={handleSubmit(onSubmit)}>
+            <TextField
+              label="Name"
+              fullWidth
+              margin="dense"
+              {...register("name")}
+              error={!!errors.name}
+              helperText={errors.name?.message}
+            />
+            <DialogActions>
+              <Button onClick={handleClose}>Cancel</Button>
+              <Button type="submit" variant="contained">Save</Button>
+            </DialogActions>
+          </form>
+        </DialogContent>
+      </Dialog>
+
+      {/* Snackbar for error notifications */}
+      <Snackbar open={snackbarOpen} autoHideDuration={6000} onClose={handleSnackbarClose}>
+        <Alert onClose={handleSnackbarClose} severity="error" sx={{ width: '100%' }}>
+          {snackbarMessage}
+        </Alert>
+      </Snackbar>
 
       <Card>
         <GymFacilitiesTableToolbar
           numSelected={table.selected.length}
           filterName={filterName}
-          onFilterName={(event: React.ChangeEvent<HTMLInputElement>) => {
-            setFilterName(event.target.value);
-            table.onResetPage();
-          }}
+          onFilterName={(e) => { setFilterName(e.target.value); table.onResetPage(); }}
         />
 
         <Scrollbar>
-          <TableContainer sx={{ overflow: 'unset' }}>
-            <Table sx={{ minWidth: 800 }}>
+          <TableContainer>
+            <Table>
               <GymFacilitiesTableHead
                 order={table.order}
                 orderBy={table.orderBy}
@@ -191,33 +194,26 @@ const schema = z.object({
                 onSelectAllRows={(checked) =>
                   table.onSelectAllRows(
                     checked,
-                    _facilities?.map((user) => user.id.toString())
+                    _facilities.map(u => u.id.toString())
                   )
                 }
-                headLabel={[
-                  { id: 'name', label: 'Name', width: '100%' },
-
-
-
-
-
-                ]}
+                headLabel={[{ id: 'name', label: 'Name', width: '100%' }]}
               />
+
               <TableBody>
-                {dataFiltered?.slice(
-                    table.page * table.rowsPerPage,
-                    table.page * table.rowsPerPage + table.rowsPerPage
-                  )
-                  .map((row) => (
-                    <GymFacilitiesTableRow
-                      key={row.id}
-                      row={row}
-                      selected={table.selected.includes(row.id.toString())}
-                      onSelectRow={() => table.onSelectRow(row.id.toString())}
-                      updateData={updateData}
-                      onDeleteSuccess={loadData}
-                    />
-                  ))}
+                {dataFiltered.slice(
+                  table.page * table.rowsPerPage,
+                  table.page * table.rowsPerPage + table.rowsPerPage
+                ).map(row => (
+                  <GymFacilitiesTableRow
+                    key={row.id}
+                    row={row}
+                    selected={table.selected.includes(row.id.toString())}
+                    onSelectRow={() => table.onSelectRow(row.id.toString())}
+                    updateData={updateData}
+                    onDeleteSuccess={loadData}
+                  />
+                ))}
 
                 <TableEmptyRows
                   height={68}
@@ -266,28 +262,18 @@ export function useTable() {
     setSelected(checked ? newSelecteds : []);
   }, []);
 
-  const onSelectRow = useCallback(
-    (inputValue: string) => {
-      setSelected((prev) =>
-        prev.includes(inputValue) ? prev.filter((value) => value !== inputValue) : [...prev, inputValue]
-      );
-    },
-    []
-  );
-
-
+  const onSelectRow = useCallback((value: string) => {
+    setSelected(prev =>
+      prev.includes(value) ? prev.filter(v => v !== value) : [...prev, value]
+    );
+  }, []);
 
   const onResetPage = useCallback(() => setPage(0), []);
-  const onChangePage = useCallback((event: unknown, newPage: number) => setPage(newPage), []);
-  const onChangeRowsPerPage = useCallback(
-    (event: React.ChangeEvent<HTMLInputElement>) => {
-      setRowsPerPage(parseInt(event.target.value, 10));
-      onResetPage();
-    },
-    [onResetPage]
-  );
-  
-
+  const onChangePage = useCallback((_: unknown, newPage: number) => setPage(newPage), []);
+  const onChangeRowsPerPage = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
+    setRowsPerPage(parseInt(event.target.value, 10));
+    onResetPage();
+  }, [onResetPage]);
 
   return { page, order, onSort, orderBy, selected, rowsPerPage, onSelectRow, onResetPage, onChangePage, onSelectAllRows, onChangeRowsPerPage };
 }

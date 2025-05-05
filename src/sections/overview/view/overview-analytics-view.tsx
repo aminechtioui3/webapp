@@ -151,7 +151,7 @@ export function OverviewAnalyticsView() {
             }} />
         </Grid>
         <Grid xs={12} sm={6} md={3}>
-          <AnalyticsWidgetSummary title="new Members last year" percent={3.6} total={isAuth ? statistics? statistics.newSubscriptionLastYear:"error" : '****'} color="error"
+          <AnalyticsWidgetSummary title="new Members last year" percent={3.6} total={isAuth ? statistics? 0:"error" : '****'} color="error"
             icon={<img alt="icon" src="/assets/icons/glass/ic-glass-message.svg" />}  chart={{
               categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug'],
               series: [56, 30, 23, 54, 47, 40, 62, 73],
@@ -194,8 +194,10 @@ export function OverviewAnalyticsView() {
           <AnalyticsWebsiteVisits title="Last months' incomes"  chart={{
               categories:  statistics? statistics.totalIncomesThisYear.map(value =>value.month.toString() ):[],
               series: [
-                { name: 'income', data: statistics? statistics.totalIncomesThisYear.map(value =>value.expenses ):[]},
-                { name: 'expense', data: statistics? statistics.totalIncomesThisYear.map(value =>value.incomes ):[]},
+                  { name: 'income', data: statistics? statistics.totalIncomesThisYear.map(value =>value.incomes ):[]},
+
+                  { name: 'expense', data: statistics? statistics.totalIncomesThisYear.map(value =>value.expenses ):[]},
+
               ],
             }} />
         </Grid>
@@ -204,8 +206,8 @@ export function OverviewAnalyticsView() {
           <AnalyticsWebsiteVisits title="This month incomes"  chart={{
               categories:  statistics? statistics.totalIncomesThisMonth.map(value =>value.day.toString() ):[],
               series: [
-                { name: 'income', data: statistics? statistics.totalIncomesThisMonth.map(value =>value.expenses ):[]},
-                { name: 'expense', data: statistics? statistics.totalIncomesThisMonth.map(value =>value.incomes ):[]},
+                { name: 'income', data: statistics? statistics.totalIncomesThisMonth.map(value =>value.incomes ):[]},
+                { name: 'expense', data: statistics? statistics.totalIncomesThisMonth.map(value =>value.expenses ):[]},
               ],
             }} />
         </Grid>
@@ -219,9 +221,9 @@ export function OverviewAnalyticsView() {
               
             }} />
         </Grid> */ }
-        <Grid xs={12} md={6} lg={4}>
+        {/* <Grid xs={12} md={6} lg={4}>
           <AnalyticsOrderTimeline title="Order timeline" historyList={history} isHistory moneyTransactionHistoryList={[]} />
-        </Grid>
+        </Grid> */}
 
           <Grid xs={12} md={6} lg={4}>
           <AnalyticsOrderTimeline title="History" historyList={[]} isHistory={false} moneyTransactionHistoryList={moneyTransactionHistory} />
